@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My AI Toolkit | AI Bootcamp for Small Business</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="../assets/css/city-theme.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .toolkit-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+    .toolkit-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+    }
+    .toolkit-card.empty {
+      opacity: 0.4;
+    }
+    .toolkit-card.empty:hover {
+      opacity: 0.6;
+    }
+    .field-value {
+      background: rgba(109,216,255,0.06);
+      border-left: 3px solid rgba(109,216,255,0.3);
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 6px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+    .field-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.35);
+      margin-top: 12px;
+    }
+    .field-label:first-child { margin-top: 0; }
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .badge-biz { background: rgba(109,216,255,0.1); color: #6dd8ff; }
+    .badge-mkt { background: rgba(255,77,154,0.1); color: #ff4d9a; }
+    .badge-shared { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+    .stat-ring {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 900;
+      color: #fff;
+      position: relative;
+    }
+    .stat-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255,255,255,0.3);
+    }
+    .empty-state i { margin-bottom: 12px; }
+    @media print {
+      body { background: white !important; color: #333 !important; }
+      .toolkit-card { background: #f8f8f8 !important; border-color: #e5e7eb !important; }
+      .field-value { background: #f1f5f9 !important; border-left-color: #6dd8ff !important; color: #334155 !important; }
+      .field-label { color: #64748b !important; }
+      nav, .no-print { display: none !important; }
+      .section-badge { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      h1, h2, h3 { color: #1e293b !important; }
+      .stat-ring { color: #1e293b !important; }
+    }
+  body{padding-bottom:4rem!important}
+</style>
+
+  <style>html.light-pending body{background:#f4f5f9!important}</style>
+<script>/* Reset wipe — clears localStorage for this directory scope */
+try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.length-1;_ri>=0;_ri--){var _rk=localStorage.key(_ri);if(_rk&&_rk.indexOf('cos_ai_')===0)localStorage.removeItem(_rk);}document.cookie='cos_ai_reset=;path=/;max-age=0';}}catch(e){}</script>
+<script>/* Early theme apply — prevents flash */try{if(localStorage.getItem('cos_ai_theme')==='light')document.documentElement.classList.add('light-pending')}catch(e){}</script>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="aim-nav fixed top-0 left-0 right-0 z-50 py-4 no-print">
+    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+      <a href="index.html">
+        <img src="../assets/aimlogo_white.png" alt="AIM — Seize the Future" class="h-10 sm:h-12">
+      </a>
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="aim-back">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Home
+        </a>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
+        <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-6 pt-28 pb-20">
+
+    <!-- Header -->
+    <div class="text-center mb-12 fade-up">
+      <div class="pill mx-auto mb-6">
+        <i data-lucide="briefcase" class="w-4 h-4"></i>
+        Your Personalised Reference
+      </div>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4" style="color:#fff">
+        My AI Toolkit
+      </h1>
+      <p class="text-[var(--aim-muted)] max-w-xl mx-auto mb-8">
+        Everything you built during the bootcamp in one place. Bookmark this page — your work is saved in this browser.
+      </p>
+
+      <!-- Stats bar -->
+      <div id="stats-bar" class="flex flex-wrap justify-center gap-8 mb-8 fade-up" style="animation-delay:150ms">
+        <div class="text-center">
+          <div class="stat-ring mx-auto mb-2" style="background:rgba(109,216,255,0.1)">
+            <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/><circle id="stat-ring-biz" cx="40" cy="40" r="36" fill="none" stroke="#6dd8ff" stroke-width="4" stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="226" style="transition:stroke-dashoffset 1s ease"/></svg>
+            <span id="stat-biz">0</span>
+          </div>
+          <div class="text-xs text-[var(--aim-muted)]">Business</div>
+        </div>
+        <div class="text-center">
+          <div class="stat-ring mx-auto mb-2" style="background:rgba(255,77,154,0.1)">
+            <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/><circle id="stat-ring-mkt" cx="40" cy="40" r="36" fill="none" stroke="#ff4d9a" stroke-width="4" stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="226" style="transition:stroke-dashoffset 1s ease"/></svg>
+            <span id="stat-mkt">0</span>
+          </div>
+          <div class="text-xs text-[var(--aim-muted)]">Marketing</div>
+        </div>
+        <div class="text-center">
+          <div class="stat-ring mx-auto mb-2" style="background:rgba(34,197,94,0.1)">
+            <svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/><circle id="stat-ring-total" cx="40" cy="40" r="36" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="226" style="transition:stroke-dashoffset 1s ease"/></svg>
+            <span id="stat-total">0</span>
+          </div>
+          <div class="text-xs text-[var(--aim-muted)]">Fields Completed</div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex flex-wrap justify-center gap-3 no-print fade-up" style="animation-delay:200ms">
+        <button onclick="downloadToolkitPDF()" class="aim-btn" style="background:#2e3d7d;border-color:transparent">
+          <i data-lucide="download" class="w-4 h-4"></i> Download as PDF
+        </button>
+        <button onclick="window.print()" class="aim-btn">
+          <i data-lucide="printer" class="w-4 h-4"></i> Print
+        </button>
+      </div>
+    </div>
+
+    <!-- Toolkit sections generated by JS -->
+    <div id="toolkit-sections"></div>
+
+    <!-- Empty state -->
+    <div id="toolkit-empty" class="hidden">
+      <div class="empty-state glass rounded-2xl">
+        <i data-lucide="inbox" class="w-12 h-12 mx-auto text-[var(--aim-muted)]"></i>
+        <h3 class="text-lg font-bold text-white mt-4 mb-2">Your toolkit is empty</h3>
+        <p class="text-sm text-[var(--aim-muted)] max-w-md mx-auto mb-6">Complete some workshop modules to start building your personalised AI toolkit. Your answers are saved automatically as you work.</p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="ai-for-business/index.html" class="aim-btn" style="background:rgba(109,216,255,0.15);border-color:rgba(109,216,255,0.2);color:#6dd8ff">Start AI for Business</a>
+          <a href="ai-for-marketing/index.html" class="aim-btn" style="background:rgba(255,77,154,0.15);border-color:rgba(255,77,154,0.2);color:#ff4d9a">Start AI for Marketing</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-[var(--aim-panel)] py-10 bg-transparent no-print">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[var(--aim-muted)]">
+      <div class="flex items-center gap-3">
+        <img src="../assets/aimlogo_white.png" alt="AIM" class="h-7 opacity-60">
+        <span>AI Bootcamp for Small Business</span>
+      </div>
+      <span>Your data is saved locally in this browser only.</span>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    'use strict';
+    var PREFIX = 'cos_ai_';
+
+    function load(id){
+      try { var r = localStorage.getItem(PREFIX+id); return r ? JSON.parse(r) : null; } catch(e){ return null; }
+    }
+
+    /* ── Section definitions ── */
+    var SECTIONS = [
+
+      /* ===== SHARED ===== */
+      { title:'My Go-To Prompt Formula', icon:'pen-tool', badge:'shared', page:'shared/act-explain-please-builder.html',
+        fields:[
+          { id:'f-act', label:'Act as' },
+          { id:'f-explain', label:'My situation' },
+          { id:'f-please', label:'Please do this' },
+          { id:'f-format', label:'Format as' }
+        ]
+      },
+      { title:'My AI Workflow', icon:'git-branch', badge:'shared', page:'shared/build-a-workflow.html',
+        fields:[
+          { id:'wf-1', label:'Step 1 — Trigger' },
+          { id:'wf-2', label:'Step 2 — AI Action' },
+          { id:'wf-3', label:'Step 3 — Human Check' },
+          { id:'wf-4', label:'Step 4 — Outcome' }
+        ]
+      },
+
+      /* ===== BUSINESS ===== */
+      { title:'Business Tasks for AI', icon:'briefcase', badge:'biz', page:'ai-for-business/business-task-finder.html',
+        dynamic: true, prefix:'task-', related:['freq-','rep-','ai-'],
+        relatedLabels:['Frequency','Repetitive?','AI Suitable?']
+      },
+      { title:'Email Response Style', icon:'mail', badge:'biz', page:'ai-for-business/email-response-builder.html',
+        fields:[
+          { id:'f-type', label:'Email type' },
+          { id:'f-context', label:'Situation/original email' },
+          { id:'f-tone', label:'Tone' },
+          { id:'f-notes', label:'Notes' }
+        ]
+      },
+      { title:'Meeting Notes Setup', icon:'clipboard', badge:'biz', page:'ai-for-business/meeting-notes-to-actions.html',
+        fields:[
+          { id:'notes-context', label:'Meeting context' }
+        ]
+      },
+      { title:'Safe Context Rewriter', icon:'shield', badge:'biz', page:'ai-for-business/safe-context-rewriter.html',
+        fields:[
+          { id:'unsafe-input', label:'Original text (with sensitive data)' },
+          { id:'safe-output', label:'Rewritten safe version' }
+        ]
+      },
+      { title:'Workflow Canvas', icon:'layers', badge:'biz', page:'ai-for-business/workflow-canvas.html',
+        fields:[
+          { id:'before-1', label:'Before AI — Step 1' },
+          { id:'before-2', label:'Before AI — Step 2' },
+          { id:'before-3', label:'Before AI — Step 3' },
+          { id:'before-4', label:'Before AI — Step 4' },
+          { id:'after-1', label:'With AI — Step 1' },
+          { id:'after-2', label:'With AI — Step 2' },
+          { id:'after-3', label:'With AI — Step 3' },
+          { id:'after-4', label:'With AI — Step 4' },
+          { id:'time-before', label:'Time per task (before)' },
+          { id:'time-after', label:'Time per task (after)' },
+          { id:'time-freq', label:'Times per week' }
+        ]
+      },
+      { title:'7-Day Action Plan', icon:'calendar', badge:'biz', page:'ai-for-business/seven-day-action-plan.html',
+        fields:[
+          { id:'day1', label:'Day 1 — Try a prompt' },
+          { id:'day2', label:'Day 2 — Business task' },
+          { id:'day3', label:'Day 3 — Document tool' },
+          { id:'day4', label:'Day 4 — Process docs' },
+          { id:'day5', label:'Day 5 — Workflow' },
+          { id:'day6', label:'Day 6 — Reflect' },
+          { id:'day7', label:'Day 7 — Commit' },
+          { id:'wont-use', label:'Where I won\'t use AI' }
+        ]
+      },
+
+      /* ===== MARKETING ===== */
+      { title:'Marketing Challenge', icon:'megaphone', badge:'mkt', page:'ai-for-marketing/marketing-task-finder.html',
+        fields:[
+          { id:'mkt-challenge', label:'Biggest marketing challenge' }
+        ]
+      },
+      { title:'Customer Persona', icon:'users', badge:'mkt', page:'ai-for-marketing/customer-persona-builder.html',
+        fields:[
+          { id:'p-biz', label:'My business' },
+          { id:'p-cust', label:'My main customers' },
+          { id:'p-need', label:'What they need' }
+        ]
+      },
+      { title:'Brand Voice', icon:'mic', badge:'mkt', page:'ai-for-marketing/brand-voice-builder.html',
+        fields:[
+          { id:'bv-biz', label:'Business description' },
+          { id:'bv-cust', label:'Target customers' },
+          { id:'bv-tone', label:'Voice & tone' }
+        ]
+      },
+      { title:'Social Post Generator', icon:'share-2', badge:'mkt', page:'ai-for-marketing/social-post-generator.html',
+        fields:[
+          { id:'s-biz', label:'Business' },
+          { id:'s-aud', label:'Audience' },
+          { id:'s-theme', label:'Theme/promotion' },
+          { id:'s-voice', label:'Brand voice' }
+        ]
+      },
+      { title:'Content Repurposer', icon:'repeat', badge:'mkt', page:'ai-for-marketing/content-repurposer.html',
+        fields:[
+          { id:'r-idea', label:'Marketing idea/content' },
+          { id:'r-voice', label:'Brand voice' }
+        ]
+      },
+      { title:'30-Day Content Plan', icon:'calendar-days', badge:'mkt', page:'ai-for-marketing/thirty-day-content-plan.html',
+        fields:[
+          { id:'cp-biz', label:'Business' },
+          { id:'cp-goal', label:'Marketing goal' },
+          { id:'cp-aud', label:'Target audience' },
+          { id:'cp-offer', label:'Main offer/message' }
+        ]
+      },
+      { title:'Publishing Checklist', icon:'check-circle', badge:'mkt', page:'ai-for-marketing/publishing-checklist.html',
+        checkboxes:[
+          { id:'pub-1', label:'Fact-checked all claims' },
+          { id:'pub-2', label:'Removed AI hallucinations' },
+          { id:'pub-3', label:'Matches my brand voice' },
+          { id:'pub-4', label:'Call to action included' },
+          { id:'pub-5', label:'Proofread for errors' },
+          { id:'pub-6', label:'Tested links & formatting' },
+          { id:'pub-7', label:'Ready to publish' }
+        ]
+      }
+    ];
+
+    function escHTML(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+    function renderSections(){
+      var container = document.getElementById('toolkit-sections');
+      var html = '';
+      var totalFilled = 0;
+      var bizFilled = 0;
+      var mktFilled = 0;
+      var hasAnything = false;
+
+      SECTIONS.forEach(function(sec, si){
+        var cardFields = [];
+        var sectionFilled = 0;
+        var sectionTotal = 0;
+
+        if(sec.dynamic){
+          /* Dynamic rows like business-task-finder */
+          for(var r=1; r<=20; r++){
+            var val = load(sec.prefix+r);
+            if(val && val.trim()){
+              sectionTotal++;
+              sectionFilled++;
+              var row = { main: val };
+              if(sec.related){
+                row.extras = [];
+                sec.related.forEach(function(rp, ri){
+                  var rv = load(rp+r);
+                  if(rv) row.extras.push({ label: sec.relatedLabels[ri], value: rv });
+                });
+              }
+              cardFields.push(row);
+            }
+          }
+        } else if(sec.checkboxes){
+          sec.checkboxes.forEach(function(cb){
+            sectionTotal++;
+            var val = load(cb.id);
+            cardFields.push({ label: cb.label, checked: val === true });
+            if(val === true){ sectionFilled++; }
+          });
+        } else if(sec.fields){
+          sec.fields.forEach(function(f){
+            sectionTotal++;
+            var val = load(f.id);
+            if(val && (typeof val === 'string' ? val.trim() : val)){
+              sectionFilled++;
+              cardFields.push({ label: f.label, value: typeof val === 'string' ? val : String(val) });
+            }
+          });
+        }
+
+        totalFilled += sectionFilled;
+        if(sec.badge === 'biz') bizFilled += sectionFilled;
+        if(sec.badge === 'mkt') mktFilled += sectionFilled;
+        if(sec.badge === 'shared'){ bizFilled += sectionFilled; mktFilled += sectionFilled; }
+        if(sectionFilled > 0) hasAnything = true;
+
+        var isEmpty = sectionFilled === 0;
+        var badgeClass = sec.badge === 'biz' ? 'badge-biz' : sec.badge === 'mkt' ? 'badge-mkt' : 'badge-shared';
+        var badgeLabel = sec.badge === 'biz' ? 'Business' : sec.badge === 'mkt' ? 'Marketing' : 'Shared';
+
+        html += '<div class="toolkit-card mb-4 fade-up'+(isEmpty?' empty':'')+'" style="animation-delay:'+(150+si*40)+'ms">';
+        html += '<div class="flex items-start justify-between gap-3 mb-4">';
+        html += '<div class="flex items-center gap-3">';
+        html += '<div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(109,216,255,0.1)"><i data-lucide="'+sec.icon+'" class="w-4 h-4 text-[#6dd8ff]"></i></div>';
+        html += '<div>';
+        html += '<h3 class="text-sm font-bold text-white">'+sec.title+'</h3>';
+        html += '<span class="section-badge '+badgeClass+' mt-1">'+badgeLabel+'</span>';
+        html += '</div></div>';
+
+        if(!isEmpty){
+          html += '<a href="'+sec.page+'" class="text-[10px] font-bold text-[var(--aim-muted)] hover:text-[#6dd8ff] transition-colors no-print flex items-center gap-1" style="white-space:nowrap"><i data-lucide="external-link" class="w-3 h-3"></i>Edit</a>';
+        } else {
+          html += '<a href="'+sec.page+'" class="text-[10px] font-bold text-[var(--aim-muted)] hover:text-[#6dd8ff] transition-colors no-print flex items-center gap-1" style="white-space:nowrap"><i data-lucide="plus" class="w-3 h-3"></i>Start</a>';
+        }
+
+        html += '</div>';
+
+        if(isEmpty){
+          html += '<p class="text-xs text-[var(--aim-muted)] italic">Not started yet</p>';
+        } else if(sec.dynamic){
+          cardFields.forEach(function(row){
+            html += '<div class="field-value">'+escHTML(row.main);
+            if(row.extras && row.extras.length){
+              html += '<span class="ml-3 text-xs text-[var(--aim-muted)]">';
+              row.extras.forEach(function(ex,i){
+                if(i>0) html += ' · ';
+                html += ex.label+': '+escHTML(ex.value);
+              });
+              html += '</span>';
+            }
+            html += '</div>';
+          });
+        } else if(sec.checkboxes){
+          html += '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">';
+          cardFields.forEach(function(cb){
+            var icon = cb.checked
+              ? '<svg class="w-4 h-4 text-green-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
+              : '<svg class="w-4 h-4 text-[var(--aim-muted)] flex-shrink-0 opacity-30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>';
+            html += '<div class="flex items-center gap-2 text-xs '+(cb.checked?'text-white':'text-[var(--aim-muted)]')+'">'+icon+' '+escHTML(cb.label)+'</div>';
+          });
+          html += '</div>';
+        } else {
+          cardFields.forEach(function(f){
+            html += '<div class="field-label">'+escHTML(f.label)+'</div>';
+            html += '<div class="field-value">'+escHTML(f.value)+'</div>';
+          });
+        }
+
+        html += '</div>';
+      });
+
+      container.innerHTML = html;
+
+      /* Show empty state if nothing */
+      if(!hasAnything){
+        document.getElementById('toolkit-empty').classList.remove('hidden');
+      }
+
+      /* Update stat rings */
+      var BIZ_MAX = 30;
+      var MKT_MAX = 25;
+      var TOTAL_MAX = BIZ_MAX + MKT_MAX;
+      var circumference = 226;
+
+      document.getElementById('stat-biz').textContent = bizFilled;
+      document.getElementById('stat-mkt').textContent = mktFilled;
+      document.getElementById('stat-total').textContent = totalFilled;
+
+      setTimeout(function(){
+        document.getElementById('stat-ring-biz').style.strokeDashoffset = circumference - (Math.min(bizFilled/BIZ_MAX,1) * circumference);
+        document.getElementById('stat-ring-mkt').style.strokeDashoffset = circumference - (Math.min(mktFilled/MKT_MAX,1) * circumference);
+        document.getElementById('stat-ring-total').style.strokeDashoffset = circumference - (Math.min(totalFilled/TOTAL_MAX,1) * circumference);
+      }, 300);
+
+      /* Re-init lucide */
+      if(window.lucide) lucide.createIcons();
+    }
+
+    renderSections();
+
+    /* ── PDF Download ── */
+    window.downloadToolkitPDF = function(){
+      if(typeof window.jspdf==='undefined'){alert('PDF library is still loading — please try again in a moment.');return;}
+      var jsPDF = window.jspdf.jsPDF;
+      var doc = new jsPDF('p','mm','a4');
+      var W = 210, H = 297;
+      var MARGIN = 18;
+      var y = 0;
+      var BLUE = [46,61,125];
+      var ACCENT = [109,216,255];
+      var DARK = [40,44,60];
+      var MUTED = [120,130,160];
+
+      function checkPage(need){
+        if(y + need > H - 20){
+          doc.addPage();
+          y = 20;
+        }
+      }
+
+      /* Header */
+      doc.setFillColor(BLUE[0],BLUE[1],BLUE[2]);
+      doc.rect(0,0,W,32,  'F');
+      doc.setFontSize(18);
+      doc.setTextColor(255,255,255);
+      doc.setFont('helvetica','bold');
+      doc.text('My AI Toolkit', MARGIN, 16);
+      doc.setFontSize(9);
+      doc.setFont('helvetica','normal');
+      doc.text('AI Bootcamp for Small Business  |  AIM x City of Sydney', MARGIN, 24);
+      doc.setFillColor(ACCENT[0],ACCENT[1],ACCENT[2]);
+      doc.rect(0,32,W,1.5,'F');
+      y = 42;
+
+      /* Date */
+      doc.setFontSize(8);
+      doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
+      doc.text('Generated: '+new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'}), W-MARGIN, y, {align:'right'});
+      y += 8;
+
+      SECTIONS.forEach(function(sec){
+        var fields = [];
+
+        if(sec.dynamic){
+          for(var r=1;r<=20;r++){
+            var val = load(sec.prefix+r);
+            if(val && val.trim()){
+              var row = val;
+              if(sec.related){
+                var extras = [];
+                sec.related.forEach(function(rp,ri){
+                  var rv = load(rp+r);
+                  if(rv) extras.push(sec.relatedLabels[ri]+': '+rv);
+                });
+                if(extras.length) row += '  ('+extras.join(', ')+')';
+              }
+              fields.push({ label:'Task '+r, value:row });
+            }
+          }
+        } else if(sec.checkboxes){
+          var checked = [];
+          sec.checkboxes.forEach(function(cb){
+            if(load(cb.id)===true) checked.push(cb.label);
+          });
+          if(checked.length) fields.push({ label:'Completed', value: checked.join(', ') });
+        } else if(sec.fields){
+          sec.fields.forEach(function(f){
+            var val = load(f.id);
+            if(val && (typeof val==='string' ? val.trim() : val)){
+              fields.push({ label:f.label, value: typeof val==='string' ? val : String(val) });
+            }
+          });
+        }
+
+        if(fields.length === 0) return;
+
+        /* Section title */
+        checkPage(20);
+        var badgeLabel = sec.badge==='biz'?'BUSINESS':sec.badge==='mkt'?'MARKETING':'SHARED';
+        doc.setFontSize(11);
+        doc.setTextColor(BLUE[0],BLUE[1],BLUE[2]);
+        doc.setFont('helvetica','bold');
+        doc.text(sec.title, MARGIN, y);
+        doc.setFontSize(7);
+        doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
+        doc.text(badgeLabel, MARGIN + doc.getTextWidth(sec.title)+4, y);
+        y += 3;
+        doc.setDrawColor(ACCENT[0],ACCENT[1],ACCENT[2]);
+        doc.setLineWidth(0.3);
+        doc.line(MARGIN, y, W-MARGIN, y);
+        y += 5;
+
+        fields.forEach(function(f){
+          checkPage(14);
+          doc.setFontSize(7);
+          doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
+          doc.setFont('helvetica','bold');
+          doc.text(f.label.toUpperCase(), MARGIN, y);
+          y += 4;
+
+          doc.setFontSize(9);
+          doc.setTextColor(DARK[0],DARK[1],DARK[2]);
+          doc.setFont('helvetica','normal');
+          var lines = doc.splitTextToSize(f.value, W - MARGIN*2 - 4);
+          checkPage(lines.length * 4.5 + 4);
+
+          /* Light background bar */
+          doc.setFillColor(245,246,250);
+          doc.roundedRect(MARGIN, y-3, W-MARGIN*2, lines.length*4.5+4, 2, 2, 'F');
+          doc.setFillColor(ACCENT[0],ACCENT[1],ACCENT[2]);
+          doc.rect(MARGIN, y-3, 1, lines.length*4.5+4, 'F');
+
+          doc.text(lines, MARGIN+4, y+1);
+          y += lines.length * 4.5 + 6;
+        });
+
+        y += 4;
+      });
+
+      /* Footer on last page */
+      doc.setFontSize(7);
+      doc.setTextColor(MUTED[0],MUTED[1],MUTED[2]);
+      doc.text('AIM x City of Sydney  |  AI Bootcamp for Small Business', W/2, H-10, {align:'center'});
+
+      doc.save('My-AI-Toolkit.pdf');
+    };
+
+  })();
+
+  /* Init lucide + nav scroll */
+  lucide.createIcons();
+  var nav = document.querySelector('.aim-nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+  </script>
+  <script>
+  /* Theme toggle — persists via localStorage */
+  (function(){
+    var KEY = 'cos_ai_theme';
+    var saved = localStorage.getItem(KEY);
+    if(saved === 'light') document.body.classList.add('light-mode');
+    updateIcon();
+
+    window.toggleTheme = function(){
+      document.body.classList.toggle('light-mode');
+      var isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem(KEY, isLight ? 'light' : 'dark');
+      updateIcon();
+    };
+
+    function updateIcon(){
+      var isLight = document.body.classList.contains('light-mode');
+      document.querySelectorAll('.theme-icon-dark').forEach(function(el){ el.style.display = isLight ? 'none' : 'block'; });
+      document.querySelectorAll('.theme-icon-light').forEach(function(el){ el.style.display = isLight ? 'block' : 'none'; });
+    }
+
+    /* Apply theme immediately on page load (before DOMContentLoaded for fast switch) */
+    if(saved === 'light' && !document.body.classList.contains('light-mode')){
+      document.body.classList.add('light-mode');
+    }
+  })();
+  </script>
+
+
+<!-- Industry Tailoring System -->
+<script>
+/**
+ * Industry Tailoring System
+ * Stores selection in localStorage, shows nav dropdown,
+ * tailors prompt placeholders and prepends context on copy.
+ */
+(function(){
+  'use strict';
+  var KEY = 'cos_ai_industry';
+
+  /* Cookie helpers — used as fallback for file:// protocol where localStorage is per-directory */
+  function setCookie(k,v){ try{document.cookie=k+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){} }
+  function getCookie(k){ try{var m=document.cookie.match('(^|;)\\s*'+k+'=([^;]*)'); return m?decodeURIComponent(m[2]):null;}catch(e){return null;} }
+
+  /* ── 14 Industries ── */
+  var INDUSTRIES = [
+    {
+      id:'hospitality',
+      name:'Hospitality & Food',
+      icon:'utensils',
+      emoji:'🍽️',
+      examples:'cafés, restaurants, bars, catering companies, food trucks',
+      customers:'diners, regulars, event guests, foodies, local families',
+      tone:'warm, welcoming, casual but professional',
+      context:'I run a hospitality / food business (e.g. café, restaurant, bar, catering company) in Sydney.',
+      placeholders:{
+        business:'café / restaurant',
+        product:'menu items and dining experiences',
+        service:'catering, dine-in, and takeaway services',
+        customers:'diners, regulars, and event guests',
+        task:'updating the seasonal menu and coordinating weekend bookings',
+        marketing:'food photography posts, seasonal menu launches, and Google review responses',
+        email:'a booking confirmation for a group dinner',
+        meeting:'a weekly front-of-house team briefing',
+        competitor:'other local cafés and restaurants in our area',
+        painPoint:'last-minute cancellations and inconsistent online reviews',
+        goal:'increase midweek foot traffic and grow our catering bookings',
+        socialPost:'a new winter dessert menu launch',
+        newsletter:'a monthly what\'s-on email featuring new dishes, events, and chef stories'
+      }
+    },
+    {
+      id:'retail',
+      name:'Retail & E-commerce',
+      icon:'shopping-bag',
+      emoji:'🛍️',
+      examples:'boutiques, gift shops, online stores, homeware shops, fashion retailers',
+      customers:'shoppers, online buyers, gift-givers, bargain hunters, loyal members',
+      tone:'friendly, helpful, on-trend',
+      context:'I run a retail / e-commerce business (e.g. boutique, online store, gift shop) in Sydney.',
+      placeholders:{
+        business:'retail store / online shop',
+        product:'our product range and seasonal collections',
+        service:'in-store shopping, online ordering, and click-and-collect',
+        customers:'shoppers, online buyers, and loyal members',
+        task:'planning a seasonal sale and updating product descriptions',
+        marketing:'product styling photos, sale announcements, and influencer collaborations',
+        email:'an abandoned cart recovery email',
+        meeting:'a weekly sales and stock review',
+        competitor:'other boutiques and online retailers in our niche',
+        painPoint:'high cart abandonment rates and managing seasonal inventory',
+        goal:'grow our online sales and increase average order value',
+        socialPost:'a new spring collection drop',
+        newsletter:'a weekly new-arrivals email with styling tips and member-only early access'
+      }
+    },
+    {
+      id:'professional',
+      name:'Professional Services',
+      icon:'briefcase',
+      emoji:'💼',
+      examples:'accounting firms, law practices, consultancies, financial planners, bookkeepers',
+      customers:'business clients, SME owners, individuals needing expert advice',
+      tone:'authoritative, trustworthy, clear and jargon-free',
+      context:'I run a professional services firm (e.g. accounting, legal, consulting, financial planning) in Sydney.',
+      placeholders:{
+        business:'professional services firm',
+        product:'advisory services and compliance packages',
+        service:'consulting, advisory, tax preparation, and compliance support',
+        customers:'business clients and SME owners',
+        task:'preparing end-of-financial-year client communications and updating service packages',
+        marketing:'thought-leadership articles, LinkedIn posts, and client case studies',
+        email:'an engagement letter for a new advisory client',
+        meeting:'a quarterly client review meeting',
+        competitor:'other local firms and online service providers in our field',
+        painPoint:'clients not understanding our value beyond compliance and fee sensitivity',
+        goal:'attract more advisory-level clients and increase client retention',
+        socialPost:'a tax tip post timed to EOFY season',
+        newsletter:'a quarterly business insights email with regulatory updates and practical tips'
+      }
+    },
+    {
+      id:'creative',
+      name:'Creative & Design',
+      icon:'palette',
+      emoji:'🎨',
+      examples:'design agencies, photographers, videographers, copywriters, branding studios',
+      customers:'businesses needing creative work, marketing managers, startup founders',
+      tone:'creative, confident, visually minded',
+      context:'I run a creative / design business (e.g. design agency, photography studio, branding consultancy) in Sydney.',
+      placeholders:{
+        business:'creative agency / design studio',
+        product:'creative services — branding, design, photography, and content production',
+        service:'brand identity, graphic design, photography, and video production',
+        customers:'business owners, marketing managers, and startup founders seeking creative work',
+        task:'scoping a rebrand project and creating a content shoot schedule',
+        marketing:'portfolio showcases, behind-the-scenes process reels, and client transformation stories',
+        email:'a project proposal for a brand identity package',
+        meeting:'a creative brief kickoff with a new client',
+        competitor:'other local agencies and freelance creatives',
+        painPoint:'scope creep, clients not understanding creative timelines, and pricing pressure from freelancers',
+        goal:'attract higher-value brand projects and build recurring retainer relationships',
+        socialPost:'a before-and-after brand transformation for a recent client',
+        newsletter:'a monthly creative inspiration email with project spotlights and design trend insights'
+      }
+    },
+    {
+      id:'health',
+      name:'Health & Wellness',
+      icon:'heart-pulse',
+      emoji:'🏥',
+      examples:'medical clinics, physiotherapists, psychologists, allied health, wellness practitioners',
+      customers:'patients, clients seeking treatment, people managing chronic conditions, health-conscious locals',
+      tone:'empathetic, professional, reassuring, evidence-based',
+      context:'I run a health / wellness practice (e.g. physiotherapy clinic, psychology practice, allied health service) in Sydney.',
+      placeholders:{
+        business:'health / wellness practice',
+        product:'treatment programs and health services',
+        service:'clinical consultations, treatment plans, and preventive health programs',
+        customers:'patients and clients seeking treatment and health support',
+        task:'streamlining patient intake forms and improving follow-up appointment reminders',
+        marketing:'health tip posts, practitioner introductions, and patient success stories (de-identified)',
+        email:'an appointment reminder with pre-visit preparation instructions',
+        meeting:'a monthly clinical team case review meeting',
+        competitor:'other local clinics and allied health providers',
+        painPoint:'no-shows, patients not completing treatment plans, and managing referral relationships',
+        goal:'reduce no-show rates and grow referrals from GPs and specialists',
+        socialPost:'a practical self-care tip related to our specialty',
+        newsletter:'a monthly wellness email with seasonal health tips, new services, and practitioner spotlights'
+      }
+    },
+    {
+      id:'education',
+      name:'Education & Training',
+      icon:'graduation-cap',
+      emoji:'🎓',
+      examples:'tutoring centres, RTOs, coaching businesses, workshop facilitators, online course creators',
+      customers:'students, professionals upskilling, parents, corporate learners',
+      tone:'encouraging, knowledgeable, approachable',
+      context:'I run an education / training business (e.g. tutoring centre, RTO, coaching practice, workshop facilitator) in Sydney.',
+      placeholders:{
+        business:'education / training provider',
+        product:'courses, workshops, and training programs',
+        service:'tutoring, professional development, coaching, and certification programs',
+        customers:'students, professionals looking to upskill, and corporate teams',
+        task:'designing a new course module and writing student assessment rubrics',
+        marketing:'student success stories, free taster workshops, and skill-gap content',
+        email:'a course enrolment confirmation with week-one preparation guide',
+        meeting:'a curriculum planning session for next term',
+        competitor:'other training providers and online learning platforms',
+        painPoint:'low course completion rates and difficulty demonstrating ROI to corporate clients',
+        goal:'increase enrolment numbers and build corporate training partnerships',
+        socialPost:'a quick study tip or skill insight from one of our trainers',
+        newsletter:'a monthly learning digest with upcoming courses, student achievements, and industry trend articles'
+      }
+    },
+    {
+      id:'construction',
+      name:'Construction & Trades',
+      icon:'hard-hat',
+      emoji:'🔨',
+      examples:'builders, electricians, plumbers, landscapers, painters, renovation companies',
+      customers:'homeowners, property managers, developers, real estate agents',
+      tone:'straightforward, reliable, no-nonsense',
+      context:'I run a construction / trades business (e.g. building, electrical, plumbing, landscaping) in Sydney.',
+      placeholders:{
+        business:'construction / trades business',
+        product:'building and trade services',
+        service:'construction, renovation, maintenance, and emergency repair services',
+        customers:'homeowners, property managers, and developers',
+        task:'writing up a job quote and scheduling subcontractors for a renovation project',
+        marketing:'project before-and-after photos, customer testimonial videos, and seasonal maintenance tips',
+        email:'a detailed quote for a bathroom renovation with timeline and terms',
+        meeting:'a site progress meeting with the client and subcontractors',
+        competitor:'other local tradies and building companies',
+        painPoint:'quoting jobs accurately, managing subcontractor schedules, and chasing late payments',
+        goal:'win more renovation projects and build a steady pipeline of repeat clients through property managers',
+        socialPost:'a dramatic before-and-after of a recent renovation project',
+        newsletter:'a seasonal home maintenance checklist email with tips, recent project photos, and special offers'
+      }
+    },
+    {
+      id:'realestate',
+      name:'Real Estate & Property',
+      icon:'building',
+      emoji:'🏠',
+      examples:'real estate agents, property managers, strata managers, buyers\' agents',
+      customers:'home buyers, sellers, landlords, tenants, investors',
+      tone:'professional, market-savvy, trustworthy',
+      context:'I run a real estate / property business (e.g. real estate agency, property management, strata management) in Sydney.',
+      placeholders:{
+        business:'real estate / property management business',
+        product:'property sales, leasing, and management services',
+        service:'property sales, rentals, property management, and market appraisals',
+        customers:'home buyers, sellers, landlords, tenants, and investors',
+        task:'writing a property listing description and preparing a market appraisal report',
+        marketing:'property video tours, market update posts, and suburb profile guides',
+        email:'a new listing alert to our buyer database',
+        meeting:'a vendor strategy session before listing a property',
+        competitor:'other local real estate agencies',
+        painPoint:'winning listings in a competitive market and keeping landlords from switching agencies',
+        goal:'grow our listing pipeline and increase our average days-on-market performance',
+        socialPost:'a just-sold success story with the sale price and time-on-market',
+        newsletter:'a monthly local market update email with recent sales, price trends, and featured listings'
+      }
+    },
+    {
+      id:'technology',
+      name:'Technology & IT',
+      icon:'monitor',
+      emoji:'💻',
+      examples:'software companies, web developers, IT support, SaaS startups, app developers',
+      customers:'businesses needing tech solutions, startups, non-technical founders, enterprise teams',
+      tone:'clear, solution-oriented, jargon-free when client-facing',
+      context:'I run a technology / IT business (e.g. software development, IT services, web development, SaaS) in Sydney.',
+      placeholders:{
+        business:'technology / IT services company',
+        product:'software solutions, web platforms, and IT services',
+        service:'software development, IT support, cloud migration, and web development',
+        customers:'business clients needing technology solutions and digital transformation',
+        task:'writing a project scope document and creating a client onboarding workflow',
+        marketing:'case study write-ups, tech tip blogs, and product demo videos',
+        email:'a project kickoff email with timeline, milestones, and access credentials',
+        meeting:'a sprint review and client demo session',
+        competitor:'other local IT firms, offshore developers, and SaaS alternatives',
+        painPoint:'scope creep, clients not understanding technical constraints, and competing with offshore pricing',
+        goal:'move from one-off projects to recurring managed-service contracts',
+        socialPost:'a quick tech tip that helps small businesses work smarter',
+        newsletter:'a monthly tech insights email with productivity tips, security updates, and case study highlights'
+      }
+    },
+    {
+      id:'tourism',
+      name:'Tourism & Events',
+      icon:'map-pin',
+      emoji:'✈️',
+      examples:'tour operators, event planners, travel agencies, venues, experience providers',
+      customers:'tourists, corporate event organisers, couples planning weddings, adventure seekers',
+      tone:'exciting, descriptive, experience-focused',
+      context:'I run a tourism / events business (e.g. tour operator, event planner, experience provider, venue) in Sydney.',
+      placeholders:{
+        business:'tourism / events business',
+        product:'tours, experiences, and event packages',
+        service:'guided tours, event planning, venue hire, and bespoke experience packages',
+        customers:'tourists, corporate event organisers, and people looking for unique experiences',
+        task:'creating an event run sheet and writing a compelling tour description',
+        marketing:'experience highlight reels, customer review features, and seasonal event guides',
+        email:'a booking confirmation with event details, what-to-bring list, and meeting point',
+        meeting:'an event planning walkthrough with the client at the venue',
+        competitor:'other tour operators and event venues in Sydney',
+        painPoint:'seasonal demand fluctuations and last-minute booking changes',
+        goal:'increase off-peak bookings and grow corporate event revenue',
+        socialPost:'a stunning photo from a recent tour or event with a guest testimonial',
+        newsletter:'a seasonal what\'s-on email with upcoming events, new experiences, and early-bird offers'
+      }
+    },
+    {
+      id:'nonprofit',
+      name:'Not-for-Profit & Community',
+      icon:'users',
+      emoji:'🤝',
+      examples:'charities, community organisations, social enterprises, associations, advocacy groups',
+      customers:'donors, volunteers, community members, grant bodies, beneficiaries',
+      tone:'mission-driven, transparent, community-focused, heartfelt',
+      context:'I run a not-for-profit / community organisation (e.g. charity, community group, social enterprise, association) in Sydney.',
+      placeholders:{
+        business:'not-for-profit / community organisation',
+        product:'programs, services, and community impact initiatives',
+        service:'community programs, advocacy, support services, and fundraising campaigns',
+        customers:'community members, donors, volunteers, and partner organisations',
+        task:'writing a grant application and preparing the annual impact report',
+        marketing:'impact stories, volunteer spotlights, and campaign awareness content',
+        email:'a donation thank-you email with impact update',
+        meeting:'a board meeting with agenda items on strategic planning and fundraising',
+        competitor:'other organisations seeking the same grants and donor base',
+        painPoint:'donor fatigue, grant reporting burden, and volunteer retention',
+        goal:'diversify funding sources and increase community awareness of our mission',
+        socialPost:'a short impact story showing how a recent program changed someone\'s life',
+        newsletter:'a quarterly impact email with program updates, volunteer stories, upcoming events, and donation calls-to-action'
+      }
+    },
+    {
+      id:'beauty',
+      name:'Beauty & Personal Care',
+      icon:'sparkles',
+      emoji:'💅',
+      examples:'hair salons, beauty therapists, barbers, nail studios, skincare clinics, day spas',
+      customers:'local clients, brides-to-be, professionals wanting grooming, beauty enthusiasts',
+      tone:'friendly, confident, trend-aware, personal',
+      context:'I run a beauty / personal care business (e.g. hair salon, beauty salon, barber, skincare clinic, day spa) in Sydney.',
+      placeholders:{
+        business:'beauty salon / personal care studio',
+        product:'treatments, packages, and retail products',
+        service:'hair styling, beauty treatments, skincare consultations, and grooming services',
+        customers:'local clients, brides-to-be, and regular booking clients',
+        task:'redesigning our service menu and setting up an online booking reminder system',
+        marketing:'transformation photos, styling tips, and seasonal look-book content',
+        email:'a rebooking reminder with a personalised treatment recommendation',
+        meeting:'a team meeting to review this month\'s bookings and plan a retail promotion',
+        competitor:'other salons, barbers, and beauty clinics in our area',
+        painPoint:'no-shows, seasonal slowdowns, and retaining skilled staff',
+        goal:'increase rebooking rates and grow retail product sales alongside services',
+        socialPost:'a stunning before-and-after transformation photo with the stylist tagged',
+        newsletter:'a monthly style guide email with new trends, treatment spotlights, and a rebooking incentive'
+      }
+    },
+    {
+      id:'fitness',
+      name:'Fitness & Sport',
+      icon:'dumbbell',
+      emoji:'💪',
+      examples:'personal trainers, gyms, yoga studios, sports clubs, Pilates studios, martial arts',
+      customers:'fitness beginners, gym regulars, athletes, people with health goals, parents wanting active kids',
+      tone:'motivating, energetic, supportive, results-focused',
+      context:'I run a fitness / sport business (e.g. gym, personal training studio, yoga studio, sports club) in Sydney.',
+      placeholders:{
+        business:'gym / fitness studio',
+        product:'memberships, training programs, and class packages',
+        service:'personal training, group fitness classes, sports coaching, and wellness programs',
+        customers:'members, fitness beginners, and people working towards health goals',
+        task:'designing a 6-week challenge program and writing the sign-up landing page',
+        marketing:'client transformation stories, workout tip reels, and challenge launch countdowns',
+        email:'a welcome email for new members with their first-week class schedule and trainer intro',
+        meeting:'a monthly team meeting to review retention numbers and plan next month\'s class timetable',
+        competitor:'other gyms, studios, and online fitness programs',
+        painPoint:'member drop-off after the first 3 months and seasonal sign-up fluctuations',
+        goal:'improve member retention past 6 months and fill off-peak class slots',
+        socialPost:'a member transformation story with their permission and a motivational caption',
+        newsletter:'a weekly workout tip and class schedule email with member shout-outs and upcoming events'
+      }
+    },
+    {
+      id:'arts',
+      name:'Arts & Entertainment',
+      icon:'music',
+      emoji:'🎭',
+      examples:'galleries, performers, music venues, cultural organisations, theatres, independent artists',
+      customers:'art lovers, audiences, collectors, event-goers, cultural tourists, patrons',
+      tone:'passionate, evocative, culturally aware, inviting',
+      context:'I run an arts / entertainment business (e.g. gallery, performance company, music venue, cultural organisation) in Sydney.',
+      placeholders:{
+        business:'arts / entertainment venue or company',
+        product:'performances, exhibitions, and creative experiences',
+        service:'exhibitions, live performances, workshops, venue hire, and artist commissions',
+        customers:'audiences, art lovers, collectors, and cultural event-goers',
+        task:'writing exhibition wall text and creating a press release for an upcoming show',
+        marketing:'artist interviews, exhibition previews, and behind-the-scenes rehearsal content',
+        email:'an opening night invitation with RSVP link and artist statement',
+        meeting:'a production planning meeting for an upcoming season',
+        competitor:'other galleries, venues, and cultural organisations competing for audience attention',
+        painPoint:'unpredictable attendance, funding cycles, and converting casual visitors into regulars',
+        goal:'build a loyal subscriber base and increase sponsorship and grant revenue',
+        socialPost:'a sneak peek of an upcoming exhibition or performance with the artist\'s story',
+        newsletter:'a monthly what\'s-on email with upcoming shows, artist features, and behind-the-scenes exclusives'
+      }
+    }
+  ];
+
+  /* ── Expose globally ── */
+  window.COS_INDUSTRIES = INDUSTRIES;
+  window.COS_INDUSTRY_KEY = KEY;
+
+  /* ── Get / set current industry ── */
+  function getCurrent() {
+    var id = localStorage.getItem(KEY) || getCookie(KEY);
+    if (!id) return null;
+    for (var i = 0; i < INDUSTRIES.length; i++) {
+      if (INDUSTRIES[i].id === id) return INDUSTRIES[i];
+    }
+    return null;
+  }
+  function setCurrent(id) {
+    localStorage.setItem(KEY, id);
+    setCookie(KEY, id);
+    window.dispatchEvent(new CustomEvent('industryChanged', { detail: id }));
+  }
+  window.getCosIndustry = getCurrent;
+  window.setCosIndustry = setCurrent;
+
+  /* ── Nav dropdown ── */
+  function buildNavDropdown() {
+    var nav = document.querySelector('.aim-nav');
+    if (!nav) return;
+    var themeBtn = nav.querySelector('.theme-toggle');
+    if (!themeBtn) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'industry-nav-wrap';
+    wrap.style.cssText = 'position:relative;display:flex;align-items:center;flex-shrink:0;';
+
+    var btn = document.createElement('button');
+    btn.className = 'industry-nav-btn';
+    btn.style.cssText = 'height:36px;padding:0 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 200ms ease;font-family:inherit;font-size:12px;font-weight:600;white-space:nowrap;';
+
+    function updateBtn() {
+      var ind = getCurrent();
+      if (ind) {
+        btn.innerHTML = '<span style="font-size:14px;">' + ind.emoji + '</span><span class="ind-label">' + ind.name + '</span><span style="font-size:10px;opacity:0.6;">▼</span>';
+      } else {
+        btn.innerHTML = '<span style="font-size:14px;">🏢</span><span class="ind-label">Select industry</span><span style="font-size:10px;opacity:0.6;">▼</span>';
+      }
+    }
+    updateBtn();
+
+    btn.onmouseover = function(){ btn.style.background='rgba(255,255,255,0.12)'; btn.style.color='#fff'; };
+    btn.onmouseout = function(){ btn.style.background='rgba(255,255,255,0.06)'; btn.style.color='rgba(255,255,255,0.7)'; };
+
+    /* Dropdown panel */
+    var dd = document.createElement('div');
+    dd.className = 'industry-dropdown';
+    dd.style.cssText = 'position:absolute;top:calc(100% + 6px);right:0;background:rgba(26,34,73,0.97);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:6px;min-width:240px;max-height:420px;overflow-y:auto;display:none;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,0.5);z-index:9999;';
+
+    var ddTitle = document.createElement('div');
+    ddTitle.textContent = 'Choose your industry';
+    ddTitle.style.cssText = 'padding:8px 10px 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);';
+    dd.appendChild(ddTitle);
+
+    INDUSTRIES.forEach(function(ind) {
+      var item = document.createElement('button');
+      item.style.cssText = 'display:flex;align-items:center;gap:10px;width:100%;padding:10px;border:none;background:transparent;color:rgba(255,255,255,0.8);font-size:13px;font-weight:500;cursor:pointer;border-radius:8px;transition:background 0.15s ease;text-align:left;font-family:inherit;';
+      item.innerHTML = '<span style="font-size:18px;width:28px;text-align:center;flex-shrink:0;">' + ind.emoji + '</span><span>' + ind.name + '</span>';
+      item.onmouseover = function(){ item.style.background='rgba(255,255,255,0.08)'; };
+      item.onmouseout = function(){
+        var cur = getCurrent();
+        item.style.background = (cur && cur.id === ind.id) ? 'rgba(255,255,255,0.1)' : 'transparent';
+      };
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        setCurrent(ind.id);
+        updateBtn();
+        dd.style.display = 'none';
+        highlightCurrent();
+        tailorPrompts();
+      });
+      dd.appendChild(item);
+    });
+
+    function highlightCurrent() {
+      var cur = getCurrent();
+      var items = dd.querySelectorAll('button');
+      items.forEach(function(it, idx) {
+        it.style.background = (cur && INDUSTRIES[idx] && INDUSTRIES[idx].id === cur.id) ? 'rgba(255,255,255,0.1)' : 'transparent';
+      });
+    }
+
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = dd.style.display === 'block';
+      dd.style.display = isOpen ? 'none' : 'block';
+      if (!isOpen) highlightCurrent();
+    });
+    document.addEventListener('click', function(){ dd.style.display = 'none'; });
+
+    wrap.appendChild(btn);
+    wrap.appendChild(dd);
+    themeBtn.parentNode.insertBefore(wrap, themeBtn);
+
+    /* Light mode styles */
+    var style = document.createElement('style');
+    style.textContent = 'body.light-mode .industry-nav-btn{border-color:rgba(0,0,0,0.1)!important;background:rgba(0,0,0,0.04)!important;color:#475569!important;}body.light-mode .industry-nav-btn:hover{background:rgba(0,0,0,0.08)!important;color:#1e293b!important;}body.light-mode .industry-dropdown{background:rgba(255,255,255,0.97)!important;border-color:rgba(0,0,0,0.1)!important;box-shadow:0 12px 40px rgba(0,0,0,0.15)!important;}body.light-mode .industry-dropdown button{color:#334155!important;}body.light-mode .industry-dropdown button:hover{background:rgba(0,0,0,0.05)!important;}body.light-mode .industry-dropdown div{color:#94a3b8!important;}body.light-mode .industry-banner{background:rgba(0,0,0,0.03)!important;border-color:rgba(0,0,0,0.08)!important;color:#475569!important;}body.light-mode .industry-banner strong{color:#1e293b!important;}@media(max-width:640px){.ind-label{display:none!important;}.industry-nav-btn{padding:0 8px!important;}}';
+    document.head.appendChild(style);
+
+    window.addEventListener('industryChanged', function(){ updateBtn(); });
+  }
+
+  /* ── Prompt tailoring ── */
+  function tailorPrompts() {
+    var ind = getCurrent();
+    if (!ind) return;
+    var ph = ind.placeholders;
+
+    /* --- Add/update industry banner on pages with prompt-boxes --- */
+    var boxes = document.querySelectorAll('.prompt-box');
+    if (boxes.length === 0) return;
+
+    var banner = document.getElementById('industry-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'industry-banner';
+      banner.className = 'industry-banner';
+      banner.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);margin-bottom:20px;font-size:13px;color:rgba(255,255,255,0.7);';
+      /* Insert before the first prompt-box's parent section */
+      var firstBox = boxes[0];
+      var target = firstBox.closest('section') || firstBox.closest('div') || firstBox.parentNode;
+      if (target && target.parentNode) {
+        target.parentNode.insertBefore(banner, target);
+      }
+    }
+    banner.innerHTML = '<span style="font-size:20px;">' + ind.emoji + '</span><span>Prompts tailored for <strong style="color:#fff;">' + ind.name + '</strong> — examples and context will reflect your industry.</span>';
+
+    /* --- Replace placeholder text in prompt boxes --- */
+    boxes.forEach(function(box) {
+      /* Detach live button bar before modifying HTML */
+      var _liveBar = box.querySelector('.prompt-btn-bar');
+      if (_liveBar) _liveBar.parentNode.removeChild(_liveBar);
+
+      /* Store original HTML on first run (without button bar) */
+      if (!box.dataset.originalHtml) {
+        box.dataset.originalHtml = box.innerHTML;
+      }
+      /* Always restore original before applying new industry */
+      var html = box.dataset.originalHtml;
+
+      /* Replace bracketed placeholders */
+      var replacements = [
+        [/\[YOUR BUSINESS\]/gi, '[e.g. ' + ph.business + ']'],
+        [/\[YOUR BUSINESS TYPE\]/gi, '[e.g. ' + ph.business + ']'],
+        [/\[BUSINESS TYPE\]/gi, '[e.g. ' + ph.business + ']'],
+        [/\[DESCRIBE YOUR BUSINESS\]/gi, '[e.g. ' + ph.context + ']'],
+        [/\[YOUR PRODUCT\]/gi, '[e.g. ' + ph.product + ']'],
+        [/\[YOUR SERVICE\]/gi, '[e.g. ' + ph.service + ']'],
+        [/\[DESCRIBE YOUR CUSTOMERS\]/gi, '[e.g. ' + ph.customers + ']'],
+        [/\[YOUR CUSTOMERS\]/gi, '[e.g. ' + ph.customers + ']'],
+        [/\[YOUR AUDIENCE\]/gi, '[e.g. ' + ph.customers + ']'],
+        [/\[DESCRIBE YOUR AUDIENCE\]/gi, '[e.g. ' + ph.customers + ']'],
+        [/\[YOUR BRAND VOICE\]/gi, '[e.g. ' + ind.tone + ']'],
+        [/\[DESCRIBE HOW YOU CURRENTLY COMMUNICATE\]/gi, '[e.g. ' + ind.tone + ']'],
+        [/\[THEME OR PROMOTION\]/gi, '[e.g. ' + ph.socialPost + ']'],
+        [/\[YOUR IDEA\]/gi, '[e.g. ' + ph.socialPost + ']'],
+        [/\[DESCRIBE YOUR OFFER\]/gi, '[e.g. ' + ph.product + ']'],
+        [/\[YOUR 3 CHOSEN WORDS\]/gi, '[e.g. ' + ind.tone + ']']
+      ];
+
+      replacements.forEach(function(r) {
+        html = html.replace(r[0], r[1]);
+      });
+
+      /* Replace generic "small business" phrasing */
+      html = html.replace(/a small Australian business/gi, 'a small Australian ' + ph.business.split('/')[0].trim());
+      html = html.replace(/a small business/gi, 'a small ' + ph.business.split('/')[0].trim());
+
+      box.innerHTML = html;
+
+      /* Re-append the live button bar (with intact event listeners) */
+      if (_liveBar) box.appendChild(_liveBar);
+    });
+
+    /* --- Patch the copy function to prepend industry context --- */
+    if (!window._industryPatchApplied) {
+      window._industryPatchApplied = true;
+      var origWrite = navigator.clipboard.writeText.bind(navigator.clipboard);
+      navigator.clipboard.writeText = function(text) {
+        var curInd = getCurrent();
+        /* Only prepend to prompt-like text (skip short strings like URLs) */
+        if (curInd && text.length > 50) {
+          var prefix = 'Context: ' + curInd.context + '\n\n';
+          /* Don't double-prepend */
+          if (text.indexOf('Context: I run') !== 0) {
+            text = prefix + text;
+          }
+        }
+        return origWrite(text);
+      };
+    }
+  }
+
+  /* ── Form field tailoring ── */
+  function tailorFormFields() {
+    var ind = getCurrent();
+    if (!ind) return;
+    var ph = ind.placeholders;
+
+    /* Update placeholder text on input/textarea fields */
+    var fieldMap = {
+      'business': ph.business,
+      'biz': ph.business,
+      'company': ph.business,
+      'customer': ph.customers,
+      'audience': ph.customers,
+      'product': ph.product,
+      'service': ph.service,
+      'tone': ind.tone,
+      'voice': ind.tone,
+      'task': ph.task,
+      'goal': ph.goal
+    };
+
+    document.querySelectorAll('input[type="text"], textarea').forEach(function(el) {
+      var label = (el.placeholder || '').toLowerCase();
+      var id = (el.id || '').toLowerCase();
+      var combined = label + ' ' + id;
+
+      Object.keys(fieldMap).forEach(function(key) {
+        if (combined.indexOf(key) !== -1 && !el.value) {
+          el.placeholder = 'e.g. ' + fieldMap[key];
+        }
+      });
+    });
+  }
+
+  /* ── Init ── */
+  function init() {
+    buildNavDropdown();
+    tailorPrompts();
+    tailorFormFields();
+    window.addEventListener('industryChanged', function() {
+      tailorPrompts();
+      tailorFormFields();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+
+<!-- AI Glossary Tooltip System -->
+<script>
+/**
+ * AI Glossary — auto-highlights AI terms and shows plain-English tooltips
+ * Scans text nodes only (won't break links, inputs, or scripts).
+ * First match per term per page to keep it clean.
+ */
+(function(){
+  'use strict';
+
+  var TERMS = {
+    'hallucination': 'When AI confidently generates information that is incorrect or made up. Always fact-check AI outputs.',
+    'hallucinations': 'When AI confidently generates information that is incorrect or made up. Always fact-check AI outputs.',
+    'hallucinate': 'When AI confidently generates information that is incorrect or made up. Always fact-check AI outputs.',
+    'prompt': 'The instruction or question you type into an AI tool. A better prompt = a better answer.',
+    'prompts': 'Instructions or questions you type into an AI tool. Better prompts = better answers.',
+    'prompting': 'The skill of writing clear, effective instructions for AI tools to get the best results.',
+    'token': 'The small chunks (roughly words or word-pieces) that AI reads and generates. More tokens = longer conversations, higher cost.',
+    'tokens': 'The small chunks (roughly words or word-pieces) that AI reads and generates. More tokens = longer conversations, higher cost.',
+    'context window': 'The amount of text an AI can "remember" in one conversation. Think of it as the AI\'s short-term memory.',
+    'large language model': 'The technology behind tools like ChatGPT and Claude. It predicts the next word based on patterns in its training data.',
+    'LLM': 'Large Language Model — the technology behind ChatGPT, Claude, and similar tools. Predicts text based on patterns learned from training data.',
+    'generative AI': 'AI that creates new content (text, images, code) rather than just analysing existing data.',
+    'ChatGPT': 'An AI chatbot made by OpenAI. One of the most popular tools for generating text, answering questions, and brainstorming.',
+    'Claude': 'An AI assistant made by Anthropic. Known for longer, more nuanced responses and strong safety features.',
+    'Gemini': 'Google\'s AI assistant, built into Google Workspace. Good for tasks connected to Google Search and Docs.',
+    'Copilot': 'Microsoft\'s AI assistant, built into Word, Excel, Outlook, and Edge. Useful if you already use Microsoft 365.',
+    'brand voice': 'The consistent personality and tone your business uses across all communications — friendly, professional, playful, etc.',
+    'persona': 'A fictional profile representing your ideal customer — their needs, habits, and what motivates them to buy.',
+    'workflow': 'A repeatable sequence of steps to complete a task. AI can automate or speed up parts of a workflow.',
+    'repurpose': 'Taking one piece of content and adapting it for different platforms — e.g. turning a blog post into social media posts.',
+    'repurposing': 'Taking one piece of content and adapting it for different platforms — e.g. turning a blog post into social media posts.',
+    'training data': 'The massive collection of text and information an AI was trained on. The AI doesn\'t "know" things — it recognises patterns from this data.',
+    'iteration': 'Refining your AI output by sending follow-up prompts. Rarely is the first result perfect — iteration is normal and expected.',
+    'iterating': 'Refining your AI output by sending follow-up prompts. Rarely is the first result perfect — iteration is normal and expected.',
+    'temperature': 'A setting that controls how creative or predictable AI responses are. Low = focused and consistent. High = varied and creative.',
+    'AI model': 'The trained software that powers an AI tool. Different models (GPT-4, Claude, Gemini) have different strengths.',
+    'bias': 'When AI reflects unfair assumptions from its training data — e.g. gender or cultural stereotypes. Important to watch for and correct.',
+    'guardrails': 'Safety limits built into AI tools that prevent harmful, inappropriate, or dangerous outputs.',
+    'zero-shot': 'Asking AI to do something with no examples — just a plain instruction. Works for simple tasks.',
+    'few-shot': 'Giving AI a few examples of what you want before asking it to generate. Improves quality for specific formats or styles.',
+    'chain of thought': 'Asking AI to explain its reasoning step by step. Produces more accurate answers for complex problems.',
+    'API': 'Application Programming Interface — a way for software to talk to AI tools directly, without using the chat interface.',
+    'output': 'The text, table, list, or content that AI generates in response to your prompt.',
+    'context': 'The background information you give AI to help it understand your situation and give a relevant answer.'
+  };
+
+  /* ── CSS for tooltips ── */
+  var style = document.createElement('style');
+  style.textContent = [
+    '.gl-term {',
+    '  border-bottom: 1px dashed rgba(109,216,255,0.4);',
+    '  cursor: help;',
+    '  position: relative;',
+    '  transition: border-color 0.2s ease;',
+    '}',
+    '.gl-term:hover { border-bottom-color: #6dd8ff; }',
+    'body.light-mode .gl-term { border-bottom-color: rgba(46,61,125,0.3); }',
+    'body.light-mode .gl-term:hover { border-bottom-color: #2e3d7d; }',
+    '',
+    '.gl-tip {',
+    '  display: none;',
+    '  position: absolute;',
+    '  bottom: calc(100% + 8px);',
+    '  left: 50%;',
+    '  transform: translateX(-50%);',
+    '  width: max-content;',
+    '  max-width: 280px;',
+    '  padding: 10px 14px;',
+    '  border-radius: 10px;',
+    '  font-family: "Lato", Arial, sans-serif;',
+    '  font-size: 12px;',
+    '  line-height: 1.5;',
+    '  font-weight: 400;',
+    '  white-space: normal;',
+    '  z-index: 1000;',
+    '  pointer-events: none;',
+    '  background: rgba(20,25,50,0.95);',
+    '  border: 1px solid rgba(109,216,255,0.2);',
+    '  color: rgba(255,255,255,0.9);',
+    '  box-shadow: 0 8px 32px rgba(0,0,0,0.3);',
+    '  backdrop-filter: blur(12px);',
+    '  -webkit-backdrop-filter: blur(12px);',
+    '}',
+    'body.light-mode .gl-tip {',
+    '  background: rgba(255,255,255,0.97);',
+    '  border-color: rgba(0,0,0,0.08);',
+    '  color: #334155;',
+    '  box-shadow: 0 8px 32px rgba(0,0,0,0.12);',
+    '}',
+    '.gl-tip::after {',
+    '  content: "";',
+    '  position: absolute;',
+    '  top: 100%;',
+    '  left: 50%;',
+    '  transform: translateX(-50%);',
+    '  border: 6px solid transparent;',
+    '  border-top-color: rgba(20,25,50,0.95);',
+    '}',
+    'body.light-mode .gl-tip::after { border-top-color: rgba(255,255,255,0.97); }',
+    '.gl-tip-label {',
+    '  font-weight: 700;',
+    '  font-size: 11px;',
+    '  text-transform: uppercase;',
+    '  letter-spacing: 0.05em;',
+    '  color: #6dd8ff;',
+    '  margin-bottom: 4px;',
+    '}',
+    'body.light-mode .gl-tip-label { color: #2e3d7d; }',
+    '.gl-term:hover .gl-tip { display: block; animation: glFadeIn 0.15s ease; }',
+    '@keyframes glFadeIn { from { opacity:0; transform:translateX(-50%) translateY(4px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }',
+    '',
+    '/* Flip tooltip below if near top of viewport */',
+    '.gl-term.gl-flip .gl-tip {',
+    '  bottom: auto;',
+    '  top: calc(100% + 8px);',
+    '}',
+    '.gl-term.gl-flip .gl-tip::after {',
+    '  top: auto;',
+    '  bottom: 100%;',
+    '  border-top-color: transparent;',
+    '  border-bottom-color: rgba(20,25,50,0.95);',
+    '}',
+    'body.light-mode .gl-term.gl-flip .gl-tip::after {',
+    '  border-top-color: transparent;',
+    '  border-bottom-color: rgba(255,255,255,0.97);',
+    '}',
+    '@media print { .gl-term { border-bottom: none !important; } .gl-tip { display: none !important; } }'
+  ].join('\n');
+  document.head.appendChild(style);
+
+  /* ── Build case-insensitive lookup ── */
+  var termLower = {};
+  var termDisplay = {};
+  Object.keys(TERMS).forEach(function(t){
+    termLower[t.toLowerCase()] = TERMS[t];
+    termDisplay[t.toLowerCase()] = t;
+  });
+
+  /* Sort terms by length (longest first) so "context window" matches before "context" */
+  var sortedTerms = Object.keys(termLower).sort(function(a,b){ return b.length - a.length; });
+
+  /* Build one big regex */
+  var escaped = sortedTerms.map(function(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); });
+  var RE = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'gi');
+
+  /* Track which terms we've already highlighted (first match only) */
+  var seen = {};
+
+  /* ── Walk text nodes ── */
+  function walk(root){
+    var skip = { SCRIPT:1, STYLE:1, TEXTAREA:1, INPUT:1, SELECT:1, BUTTON:1, A:1, CODE:1, PRE:1 };
+
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(node){
+        var p = node.parentElement;
+        if(!p) return NodeFilter.FILTER_REJECT;
+        /* Skip if parent is already a glossary term, or is in skip list */
+        if(p.classList && p.classList.contains('gl-term')) return NodeFilter.FILTER_REJECT;
+        if(p.classList && p.classList.contains('gl-tip')) return NodeFilter.FILTER_REJECT;
+        if(p.closest && p.closest('.gl-tip')) return NodeFilter.FILTER_REJECT;
+        if(skip[p.tagName]) return NodeFilter.FILTER_REJECT;
+        /* Skip prompt-box content — don't annotate inside prompts */
+        if(p.closest && p.closest('.prompt-box')) return NodeFilter.FILTER_REJECT;
+        if(p.closest && p.closest('.gradient-text')) return NodeFilter.FILTER_REJECT;
+        /* Skip nav */
+        if(p.closest && p.closest('nav')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
+    var nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(function(textNode){
+      var text = textNode.nodeValue;
+      if(!RE.test(text)){ return; }
+      RE.lastIndex = 0;
+
+      var frag = document.createDocumentFragment();
+      var lastIdx = 0;
+      var match;
+
+      RE.lastIndex = 0;
+      while((match = RE.exec(text)) !== null){
+        var term = match[1];
+        var key = term.toLowerCase();
+
+        /* Only highlight first occurrence per term */
+        if(seen[key]) continue;
+        seen[key] = true;
+
+        /* Text before match */
+        if(match.index > lastIdx){
+          frag.appendChild(document.createTextNode(text.slice(lastIdx, match.index)));
+        }
+
+        /* Create the glossary span */
+        var span = document.createElement('span');
+        span.className = 'gl-term';
+        span.textContent = term;
+
+        var tip = document.createElement('span');
+        tip.className = 'gl-tip';
+        tip.innerHTML = '<div class="gl-tip-label">' + term + '</div>' + termLower[key];
+        span.appendChild(tip);
+
+        frag.appendChild(span);
+        lastIdx = match.index + term.length;
+      }
+
+      if(lastIdx === 0) return; /* no new highlights in this node */
+
+      /* Remaining text */
+      if(lastIdx < text.length){
+        frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+      }
+
+      textNode.parentNode.replaceChild(frag, textNode);
+    });
+  }
+
+  /* ── Flip detection (tooltip near top of page) ── */
+  function addFlipDetection(){
+    document.querySelectorAll('.gl-term').forEach(function(el){
+      el.addEventListener('mouseenter', function(){
+        var rect = el.getBoundingClientRect();
+        if(rect.top < 120){
+          el.classList.add('gl-flip');
+        } else {
+          el.classList.remove('gl-flip');
+        }
+      });
+    });
+  }
+
+  function init(){
+    walk(document.body);
+    addFlipDetection();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+
+<!-- Reset Button -->
+<script>
+/**
+ * Reset Button — clears all bootcamp data and returns to lock screen.
+ * Two-step confirmation to prevent accidental resets.
+ */
+(function(){
+  'use strict';
+
+  /* Build reset button */
+  var btn = document.createElement('button');
+  btn.id = 'cos-reset-btn';
+  btn.innerHTML = '↺ Reset';
+  btn.title = 'Reset all progress and return to start';
+  btn.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:9000;padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.25);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.25s ease;letter-spacing:0.02em;';
+  btn.onmouseover = function(){ btn.style.color='rgba(255,255,255,0.55)'; btn.style.borderColor='rgba(255,255,255,0.15)'; btn.style.background='rgba(255,255,255,0.06)'; };
+  btn.onmouseout = function(){ btn.style.color='rgba(255,255,255,0.25)'; btn.style.borderColor='rgba(255,255,255,0.08)'; btn.style.background='rgba(255,255,255,0.03)'; };
+
+  /* Light mode styles */
+  var style = document.createElement('style');
+  style.textContent = 'body.light-mode #cos-reset-btn{border-color:rgba(0,0,0,0.06)!important;background:rgba(0,0,0,0.02)!important;color:rgba(0,0,0,0.2)!important;}body.light-mode #cos-reset-btn:hover{border-color:rgba(0,0,0,0.12)!important;background:rgba(0,0,0,0.04)!important;color:rgba(0,0,0,0.4)!important;}body.light-mode #cos-reset-confirm{background:rgba(255,255,255,0.97)!important;border-color:rgba(0,0,0,0.1)!important;box-shadow:0 8px 32px rgba(0,0,0,0.12)!important;}body.light-mode #cos-reset-confirm p{color:#334155!important;}body.light-mode #cos-reset-confirm .reset-msg{color:#64748b!important;}body.light-mode .reset-cancel{border-color:rgba(0,0,0,0.1)!important;background:rgba(0,0,0,0.04)!important;color:#475569!important;}body.light-mode .reset-cancel:hover{background:rgba(0,0,0,0.08)!important;}@media print{#cos-reset-btn,#cos-reset-confirm{display:none!important;}}';
+  document.head.appendChild(style);
+
+  /* Confirmation dialog */
+  var dialog = document.createElement('div');
+  dialog.id = 'cos-reset-confirm';
+  dialog.style.cssText = 'display:none;position:fixed;bottom:52px;right:16px;z-index:9001;background:rgba(26,34,73,0.97);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:20px;width:280px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,0.4);';
+  dialog.innerHTML =
+    '<p style="color:#fff;font-size:14px;font-weight:700;margin:0 0 6px 0;">Reset everything?</p>' +
+    '<p class="reset-msg" style="color:rgba(255,255,255,0.5);font-size:12px;line-height:1.5;margin:0 0 16px 0;">This will clear all your saved work, quiz answers, progress, and industry selection. You\'ll return to the welcome screen.</p>' +
+    '<div style="display:flex;gap:8px;">' +
+      '<button class="reset-cancel" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s ease;">Cancel</button>' +
+      '<button class="reset-confirm-yes" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.12);color:#f87171;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s ease;">Yes, reset all</button>' +
+    '</div>';
+
+  var cancelBtn = dialog.querySelector('.reset-cancel');
+  var confirmBtn = dialog.querySelector('.reset-confirm-yes');
+
+  cancelBtn.onmouseover = function(){ cancelBtn.style.background='rgba(255,255,255,0.1)'; };
+  cancelBtn.onmouseout = function(){ cancelBtn.style.background='rgba(255,255,255,0.06)'; };
+  confirmBtn.onmouseover = function(){ confirmBtn.style.background='rgba(239,68,68,0.25)'; };
+  confirmBtn.onmouseout = function(){ confirmBtn.style.background='rgba(239,68,68,0.12)'; };
+
+  cancelBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    dialog.style.display = 'none';
+  });
+
+  confirmBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    /* Clear ALL cos_ai_ localStorage keys */
+    var keysToRemove = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('cos_ai_') === 0) {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach(function(k){ localStorage.removeItem(k); });
+
+    /* Clear sessionStorage */
+    sessionStorage.removeItem('cos_ai_unlocked');
+
+    /* Clear industry cookie */
+    try { document.cookie = 'cos_ai_industry=;path=/;max-age=0'; document.cookie = 'cos_ai_reset=1;path=/;max-age=120'; } catch(e){}
+
+    /* Navigate to root */
+    var path = window.location.pathname;
+    var base = path.substring(0, path.indexOf('city-of-sydney-ai-bootcamp'));
+    if (base) {
+      window.location.href = base + 'city-of-sydney-ai-bootcamp/index.html';
+    } else {
+      window.location.href = 'index.html';
+    }
+  });
+
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    dialog.style.display = dialog.style.display === 'none' ? 'block' : 'none';
+  });
+
+  document.addEventListener('click', function(){
+    dialog.style.display = 'none';
+  });
+
+  dialog.addEventListener('click', function(e){ e.stopPropagation(); });
+
+  /* Don't show on welcome overlay */
+  function addToPage(){
+    if (document.getElementById('welcome-overlay') && document.body.classList.contains('locked')) {
+      /* Wait until unlocked */
+      var obs = new MutationObserver(function(){
+        if (!document.body.classList.contains('locked')) {
+          document.body.appendChild(btn);
+          document.body.appendChild(dialog);
+          obs.disconnect();
+        }
+      });
+      obs.observe(document.body, { attributes:true, attributeFilter:['class'] });
+    } else {
+      document.body.appendChild(btn);
+      document.body.appendChild(dialog);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addToPage);
+  } else {
+    addToPage();
+  }
+})();
+
+</script>
+
+
+<style>
+.ws-nav{position:fixed;bottom:0;left:0;right:0;z-index:9000;display:flex;justify-content:space-between;align-items:center;padding:0.6rem 1.5rem;background:rgba(26,34,73,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,0.1);font-family:'Lato',sans-serif}
+html.light-pending .ws-nav,html[data-theme="light"] .ws-nav{background:rgba(255,255,255,0.95);border-top:1px solid rgba(0,0,0,0.1)}
+.ws-nav a{display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;border-radius:8px;font-size:0.85rem;font-weight:600;text-decoration:none;color:rgba(255,255,255,0.8);transition:all 0.2s}
+html.light-pending .ws-nav a,html[data-theme="light"] .ws-nav a{color:rgba(46,61,125,0.8)}
+.ws-nav a:hover{background:rgba(255,255,255,0.1);color:#fff}
+html.light-pending .ws-nav a:hover,html[data-theme="light"] .ws-nav a:hover{background:rgba(46,61,125,0.08);color:#2e3d7d}
+.ws-nav .ws-nav-label{font-size:0.75rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;font-weight:700}
+html.light-pending .ws-nav .ws-nav-label,html[data-theme="light"] .ws-nav .ws-nav-label{color:rgba(46,61,125,0.45)}
+.ws-nav .ws-nav-home{font-size:0.8rem}
+</style>
+
+<nav class="ws-nav">
+  <div><a href="cheat-sheets.html">&#9664; Cheat Sheets</a></div>
+  <div><a href="index.html" class="ws-nav-home" title="Course Home">&#9632; Home</a></div>
+  <div><a href="index.html">Course Home &#9654;</a></div>
+</nav>
+
+</body>
+</html>

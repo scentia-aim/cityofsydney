@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safe Context Rewriter | AI for Business</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="../assets/css/global.css" />
+  <link rel="stylesheet" href="../assets/css/city-theme.css" />
+
+  <style>html.light-pending body{background:#f4f5f9!important}body{padding-bottom:4rem!important}
+</style>
+<script>/* Reset wipe — clears localStorage for this directory scope */
+try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.length-1;_ri>=0;_ri--){var _rk=localStorage.key(_ri);if(_rk&&_rk.indexOf('cos_ai_')===0)localStorage.removeItem(_rk);}document.cookie='cos_ai_reset=;path=/;max-age=0';}}catch(e){}</script>
+<script>/* Early theme apply — prevents flash */try{if(localStorage.getItem('cos_ai_theme')==='light')document.documentElement.classList.add('light-pending')}catch(e){}</script>
+</head>
+<body class="course-business">
+  
+  <nav class="aim-nav fixed top-0 left-0 right-0 z-50 py-5">
+    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+      <a href="../index.html"><img src="../assets/aimlogo_white.png" alt="AIM" class="h-8 sm:h-10"></a>
+      <a href="index.html" class="aim-back"><i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> AI for Business</a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
+        <svg class="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main class="relative z-10 max-w-4xl mx-auto px-6 pt-28 pb-20">
+    <div class="pill mb-6 fade-up"><span class="w-2 h-2 rounded-full bg-[var(--aim-success)] inline-block"></span> Module 2</div>
+    <h1 class="text-3xl sm:text-4xl font-bold mb-4 fade-up" style="animation-delay:100ms">Safe Context <span class="gradient-text">Rewriter</span></h1>
+    <p class="text-[var(--aim-text)] text-lg mb-12 fade-up" style="animation-delay:200ms">Practice turning confidential business context into safe, general prompts.</p>
+
+    <!-- Activity -->
+    <section class="glass rounded-2xl p-8 mb-10 fade-up" style="animation-delay:300ms">
+      <h2 class="text-lg font-semibold text-[var(--aim-heading)] mb-2">Your Turn</h2>
+      <p class="text-sm text-[var(--aim-text)] mb-6">Paste or type a business scenario, then rewrite it without any private details.</p>
+
+      <div class="space-y-6">
+        <div>
+          <label class="block text-sm font-semibold text-[var(--aim-danger)] mb-2 flex items-center gap-2"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Original (may contain sensitive info)</label>
+          <textarea id="unsafe-input" class="save-field w-full bg-white/5 border border-[#ff6b52]/20 rounded-lg px-4 py-3 text-sm text-[var(--aim-text)] placeholder-[var(--aim-muted)] focus:outline-none focus:border-[#ff6b52] resize-y" rows="4" placeholder="e.g. I run a caf&eacute; on Crown Street called Bean & Gone. My staff member Sarah works Mon-Wed and earns $28/hr..."></textarea>
+        </div>
+        <div class="flex justify-center"><i data-lucide="arrow-down" class="w-5 h-5 text-[var(--aim-muted)]"></i></div>
+        <div>
+          <label class="block text-sm font-semibold text-[var(--aim-success)] mb-2 flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4"></i> Safe version (ready for AI)</label>
+          <textarea id="safe-output" class="save-field w-full bg-white/5 border border-[#2ecc71]/20 rounded-lg px-4 py-3 text-sm text-[var(--aim-text)] placeholder-[var(--aim-muted)] focus:outline-none focus:border-[#2ecc71] resize-y" rows="4" placeholder="e.g. I run a small caf&eacute; in inner Sydney with a small casual team. Please help me create a general weekly roster template..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rewriter Prompt -->
+    <section class="mb-10 fade-up" style="animation-delay:400ms">
+      <h2 class="text-lg font-semibold text-[var(--aim-heading)] mb-4">Safe Context Rewriter Prompt</h2>
+      <p class="text-sm text-[var(--aim-text)] mb-4">Copy this prompt and paste your business context at the bottom. AI will help you remove sensitive details.</p>
+      <div class="prompt-box">Act as a privacy-conscious AI advisor for small businesses.
+
+I want to use AI to help with a business task, but I need to remove confidential, personal or commercially sensitive information first.
+
+Please rewrite the following into safe, general business context that keeps the useful details but removes names, private data, exact financial details, customer information and anything sensitive.
+
+Context:
+[PASTE YOUR CONTEXT HERE]</div>
+    </section>
+
+    <!-- Checklist -->
+    <section class="glass rounded-2xl p-8 fade-up" style="animation-delay:500ms">
+      <h3 class="text-lg font-bold text-[var(--aim-heading)] mb-4">What to Remove</h3>
+      <div class="grid sm:grid-cols-2 gap-3 text-sm">
+        <div class="flex items-start gap-2 text-[var(--aim-text)]"><i data-lucide="x" class="w-4 h-4 text-[var(--aim-danger)] mt-0.5 shrink-0"></i> People's names</div>
+        <div class="flex items-start gap-2 text-[var(--aim-text)]"><i data-lucide="x" class="w-4 h-4 text-[var(--aim-danger)] mt-0.5 shrink-0"></i> Exact addresses</div>
+        <div class="flex items-start gap-2 text-[var(--aim-text)]"><i data-lucide="x" class="w-4 h-4 text-[var(--aim-danger)] mt-0.5 shrink-0"></i> Pay rates and financial figures</div>
+        <div class="flex items-start gap-2 text-[var(--aim-text)]"><i data-lucide="x" class="w-4 h-4 text-[var(--aim-danger)] mt-0.5 shrink-0"></i> Customer contact details</div>
+        <div class="flex items-start gap-2 text-[var(--aim-text)]"><i data-lucide="x" class="w-4 h-4 text-[var(--aim-danger)] mt-0.5 shrink-0"></i> Business name (if sensitive)</div>
+        <div class="flex items-start gap-2 text-[var(--aim-text)]"><i data-lucide="x" class="w-4 h-4 text-[var(--aim-danger)] mt-0.5 shrink-0"></i> Health or legal information</div>
+      </div>
+    </section>
+
+    <!-- Cheat Sheets -->
+    <section class="mt-12 fade-up" style="animation-delay:600ms">
+      <h2 class="text-lg font-semibold mb-4" style="color:var(--aim-heading)"><i data-lucide="file-down" class="w-5 h-5 inline-block mr-1" style="color:#6dd8ff"></i> Related Cheat Sheets</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <a href="#" data-dl-url="../assets/cheatsheets/SafeContextRewriter.png" data-dl-name="SafeContextRewriter.png" onclick="downloadSheet(this,event)" class="glass-light rounded-xl overflow-hidden block hover:shadow-md transition-all group">
+          <div class="aspect-[3/4] overflow-hidden bg-white/5"><img src="../assets/cheatsheets/cheatsheet_thumbs/SafeContextRewriter.jpg" alt="Safe Context Rewriter" class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform" loading="lazy"></div>
+          <div class="p-3"><div class="text-xs font-bold leading-tight" style="color:var(--aim-heading)">Safe Context Rewriter</div><div class="text-[10px] mt-1 font-semibold flex items-center gap-1" style="color:#6dd8ff"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</div></div>
+        </a>
+        <a href="#" data-dl-url="../assets/cheatsheets/BeforeYouPaste.png" data-dl-name="BeforeYouPaste.png" onclick="downloadSheet(this,event)" class="glass-light rounded-xl overflow-hidden block hover:shadow-md transition-all group">
+          <div class="aspect-[3/4] overflow-hidden bg-white/5"><img src="../assets/cheatsheets/cheatsheet_thumbs/BeforeYouPaste.jpg" alt="Before You Paste: Safe AI Checklist" class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform" loading="lazy"></div>
+          <div class="p-3"><div class="text-xs font-bold leading-tight" style="color:var(--aim-heading)">Before You Paste: Safe AI Checklist</div><div class="text-[10px] mt-1 font-semibold flex items-center gap-1" style="color:#6dd8ff"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download</div></div>
+        </a>
+      </div>
+    </section>
+  
+    <!-- Download as PDF -->
+    <div class="text-center mt-12 mb-4 fade-up">
+      <button onclick="downloadWorkshopPDF()" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold transition-all" style="background:#2e3d7d;color:#fff;border:none;cursor:pointer;" onmouseover="this.style.background='#3a4f9a'" onmouseout="this.style.background='#2e3d7d'">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download as PDF
+      </button>
+      
+    </div>
+  </main>
+
+  <footer class="border-t border-[var(--aim-panel)] py-8">
+    <div class="max-w-6xl mx-auto px-6 text-center text-xs text-[var(--aim-muted)]">AIM AI Bootcamp for Small Business</div>
+  </footer>
+
+  <script>lucide.createIcons();</script>
+<script>
+function downloadSheet(el,evt){
+  evt.preventDefault();
+  var url=el.getAttribute("data-dl-url");
+  var name=el.getAttribute("data-dl-name");
+  /* file:// protocol can't use fetch — open image directly instead */
+  if(window.location.protocol==='file:'){
+    var a=document.createElement("a");a.href=url;a.download=name;a.target="_blank";
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    return;
+  }
+  fetch(url).then(function(r){return r.blob();}).then(function(b){
+    var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
+  });
+}
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+/**
+ * AIM Workshop — Download as PDF
+ * Generates a branded PDF with embedded AIM + City of Sydney logos.
+ * Requires jsPDF loaded via CDN before this script.
+ */
+(function () {
+  var BLUE  = [46, 61, 125];
+  var WHITE = [255, 255, 255];
+  var CREAM = [241, 238, 222];
+  var MUTED = [130, 135, 160];
+  var ACCENT = [109, 216, 255];
+  var DARK  = [40, 44, 60];
+
+  var PAGE_W = 210;
+  var PAGE_H = 297;
+  var MARGIN = 20;
+  var CONTENT_W = PAGE_W - MARGIN * 2;
+  var y = 0;
+
+  /* ── Embedded logos (base64) ── */
+  var AIM_LOGO = 'data:image/png;base64,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';
+  var COS_LOGO = 'data:image/png;base64,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';
+
+  function needsNewPage(doc, needed) {
+    if (y + needed > PAGE_H - 25) {
+      doc.addPage();
+      y = MARGIN;
+      return true;
+    }
+    return false;
+  }
+
+  function drawHeader(doc, title, subtitle) {
+    doc.setFillColor(BLUE[0], BLUE[1], BLUE[2]);
+    doc.rect(0, 0, PAGE_W, 48, 'F');
+
+    /* AIM logo left */
+    try { doc.addImage(AIM_LOGO, 'PNG', MARGIN, 7, 32, 13); } catch (e) {
+      doc.setTextColor(255,255,255); doc.setFontSize(14); doc.setFont('helvetica','bold'); doc.text('AIM', MARGIN, 17);
+    }
+    /* City of Sydney logo right */
+    try { doc.addImage(COS_LOGO, 'PNG', PAGE_W - MARGIN - 44, 6, 44, 11); } catch (e) {}
+
+    /* Accent line */
+    doc.setDrawColor(ACCENT[0], ACCENT[1], ACCENT[2]);
+    doc.setLineWidth(0.4);
+    doc.line(MARGIN, 24, PAGE_W - MARGIN, 24);
+
+    /* Title */
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(15);
+    doc.setFont('helvetica', 'bold');
+    var titleLines = doc.splitTextToSize(title, CONTENT_W);
+    doc.text(titleLines, MARGIN, 33);
+
+    if (subtitle) {
+      doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+      doc.setTextColor(ACCENT[0], ACCENT[1], ACCENT[2]);
+      doc.text(subtitle, PAGE_W - MARGIN, 31, { align: 'right' });
+    }
+    doc.setFontSize(7); doc.setTextColor(200, 200, 220);
+    doc.text(new Date().toLocaleDateString('en-AU', { day:'numeric', month:'long', year:'numeric' }), PAGE_W - MARGIN, 38, { align:'right' });
+
+    doc.setFillColor(CREAM[0], CREAM[1], CREAM[2]);
+    doc.rect(0, 48, PAGE_W, 3, 'F');
+    y = 58;
+  }
+
+  function drawSectionTitle(doc, text) {
+    needsNewPage(doc, 18);
+    y += 2;
+    doc.setFillColor(CREAM[0], CREAM[1], CREAM[2]);
+    doc.roundedRect(MARGIN, y, CONTENT_W, 10, 2, 2, 'F');
+    doc.setTextColor(BLUE[0], BLUE[1], BLUE[2]);
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+    doc.text(text, MARGIN + 4, y + 7);
+    y += 16;
+  }
+
+  function drawParagraph(doc, text, style) {
+    if (!text || text.trim().length < 3) return;
+    text = text.trim();
+    needsNewPage(doc, 12);
+    if (style === 'muted') {
+      doc.setTextColor(MUTED[0], MUTED[1], MUTED[2]);
+      doc.setFontSize(9); doc.setFont('helvetica', 'italic');
+    } else {
+      doc.setTextColor(DARK[0], DARK[1], DARK[2]);
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+    }
+    var lines = doc.splitTextToSize(text, CONTENT_W);
+    lines.forEach(function (line) {
+      needsNewPage(doc, 6);
+      doc.text(line, MARGIN, y + 3);
+      y += 5.5;
+    });
+    y += 3;
+  }
+
+  function drawLabel(doc, text) {
+    needsNewPage(doc, 10);
+    doc.setTextColor(MUTED[0], MUTED[1], MUTED[2]);
+    doc.setFontSize(8); doc.setFont('helvetica', 'bold');
+    doc.text(text.toUpperCase(), MARGIN, y + 3);
+    y += 7;
+  }
+
+  function drawValue(doc, text) {
+    needsNewPage(doc, 12);
+    doc.setTextColor(DARK[0], DARK[1], DARK[2]);
+    doc.setFontSize(10); doc.setFont('helvetica', 'normal');
+    if (!text || text.trim() === '') { doc.setTextColor(180,180,180); text = '(not filled in)'; }
+    var lines = doc.splitTextToSize(text, CONTENT_W - 4);
+    lines.forEach(function (line) {
+      needsNewPage(doc, 7);
+      doc.text(line, MARGIN + 2, y + 3);
+      y += 6;
+    });
+    y += 3;
+  }
+
+  function drawDivider(doc) {
+    needsNewPage(doc, 4);
+    doc.setDrawColor(220, 220, 225);
+    doc.setLineWidth(0.3);
+    doc.line(MARGIN, y, PAGE_W - MARGIN, y);
+    y += 5;
+  }
+
+  function drawBullet(doc, text) {
+    if (!text || text.trim().length < 3) return;
+    text = text.trim();
+    needsNewPage(doc, 10);
+    doc.setFillColor(BLUE[0], BLUE[1], BLUE[2]);
+    doc.circle(MARGIN + 2, y + 2, 1.2, 'F');
+    doc.setTextColor(DARK[0], DARK[1], DARK[2]);
+    doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+    var lines = doc.splitTextToSize(text, CONTENT_W - 10);
+    lines.forEach(function (line) {
+      needsNewPage(doc, 6);
+      doc.text(line, MARGIN + 7, y + 3);
+      y += 5.5;
+    });
+    y += 1;
+  }
+
+  function drawCard(doc, heading, body) {
+    needsNewPage(doc, 18);
+    var bodyLines = body ? doc.splitTextToSize(body, CONTENT_W - 14) : [];
+    var cardH = (heading ? 9 : 0) + bodyLines.length * 5 + 6;
+    needsNewPage(doc, cardH + 4);
+    doc.setFillColor(248, 247, 244);
+    doc.roundedRect(MARGIN + 2, y, CONTENT_W - 4, cardH, 2, 2, 'F');
+    doc.setDrawColor(230, 228, 220); doc.setLineWidth(0.2);
+    doc.roundedRect(MARGIN + 2, y, CONTENT_W - 4, cardH, 2, 2, 'S');
+    if (heading) {
+      doc.setTextColor(BLUE[0], BLUE[1], BLUE[2]);
+      doc.setFontSize(9); doc.setFont('helvetica', 'bold');
+      doc.text(heading, MARGIN + 6, y + 6);
+      y += 9;
+    }
+    if (bodyLines.length > 0) {
+      doc.setTextColor(DARK[0], DARK[1], DARK[2]);
+      doc.setFontSize(8); doc.setFont('helvetica', 'normal');
+      bodyLines.forEach(function (line) { doc.text(line, MARGIN + 6, y + 3); y += 5; });
+    }
+    y += 5;
+  }
+
+  function drawFooter(doc) {
+    var n = doc.internal.getNumberOfPages();
+    for (var i = 1; i <= n; i++) {
+      doc.setPage(i);
+      doc.setDrawColor(BLUE[0], BLUE[1], BLUE[2]);
+      doc.setLineWidth(0.5);
+      doc.line(MARGIN, PAGE_H - 15, PAGE_W - MARGIN, PAGE_H - 15);
+      doc.setTextColor(MUTED[0], MUTED[1], MUTED[2]);
+      doc.setFontSize(7); doc.setFont('helvetica', 'normal');
+      doc.text('AIM AI Bootcamp for Small Business  |  City of Sydney', MARGIN, PAGE_H - 10);
+      doc.text('Page ' + i + ' of ' + n, PAGE_W - MARGIN, PAGE_H - 10, { align:'right' });
+    }
+  }
+
+  function getVisibleText(el) {
+    if (!el) return '';
+    var skip = ['SCRIPT','STYLE','SVG','NAV','BUTTON','INPUT','TEXTAREA','SELECT'];
+    if (skip.indexOf(el.tagName) > -1) return '';
+    if (el.classList && (el.classList.contains('cs-thumb') || el.classList.contains('module-dot') || el.classList.contains('gl-tip'))) return '';
+    var t = '';
+    el.childNodes.forEach(function (n) {
+      if (n.nodeType === 3) t += n.textContent;
+      else if (n.nodeType === 1) t += getVisibleText(n);
+    });
+    return t;
+  }
+
+  window.downloadWorkshopPDF = function () {
+    if (typeof window.jspdf === 'undefined') { alert('PDF library is loading, please try again in a moment.'); return; }
+    var btn = document.querySelector('[onclick*="downloadWorkshopPDF"]');
+    var btnText = '';
+    if (btn) { btnText = btn.innerHTML; btn.innerHTML = 'Generating…'; btn.disabled = true; }
+    try { generatePDF(); } catch (e) { console.error('PDF error:', e); alert('Error generating PDF.'); }
+    if (btn) { btn.innerHTML = btnText; btn.disabled = false; }
+  };
+
+  function generatePDF() {
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF({ unit:'mm', format:'a4' });
+
+    var pageTitle = document.querySelector('h1') ? document.querySelector('h1').textContent.trim() : 'Workshop';
+    var courseName = '';
+    if (document.body.classList.contains('course-business')) courseName = 'AI for Business';
+    else if (document.body.classList.contains('course-marketing')) courseName = 'AI for Marketing';
+    else courseName = 'AI Bootcamp';
+
+    drawHeader(doc, pageTitle, courseName);
+
+    var mainEl = document.querySelector('main');
+    if (mainEl) {
+      var introEls = mainEl.querySelectorAll(':scope > p, :scope > div > p');
+      introEls.forEach(function (p) {
+        if (p.closest('section')) return;
+        var txt = p.textContent.trim();
+        if (txt.length > 5) drawParagraph(doc, txt, 'muted');
+      });
+    }
+
+    var sections = document.querySelectorAll('main section');
+    sections.forEach(function (section) {
+      var h = section.querySelector('h2, h3');
+      var sectionTitle = h ? h.textContent.trim() : '';
+      var lower = sectionTitle.toLowerCase();
+      if (lower.indexOf('cheat sheet') > -1) return;
+      if (lower.indexOf('related') > -1 && lower.indexOf('cheat') > -1) return;
+      if (section.querySelector('[onclick*="downloadWorkshopPDF"]')) return;
+
+      if (sectionTitle) drawSectionTitle(doc, sectionTitle);
+
+      var sectionP = section.querySelectorAll(':scope > p, :scope > div > p');
+      sectionP.forEach(function (p) {
+        if (p.closest('table') || p.closest('.glass-light') || p.closest('.glass')) return;
+        var txt = p.textContent.trim();
+        if (txt && txt.length > 5) drawParagraph(doc, txt, 'muted');
+      });
+
+      var cards = section.querySelectorAll('.glass, .glass-light');
+      cards.forEach(function (card) {
+        if (card.querySelector('.aspect-\\[3\\/4\\]') || card.querySelector('img[src*="cheatsheet"]') || card.querySelector('img[src*="cheat"]')) return;
+        if (card.tagName === 'A' && card.getAttribute('href') && card.getAttribute('href').indexOf('.html') > -1) return;
+        var cardH3 = card.querySelector('h3, .font-semibold, .font-bold');
+        var heading = cardH3 ? cardH3.textContent.trim() : '';
+        var bodyText = '';
+        card.querySelectorAll('p').forEach(function (p) {
+          var t = p.textContent.trim();
+          if (t && t !== heading && t.length > 2) bodyText += (bodyText ? ' ' : '') + t;
+        });
+        card.querySelectorAll('li').forEach(function (li) {
+          var t = li.textContent.trim();
+          if (t) bodyText += (bodyText ? '\n' : '') + '  •  ' + t;
+        });
+        if (heading || bodyText) {
+          if (heading && bodyText) drawCard(doc, heading, bodyText);
+          else if (heading) drawBullet(doc, heading);
+          else if (bodyText && bodyText.length < 300) drawBullet(doc, bodyText);
+        }
+      });
+
+      var lists = section.querySelectorAll(':scope > ul > li, :scope > ol > li, :scope > div > ul > li, :scope > div > ol > li');
+      lists.forEach(function (li) {
+        if (li.closest('.glass') || li.closest('.glass-light')) return;
+        var txt = li.textContent.trim();
+        if (txt && txt.length > 3) drawBullet(doc, txt);
+      });
+
+      var tables = section.querySelectorAll('table');
+      tables.forEach(function (table) {
+        var headers = [];
+        table.querySelectorAll('thead th').forEach(function (th) { headers.push(th.textContent.trim()); });
+        var nCols = headers.length || 1;
+        var colWidths = [];
+        if (nCols >= 4) {
+          var firstW = CONTENT_W * 0.4;
+          var restW = (CONTENT_W - firstW) / (nCols - 1);
+          colWidths.push(firstW);
+          for (var _c = 1; _c < nCols; _c++) colWidths.push(restW);
+        } else {
+          for (var _c = 0; _c < nCols; _c++) colWidths.push(CONTENT_W / nCols);
+        }
+        function colX(idx) { var x = MARGIN; for (var _j = 0; _j < idx; _j++) x += colWidths[_j]; return x; }
+        if (headers.length > 0) {
+          needsNewPage(doc, 14);
+          doc.setFillColor(BLUE[0], BLUE[1], BLUE[2]);
+          doc.rect(MARGIN, y, CONTENT_W, 8, 'F');
+          doc.setTextColor(255,255,255); doc.setFontSize(7); doc.setFont('helvetica','bold');
+          headers.forEach(function (h, i) { doc.text(doc.splitTextToSize(h, colWidths[i]-4)[0], colX(i) + 2, y + 5.5); });
+          y += 10;
+        }
+        table.querySelectorAll('tbody tr').forEach(function (tr, rowIdx) {
+          needsNewPage(doc, 10);
+          if (rowIdx % 2 === 0) { doc.setFillColor(248,248,250); doc.rect(MARGIN, y-1, CONTENT_W, 8, 'F'); }
+          var cells = tr.querySelectorAll('td');
+          doc.setTextColor(DARK[0], DARK[1], DARK[2]); doc.setFontSize(8); doc.setFont('helvetica','normal');
+          cells.forEach(function (td, i) {
+            var input = td.querySelector('input, select, textarea');
+            var val = input ? (input.value || '') : td.textContent.trim();
+            if (!val && input && input.placeholder) val = input.placeholder;
+            var cw = (i < colWidths.length) ? colWidths[i] : (CONTENT_W / nCols);
+            var lines = doc.splitTextToSize(val, cw - 4);
+            doc.text(lines[0], colX(i) + 2, y + 4.5);
+          });
+          y += 8;
+        });
+        y += 4;
+      });
+
+      var inputs = section.querySelectorAll('input[type="text"], textarea, select');
+      inputs.forEach(function (input) {
+        if (input.closest('table')) return;
+        var label = '';
+        var wrapper = input.closest('.glass, .glass-light, div');
+        if (wrapper) { var le = wrapper.querySelector('span.text-sm, label, .font-semibold'); if (le && le.textContent.trim().length < 120) label = le.textContent.trim(); }
+        if (!label) { var prev = input.previousElementSibling; if (prev && prev.textContent) label = prev.textContent.trim(); }
+        if (!label && input.placeholder) label = input.placeholder;
+        if (!label && input.id) label = input.id.replace(/-/g, ' ');
+        if (label) drawLabel(doc, label);
+        var val = input.value || '';
+        if (input.tagName === 'SELECT') val = input.options[input.selectedIndex] ? input.options[input.selectedIndex].text : '';
+        drawValue(doc, val);
+      });
+
+      var checks = section.querySelectorAll('input[type="checkbox"]');
+      if (checks.length > 0) {
+        checks.forEach(function (cb) {
+          var lbl = ''; var le = cb.closest('label') || cb.parentElement;
+          if (le) lbl = le.textContent.trim();
+          if (lbl) {
+            needsNewPage(doc, 8);
+            doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(DARK[0], DARK[1], DARK[2]);
+            doc.text((cb.checked ? '[x]' : '[ ]') + '  ' + lbl, MARGIN + 2, y + 3);
+            y += 6;
+          }
+        });
+        y += 3;
+      }
+
+
+      /* Capture prompt-box generated content */
+      var promptBoxes = section.querySelectorAll('.prompt-box');
+      promptBoxes.forEach(function(pb) {
+        var span = pb.querySelector('.prompt-text-content');
+        var txt = span ? span.textContent.trim() : '';
+        if (!txt) {
+          /* Fallback: get all text excluding button labels */
+          txt = pb.innerText.replace(/^Copy$|^Copied!$|^Try it ▾$|^ChatGPT$|^Claude$|^Gemini$|^Copilot$/gm, '').trim();
+        }
+        if (txt && txt.length > 10 && txt.indexOf('Fill in the fields') === -1) {
+          drawLabel(doc, 'Your Generated Prompt');
+          drawValue(doc, txt);
+        }
+      });
+
+      drawDivider(doc);
+    });
+
+    var standaloneCards = document.querySelectorAll('main > section.glass, main > .glass');
+    standaloneCards.forEach(function (card) {
+      var h = card.querySelector('h3, h2');
+      var heading = h ? h.textContent.trim() : '';
+      var body = '';
+      card.querySelectorAll('p').forEach(function (p) { var t = p.textContent.trim(); if (t && t !== heading) body += (body ? ' ' : '') + t; });
+      if (heading || body) drawCard(doc, heading, body);
+    });
+
+    drawFooter(doc);
+    var fileName = pageTitle.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, '-') + '.pdf';
+    doc.save(fileName);
+  }
+})();
+
+  </script>
+  <script>
+/**
+ * Copy & Try-It Buttons — attaches "Copy" + "Try it" to .prompt-box elements
+ * "Try it" copies the prompt and opens ChatGPT or Claude in a new tab.
+ */
+(function () {
+  'use strict';
+
+  var AI_TOOLS = [
+    { name:'ChatGPT', url:'https://chatgpt.com/', icon:'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-2h-2v2zm0-4h2V7h-2v6z' },
+    { name:'Claude', url:'https://claude.ai/new', icon:'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z' },
+    { name:'Gemini', url:'https://gemini.google.com/app', icon:'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
+    { name:'Copilot', url:'https://copilot.microsoft.com/', icon:'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' }
+  ];
+
+  function getPromptText(box) {
+    return box.innerText.replace(/^Copy$|^Copied!$|^Try it ▾$|^ChatGPT$|^Claude$|^Gemini$|^Copilot$|^Copied & opening.*$/gm, '').trim();
+  }
+
+  function init() {
+    document.querySelectorAll('.prompt-box').forEach(function (box) {
+      if (box.querySelector('.copy-btn')) return;
+      box.style.position = 'relative';
+
+      /* ── Button bar (flex container) ── */
+      var btnBar = document.createElement('div'); btnBar.className='prompt-btn-bar';
+      btnBar.style.cssText = 'position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:6px;z-index:5;';
+
+      /* ── Copy button ── */
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.style.cssText = 'position:static;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#93c5fd;font-size:11px;cursor:pointer;transition:all 200ms ease;font-family:inherit;';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy prompt to clipboard');
+      btn.addEventListener('click', function () {
+        var text = getPromptText(box);
+        navigator.clipboard.writeText(text).then(function () {
+          btn.textContent = 'Copied!';
+          btn.style.background = 'rgba(74, 222, 128, 0.18)';
+          btn.style.borderColor = 'rgba(74, 222, 128, 0.35)';
+          btn.style.color = '#4ade80';
+          setTimeout(function () {
+            btn.textContent = 'Copy';
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            btn.style.color = '';
+          }, 2000);
+        });
+      });
+      btnBar.appendChild(btn);
+
+      /* ── Try-it button with dropdown ── */
+      var tryWrap = document.createElement('div');
+      tryWrap.style.cssText = 'position:relative;z-index:5;';
+
+      var tryBtn = document.createElement('button');
+      tryBtn.textContent = 'Try it ▾';
+      tryBtn.style.cssText = 'padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid rgba(109,216,255,0.3);background:rgba(109,216,255,0.1);color:#6dd8ff;transition:all 0.2s ease;white-space:nowrap;';
+      tryBtn.onmouseover = function(){ tryBtn.style.background='rgba(109,216,255,0.2)'; };
+      tryBtn.onmouseout = function(){ if(!dropdown.classList.contains('show')) tryBtn.style.background='rgba(109,216,255,0.1)'; };
+
+      var dropdown = document.createElement('div');
+      dropdown.style.cssText = 'position:absolute;top:100%;right:0;margin-top:4px;background:rgba(26,34,73,0.97);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:4px;min-width:150px;display:none;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:100;';
+
+      AI_TOOLS.forEach(function(tool) {
+        var item = document.createElement('button');
+        item.style.cssText = 'display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border:none;background:transparent;color:rgba(255,255,255,0.8);font-size:12px;font-weight:600;cursor:pointer;border-radius:6px;transition:background 0.15s ease;text-align:left;font-family:inherit;';
+        item.onmouseover = function(){ item.style.background='rgba(255,255,255,0.08)'; };
+        item.onmouseout = function(){ item.style.background='transparent'; };
+
+        var icon = document.createElement('div');
+        icon.style.cssText = 'width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:800;';
+
+        if(tool.name === 'ChatGPT') {
+          icon.style.background = 'rgba(16,163,127,0.15)';
+          icon.style.color = '#10a37f';
+          icon.textContent = 'G';
+        } else if(tool.name === 'Claude') {
+          icon.style.background = 'rgba(217,119,87,0.15)';
+          icon.style.color = '#d97757';
+          icon.textContent = 'C';
+        } else if(tool.name === 'Gemini') {
+          icon.style.background = 'rgba(66,133,244,0.15)';
+          icon.style.color = '#4285f4';
+          icon.textContent = 'G';
+        } else {
+          icon.style.background = 'rgba(109,216,255,0.15)';
+          icon.style.color = '#6dd8ff';
+          icon.textContent = 'Co';
+          icon.style.fontSize = '10px';
+        }
+
+        var label = document.createElement('span');
+        label.textContent = tool.name;
+
+        item.appendChild(icon);
+        item.appendChild(label);
+
+        item.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var text = getPromptText(box);
+          navigator.clipboard.writeText(text).then(function() {
+            /* Show feedback */
+            tryBtn.textContent = 'Copied!';
+            tryBtn.style.background = 'rgba(74,222,128,0.18)';
+            tryBtn.style.borderColor = 'rgba(74,222,128,0.35)';
+            tryBtn.style.color = '#4ade80';
+            dropdown.style.display = 'none';
+            dropdown.classList.remove('show');
+
+            /* Open AI tool */
+            window.open(tool.url, '_blank');
+
+            setTimeout(function() {
+              tryBtn.textContent = 'Try it ▾';
+              tryBtn.style.background = 'rgba(109,216,255,0.1)';
+              tryBtn.style.borderColor = 'rgba(109,216,255,0.3)';
+              tryBtn.style.color = '#6dd8ff';
+            }, 2500);
+          });
+        });
+
+        dropdown.appendChild(item);
+      });
+
+      tryBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = dropdown.style.display === 'block';
+        /* Close all other dropdowns first */
+        document.querySelectorAll('.try-it-dropdown').forEach(function(d){ d.style.display='none'; d.classList.remove('show'); });
+        if (!isOpen) {
+          dropdown.style.display = 'block';
+          dropdown.classList.add('show');
+          tryBtn.style.background = 'rgba(109,216,255,0.2)';
+        } else {
+          dropdown.style.display = 'none';
+          dropdown.classList.remove('show');
+        }
+      });
+
+      dropdown.className = 'try-it-dropdown';
+      tryWrap.appendChild(tryBtn);
+      tryWrap.appendChild(dropdown);
+      btnBar.appendChild(tryWrap);
+      box.appendChild(btnBar);
+    });
+
+    /* Close dropdowns on outside click */
+    document.addEventListener('click', function() {
+      document.querySelectorAll('.try-it-dropdown').forEach(function(d){
+        d.style.display = 'none';
+        d.classList.remove('show');
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+  </script>
+  <script>
+/**
+ * Local Storage — saves and restores participant draft answers
+ * Data stays in the browser only. Nothing is uploaded.
+ *
+ * Usage:
+ *   Add class "save-field" and a unique id to any input/textarea/select.
+ *   Auto-save fires on input, every 30 seconds, and on beforeunload.
+ *   Module completion is tracked automatically — any filled input = complete.
+ */
+(function () {
+  'use strict';
+
+  var PREFIX = 'cos_ai_';
+
+  /* ── Module ID mapping ── */
+  /* Each page filename maps to a module ID used on the index pages */
+  var PAGE_MODULE_MAP = {
+    /* AI for Business */
+    'what-ai-is-good-for.html': 'biz-m1',
+    'business-task-finder.html': 'biz-m2',
+    'safe-context-rewriter.html': 'biz-m3',
+    'act-explain-please-builder.html': 'biz-m4',
+    'admin-prompt-library.html': 'biz-m5',
+    'document-summary-builder.html': 'biz-m6',
+    'workflow-canvas.html': 'biz-m7',
+    'seven-day-action-plan.html': 'biz-m8',
+    /* AI for Marketing */
+    'marketing-task-finder.html': 'mkt-m1',
+    /* what-ai-is-good-for.html also = mkt-m2 — handled specially */
+    'customer-persona-builder.html': 'mkt-m3',
+    'brand-voice-builder.html': 'mkt-m4',
+    'social-post-generator.html': 'mkt-m5',
+    'email-campaign-builder.html': 'mkt-m6',
+    'thirty-day-content-plan.html': 'mkt-m7',
+    'publishing-checklist.html': 'mkt-m8'
+  };
+
+  /* Pages that belong to two courses */
+  var DUAL_MODULE_MAP = {
+    'what-ai-is-good-for.html': ['biz-m1', 'mkt-m2']
+  };
+
+  function getCurrentPageFile() {
+    var path = window.location.pathname;
+    var parts = path.split('/');
+    return parts[parts.length - 1] || '';
+  }
+
+  function getModuleIds() {
+    var file = getCurrentPageFile();
+    if (DUAL_MODULE_MAP[file]) return DUAL_MODULE_MAP[file];
+    if (PAGE_MODULE_MAP[file]) return [PAGE_MODULE_MAP[file]];
+    return [];
+  }
+
+  var LocalStore = {
+    save: function (id, value) {
+      try { localStorage.setItem(PREFIX + id, JSON.stringify(value)); } catch (e) { /* quota */ }
+    },
+
+    load: function (id) {
+      try {
+        var raw = localStorage.getItem(PREFIX + id);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) { return null; }
+    },
+
+    remove: function (id) {
+      try { localStorage.removeItem(PREFIX + id); } catch (e) { /* noop */ }
+    },
+
+    saveAll: function () {
+      var anyFilled = false;
+      document.querySelectorAll('.save-field').forEach(function (el) {
+        if (!el.id) return;
+        var val = el.type === 'checkbox' ? el.checked : el.value;
+        LocalStore.save(el.id, val);
+        if (val && val !== false && val !== '') anyFilled = true;
+      });
+      /* Auto-mark module complete if any field has content */
+      if (anyFilled) {
+        var ids = getModuleIds();
+        ids.forEach(function (mid) {
+          LocalStore.markModuleComplete(mid);
+        });
+      }
+    },
+
+    loadAll: function () {
+      document.querySelectorAll('.save-field').forEach(function (el) {
+        if (!el.id) return;
+        var val = LocalStore.load(el.id);
+        if (val === null) return;
+        if (el.type === 'checkbox') {
+          el.checked = val;
+        } else {
+          el.value = val;
+        }
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    },
+
+    clearAll: function () {
+      var keys = [];
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.startsWith(PREFIX)) keys.push(k);
+      }
+      keys.forEach(function (k) { localStorage.removeItem(k); });
+    },
+
+    /* ── Module progress ── */
+    markModuleComplete: function (moduleId) {
+      var progress = LocalStore.load('_progress') || {};
+      if (progress[moduleId]) return; /* already done */
+      progress[moduleId] = Date.now();
+      LocalStore.save('_progress', progress);
+    },
+
+    getProgress: function () {
+      return LocalStore.load('_progress') || {};
+    },
+
+    updateProgressUI: function () {
+      var progress = LocalStore.getProgress();
+      var dots = document.querySelectorAll('.module-dot');
+      var completedCount = 0;
+
+      dots.forEach(function (dot) {
+        var mod = dot.getAttribute('data-module');
+        if (mod && progress[mod]) {
+          dot.classList.add('completed');
+          /* Add checkmark icon if not already present */
+          if (!dot.querySelector('.check-icon')) {
+            dot.innerHTML = '<svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;padding:1px;color:#fff"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            dot.style.display = 'flex';
+            dot.style.alignItems = 'center';
+            dot.style.justifyContent = 'center';
+          }
+          completedCount++;
+        }
+      });
+
+      /* Update progress bar */
+      var bar = document.querySelector('.progress-fill');
+      if (bar && dots.length > 0) {
+        var pct = Math.min(100, Math.round((completedCount / dots.length) * 100));
+        bar.style.width = pct + '%';
+        var label = document.getElementById('progress-label');
+        if (label) {
+          if (pct === 100) {
+            label.textContent = 'All modules complete!';
+            label.style.color = '#4ade80';
+          } else {
+            label.textContent = completedCount + ' of ' + dots.length + ' modules  ·  ' + pct + '%';
+          }
+        }
+      }
+    },
+
+    /* ── Get all saved data for a specific module page ── */
+    getSavedFieldsByPrefix: function (fieldPrefix) {
+      var result = {};
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.startsWith(PREFIX) && !k.startsWith(PREFIX + '_')) {
+          var fieldId = k.substring(PREFIX.length);
+          if (!fieldPrefix || fieldId.startsWith(fieldPrefix)) {
+            try { result[fieldId] = JSON.parse(localStorage.getItem(k)); } catch (e) {}
+          }
+        }
+      }
+      return result;
+    },
+
+    getAllSavedFields: function () {
+      return LocalStore.getSavedFieldsByPrefix('');
+    }
+  };
+
+  function init() {
+    LocalStore.loadAll();
+    LocalStore.updateProgressUI();
+
+    /* Check completion state on page load for pages with fields already filled */
+    var anyFilled = false;
+    document.querySelectorAll('.save-field').forEach(function (el) {
+      if (!el.id) return;
+      var val = el.type === 'checkbox' ? el.checked : el.value;
+      if (val && val !== false && val !== '') anyFilled = true;
+    });
+    if (anyFilled) {
+      var ids = getModuleIds();
+      ids.forEach(function (mid) { LocalStore.markModuleComplete(mid); });
+    }
+
+    /* Auto-save on input (debounced) */
+    var saveTimer = null;
+    document.addEventListener('input', function (e) {
+      if (e.target.classList && e.target.classList.contains('save-field')) {
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(function () { LocalStore.saveAll(); }, 500);
+      }
+    });
+
+    /* Also save on change (for selects and checkboxes) */
+    document.addEventListener('change', function (e) {
+      if (e.target.classList && e.target.classList.contains('save-field')) {
+        LocalStore.saveAll();
+      }
+    });
+
+    /* Auto-save every 30 seconds and before leaving */
+    setInterval(LocalStore.saveAll, 30000);
+    window.addEventListener('beforeunload', LocalStore.saveAll);
+  }
+
+  window.LocalStore = LocalStore;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+  </script>
+  <script>
+  /* Theme toggle — persists via localStorage */
+  (function(){
+    var KEY = 'cos_ai_theme';
+    var saved = localStorage.getItem(KEY);
+    if(saved === 'light') document.body.classList.add('light-mode');
+    updateIcon();
+
+    window.toggleTheme = function(){
+      document.body.classList.toggle('light-mode');
+      var isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem(KEY, isLight ? 'light' : 'dark');
+      updateIcon();
+    };
+
+    function updateIcon(){
+      var isLight = document.body.classList.contains('light-mode');
+      document.querySelectorAll('.theme-icon-dark').forEach(function(el){ el.style.display = isLight ? 'none' : 'block'; });
+      document.querySelectorAll('.theme-icon-light').forEach(function(el){ el.style.display = isLight ? 'block' : 'none'; });
+    }
+
+    /* Apply theme immediately on page load (before DOMContentLoaded for fast switch) */
+    if(saved === 'light' && !document.body.classList.contains('light-mode')){
+      document.body.classList.add('light-mode');
+    }
+  })();
+  </script>
+
+
+<script src="../assets/js/industry-content.js"></script>
+<!-- Industry Tailoring System -->
+<script>
+/**
+ * Industry Tailoring System
+ * Stores selection in localStorage, shows nav dropdown,
+ * tailors prompt placeholders and prepends context on copy.
+ */
+(function(){
+  'use strict';
+  var KEY = 'cos_ai_industry';
+
+  /* Cookie helpers — used as fallback for file:// protocol where localStorage is per-directory */
+  function setCookie(k,v){ try{document.cookie=k+'='+encodeURIComponent(v)+';path=/;max-age=31536000;SameSite=Lax';}catch(e){} }
+  function getCookie(k){ try{var m=document.cookie.match('(^|;)\\s*'+k+'=([^;]*)'); return m?decodeURIComponent(m[2]):null;}catch(e){return null;} }
+
+  /* ── 14 Industries ── */
+  var INDUSTRIES = [
+    {
+      id:'hospitality',
+      name:'Hospitality & Food',
+      icon:'utensils',
+      emoji:'🍽️',
+      examples:'cafés, restaurants, bars, catering companies, food trucks',
+      customers:'diners, regulars, event guests, foodies, local families',
+      tone:'warm, welcoming, casual but professional',
+      context:'I run a hospitality / food business (e.g. café, restaurant, bar, catering company) in Sydney.',
+      placeholders:{
+        business:'café / restaurant',
+        product:'menu items and dining experiences',
+        service:'catering, dine-in, and takeaway services',
+        customers:'diners, regulars, and event guests',
+        task:'updating the seasonal menu and coordinating weekend bookings',
+        marketing:'food photography posts, seasonal menu launches, and Google review responses',
+        email:'a booking confirmation for a group dinner',
+        meeting:'a weekly front-of-house team briefing',
+        competitor:'other local cafés and restaurants in our area',
+        painPoint:'last-minute cancellations and inconsistent online reviews',
+        goal:'increase midweek foot traffic and grow our catering bookings',
+        socialPost:'a new winter dessert menu launch',
+        newsletter:'a monthly what\'s-on email featuring new dishes, events, and chef stories'
+      }
+    },
+    {
+      id:'retail',
+      name:'Retail & E-commerce',
+      icon:'shopping-bag',
+      emoji:'🛍️',
+      examples:'boutiques, gift shops, online stores, homeware shops, fashion retailers',
+      customers:'shoppers, online buyers, gift-givers, bargain hunters, loyal members',
+      tone:'friendly, helpful, on-trend',
+      context:'I run a retail / e-commerce business (e.g. boutique, online store, gift shop) in Sydney.',
+      placeholders:{
+        business:'retail store / online shop',
+        product:'our product range and seasonal collections',
+        service:'in-store shopping, online ordering, and click-and-collect',
+        customers:'shoppers, online buyers, and loyal members',
+        task:'planning a seasonal sale and updating product descriptions',
+        marketing:'product styling photos, sale announcements, and influencer collaborations',
+        email:'an abandoned cart recovery email',
+        meeting:'a weekly sales and stock review',
+        competitor:'other boutiques and online retailers in our niche',
+        painPoint:'high cart abandonment rates and managing seasonal inventory',
+        goal:'grow our online sales and increase average order value',
+        socialPost:'a new spring collection drop',
+        newsletter:'a weekly new-arrivals email with styling tips and member-only early access'
+      }
+    },
+    {
+      id:'professional',
+      name:'Professional Services',
+      icon:'briefcase',
+      emoji:'💼',
+      examples:'accounting firms, law practices, consultancies, financial planners, bookkeepers',
+      customers:'business clients, SME owners, individuals needing expert advice',
+      tone:'authoritative, trustworthy, clear and jargon-free',
+      context:'I run a professional services firm (e.g. accounting, legal, consulting, financial planning) in Sydney.',
+      placeholders:{
+        business:'professional services firm',
+        product:'advisory services and compliance packages',
+        service:'consulting, advisory, tax preparation, and compliance support',
+        customers:'business clients and SME owners',
+        task:'preparing end-of-financial-year client communications and updating service packages',
+        marketing:'thought-leadership articles, LinkedIn posts, and client case studies',
+        email:'an engagement letter for a new advisory client',
+        meeting:'a quarterly client review meeting',
+        competitor:'other local firms and online service providers in our field',
+        painPoint:'clients not understanding our value beyond compliance and fee sensitivity',
+        goal:'attract more advisory-level clients and increase client retention',
+        socialPost:'a tax tip post timed to EOFY season',
+        newsletter:'a quarterly business insights email with regulatory updates and practical tips'
+      }
+    },
+    {
+      id:'creative',
+      name:'Creative & Design',
+      icon:'palette',
+      emoji:'🎨',
+      examples:'design agencies, photographers, videographers, copywriters, branding studios',
+      customers:'businesses needing creative work, marketing managers, startup founders',
+      tone:'creative, confident, visually minded',
+      context:'I run a creative / design business (e.g. design agency, photography studio, branding consultancy) in Sydney.',
+      placeholders:{
+        business:'creative agency / design studio',
+        product:'creative services — branding, design, photography, and content production',
+        service:'brand identity, graphic design, photography, and video production',
+        customers:'business owners, marketing managers, and startup founders seeking creative work',
+        task:'scoping a rebrand project and creating a content shoot schedule',
+        marketing:'portfolio showcases, behind-the-scenes process reels, and client transformation stories',
+        email:'a project proposal for a brand identity package',
+        meeting:'a creative brief kickoff with a new client',
+        competitor:'other local agencies and freelance creatives',
+        painPoint:'scope creep, clients not understanding creative timelines, and pricing pressure from freelancers',
+        goal:'attract higher-value brand projects and build recurring retainer relationships',
+        socialPost:'a before-and-after brand transformation for a recent client',
+        newsletter:'a monthly creative inspiration email with project spotlights and design trend insights'
+      }
+    },
+    {
+      id:'health',
+      name:'Health & Wellness',
+      icon:'heart-pulse',
+      emoji:'🏥',
+      examples:'medical clinics, physiotherapists, psychologists, allied health, wellness practitioners',
+      customers:'patients, clients seeking treatment, people managing chronic conditions, health-conscious locals',
+      tone:'empathetic, professional, reassuring, evidence-based',
+      context:'I run a health / wellness practice (e.g. physiotherapy clinic, psychology practice, allied health service) in Sydney.',
+      placeholders:{
+        business:'health / wellness practice',
+        product:'treatment programs and health services',
+        service:'clinical consultations, treatment plans, and preventive health programs',
+        customers:'patients and clients seeking treatment and health support',
+        task:'streamlining patient intake forms and improving follow-up appointment reminders',
+        marketing:'health tip posts, practitioner introductions, and patient success stories (de-identified)',
+        email:'an appointment reminder with pre-visit preparation instructions',
+        meeting:'a monthly clinical team case review meeting',
+        competitor:'other local clinics and allied health providers',
+        painPoint:'no-shows, patients not completing treatment plans, and managing referral relationships',
+        goal:'reduce no-show rates and grow referrals from GPs and specialists',
+        socialPost:'a practical self-care tip related to our specialty',
+        newsletter:'a monthly wellness email with seasonal health tips, new services, and practitioner spotlights'
+      }
+    },
+    {
+      id:'education',
+      name:'Education & Training',
+      icon:'graduation-cap',
+      emoji:'🎓',
+      examples:'tutoring centres, RTOs, coaching businesses, workshop facilitators, online course creators',
+      customers:'students, professionals upskilling, parents, corporate learners',
+      tone:'encouraging, knowledgeable, approachable',
+      context:'I run an education / training business (e.g. tutoring centre, RTO, coaching practice, workshop facilitator) in Sydney.',
+      placeholders:{
+        business:'education / training provider',
+        product:'courses, workshops, and training programs',
+        service:'tutoring, professional development, coaching, and certification programs',
+        customers:'students, professionals looking to upskill, and corporate teams',
+        task:'designing a new course module and writing student assessment rubrics',
+        marketing:'student success stories, free taster workshops, and skill-gap content',
+        email:'a course enrolment confirmation with week-one preparation guide',
+        meeting:'a curriculum planning session for next term',
+        competitor:'other training providers and online learning platforms',
+        painPoint:'low course completion rates and difficulty demonstrating ROI to corporate clients',
+        goal:'increase enrolment numbers and build corporate training partnerships',
+        socialPost:'a quick study tip or skill insight from one of our trainers',
+        newsletter:'a monthly learning digest with upcoming courses, student achievements, and industry trend articles'
+      }
+    },
+    {
+      id:'construction',
+      name:'Construction & Trades',
+      icon:'hard-hat',
+      emoji:'🔨',
+      examples:'builders, electricians, plumbers, landscapers, painters, renovation companies',
+      customers:'homeowners, property managers, developers, real estate agents',
+      tone:'straightforward, reliable, no-nonsense',
+      context:'I run a construction / trades business (e.g. building, electrical, plumbing, landscaping) in Sydney.',
+      placeholders:{
+        business:'construction / trades business',
+        product:'building and trade services',
+        service:'construction, renovation, maintenance, and emergency repair services',
+        customers:'homeowners, property managers, and developers',
+        task:'writing up a job quote and scheduling subcontractors for a renovation project',
+        marketing:'project before-and-after photos, customer testimonial videos, and seasonal maintenance tips',
+        email:'a detailed quote for a bathroom renovation with timeline and terms',
+        meeting:'a site progress meeting with the client and subcontractors',
+        competitor:'other local tradies and building companies',
+        painPoint:'quoting jobs accurately, managing subcontractor schedules, and chasing late payments',
+        goal:'win more renovation projects and build a steady pipeline of repeat clients through property managers',
+        socialPost:'a dramatic before-and-after of a recent renovation project',
+        newsletter:'a seasonal home maintenance checklist email with tips, recent project photos, and special offers'
+      }
+    },
+    {
+      id:'realestate',
+      name:'Real Estate & Property',
+      icon:'building',
+      emoji:'🏠',
+      examples:'real estate agents, property managers, strata managers, buyers\' agents',
+      customers:'home buyers, sellers, landlords, tenants, investors',
+      tone:'professional, market-savvy, trustworthy',
+      context:'I run a real estate / property business (e.g. real estate agency, property management, strata management) in Sydney.',
+      placeholders:{
+        business:'real estate / property management business',
+        product:'property sales, leasing, and management services',
+        service:'property sales, rentals, property management, and market appraisals',
+        customers:'home buyers, sellers, landlords, tenants, and investors',
+        task:'writing a property listing description and preparing a market appraisal report',
+        marketing:'property video tours, market update posts, and suburb profile guides',
+        email:'a new listing alert to our buyer database',
+        meeting:'a vendor strategy session before listing a property',
+        competitor:'other local real estate agencies',
+        painPoint:'winning listings in a competitive market and keeping landlords from switching agencies',
+        goal:'grow our listing pipeline and increase our average days-on-market performance',
+        socialPost:'a just-sold success story with the sale price and time-on-market',
+        newsletter:'a monthly local market update email with recent sales, price trends, and featured listings'
+      }
+    },
+    {
+      id:'technology',
+      name:'Technology & IT',
+      icon:'monitor',
+      emoji:'💻',
+      examples:'software companies, web developers, IT support, SaaS startups, app developers',
+      customers:'businesses needing tech solutions, startups, non-technical founders, enterprise teams',
+      tone:'clear, solution-oriented, jargon-free when client-facing',
+      context:'I run a technology / IT business (e.g. software development, IT services, web development, SaaS) in Sydney.',
+      placeholders:{
+        business:'technology / IT services company',
+        product:'software solutions, web platforms, and IT services',
+        service:'software development, IT support, cloud migration, and web development',
+        customers:'business clients needing technology solutions and digital transformation',
+        task:'writing a project scope document and creating a client onboarding workflow',
+        marketing:'case study write-ups, tech tip blogs, and product demo videos',
+        email:'a project kickoff email with timeline, milestones, and access credentials',
+        meeting:'a sprint review and client demo session',
+        competitor:'other local IT firms, offshore developers, and SaaS alternatives',
+        painPoint:'scope creep, clients not understanding technical constraints, and competing with offshore pricing',
+        goal:'move from one-off projects to recurring managed-service contracts',
+        socialPost:'a quick tech tip that helps small businesses work smarter',
+        newsletter:'a monthly tech insights email with productivity tips, security updates, and case study highlights'
+      }
+    },
+    {
+      id:'tourism',
+      name:'Tourism & Events',
+      icon:'map-pin',
+      emoji:'✈️',
+      examples:'tour operators, event planners, travel agencies, venues, experience providers',
+      customers:'tourists, corporate event organisers, couples planning weddings, adventure seekers',
+      tone:'exciting, descriptive, experience-focused',
+      context:'I run a tourism / events business (e.g. tour operator, event planner, experience provider, venue) in Sydney.',
+      placeholders:{
+        business:'tourism / events business',
+        product:'tours, experiences, and event packages',
+        service:'guided tours, event planning, venue hire, and bespoke experience packages',
+        customers:'tourists, corporate event organisers, and people looking for unique experiences',
+        task:'creating an event run sheet and writing a compelling tour description',
+        marketing:'experience highlight reels, customer review features, and seasonal event guides',
+        email:'a booking confirmation with event details, what-to-bring list, and meeting point',
+        meeting:'an event planning walkthrough with the client at the venue',
+        competitor:'other tour operators and event venues in Sydney',
+        painPoint:'seasonal demand fluctuations and last-minute booking changes',
+        goal:'increase off-peak bookings and grow corporate event revenue',
+        socialPost:'a stunning photo from a recent tour or event with a guest testimonial',
+        newsletter:'a seasonal what\'s-on email with upcoming events, new experiences, and early-bird offers'
+      }
+    },
+    {
+      id:'nonprofit',
+      name:'Not-for-Profit & Community',
+      icon:'users',
+      emoji:'🤝',
+      examples:'charities, community organisations, social enterprises, associations, advocacy groups',
+      customers:'donors, volunteers, community members, grant bodies, beneficiaries',
+      tone:'mission-driven, transparent, community-focused, heartfelt',
+      context:'I run a not-for-profit / community organisation (e.g. charity, community group, social enterprise, association) in Sydney.',
+      placeholders:{
+        business:'not-for-profit / community organisation',
+        product:'programs, services, and community impact initiatives',
+        service:'community programs, advocacy, support services, and fundraising campaigns',
+        customers:'community members, donors, volunteers, and partner organisations',
+        task:'writing a grant application and preparing the annual impact report',
+        marketing:'impact stories, volunteer spotlights, and campaign awareness content',
+        email:'a donation thank-you email with impact update',
+        meeting:'a board meeting with agenda items on strategic planning and fundraising',
+        competitor:'other organisations seeking the same grants and donor base',
+        painPoint:'donor fatigue, grant reporting burden, and volunteer retention',
+        goal:'diversify funding sources and increase community awareness of our mission',
+        socialPost:'a short impact story showing how a recent program changed someone\'s life',
+        newsletter:'a quarterly impact email with program updates, volunteer stories, upcoming events, and donation calls-to-action'
+      }
+    },
+    {
+      id:'beauty',
+      name:'Beauty & Personal Care',
+      icon:'sparkles',
+      emoji:'💅',
+      examples:'hair salons, beauty therapists, barbers, nail studios, skincare clinics, day spas',
+      customers:'local clients, brides-to-be, professionals wanting grooming, beauty enthusiasts',
+      tone:'friendly, confident, trend-aware, personal',
+      context:'I run a beauty / personal care business (e.g. hair salon, beauty salon, barber, skincare clinic, day spa) in Sydney.',
+      placeholders:{
+        business:'beauty salon / personal care studio',
+        product:'treatments, packages, and retail products',
+        service:'hair styling, beauty treatments, skincare consultations, and grooming services',
+        customers:'local clients, brides-to-be, and regular booking clients',
+        task:'redesigning our service menu and setting up an online booking reminder system',
+        marketing:'transformation photos, styling tips, and seasonal look-book content',
+        email:'a rebooking reminder with a personalised treatment recommendation',
+        meeting:'a team meeting to review this month\'s bookings and plan a retail promotion',
+        competitor:'other salons, barbers, and beauty clinics in our area',
+        painPoint:'no-shows, seasonal slowdowns, and retaining skilled staff',
+        goal:'increase rebooking rates and grow retail product sales alongside services',
+        socialPost:'a stunning before-and-after transformation photo with the stylist tagged',
+        newsletter:'a monthly style guide email with new trends, treatment spotlights, and a rebooking incentive'
+      }
+    },
+    {
+      id:'fitness',
+      name:'Fitness & Sport',
+      icon:'dumbbell',
+      emoji:'💪',
+      examples:'personal trainers, gyms, yoga studios, sports clubs, Pilates studios, martial arts',
+      customers:'fitness beginners, gym regulars, athletes, people with health goals, parents wanting active kids',
+      tone:'motivating, energetic, supportive, results-focused',
+      context:'I run a fitness / sport business (e.g. gym, personal training studio, yoga studio, sports club) in Sydney.',
+      placeholders:{
+        business:'gym / fitness studio',
+        product:'memberships, training programs, and class packages',
+        service:'personal training, group fitness classes, sports coaching, and wellness programs',
+        customers:'members, fitness beginners, and people working towards health goals',
+        task:'designing a 6-week challenge program and writing the sign-up landing page',
+        marketing:'client transformation stories, workout tip reels, and challenge launch countdowns',
+        email:'a welcome email for new members with their first-week class schedule and trainer intro',
+        meeting:'a monthly team meeting to review retention numbers and plan next month\'s class timetable',
+        competitor:'other gyms, studios, and online fitness programs',
+        painPoint:'member drop-off after the first 3 months and seasonal sign-up fluctuations',
+        goal:'improve member retention past 6 months and fill off-peak class slots',
+        socialPost:'a member transformation story with their permission and a motivational caption',
+        newsletter:'a weekly workout tip and class schedule email with member shout-outs and upcoming events'
+      }
+    },
+    {
+      id:'arts',
+      name:'Arts & Entertainment',
+      icon:'music',
+      emoji:'🎭',
+      examples:'galleries, performers, music venues, cultural organisations, theatres, independent artists',
+      customers:'art lovers, audiences, collectors, event-goers, cultural tourists, patrons',
+      tone:'passionate, evocative, culturally aware, inviting',
+      context:'I run an arts / entertainment business (e.g. gallery, performance company, music venue, cultural organisation) in Sydney.',
+      placeholders:{
+        business:'arts / entertainment venue or company',
+        product:'performances, exhibitions, and creative experiences',
+        service:'exhibitions, live performances, workshops, venue hire, and artist commissions',
+        customers:'audiences, art lovers, collectors, and cultural event-goers',
+        task:'writing exhibition wall text and creating a press release for an upcoming show',
+        marketing:'artist interviews, exhibition previews, and behind-the-scenes rehearsal content',
+        email:'an opening night invitation with RSVP link and artist statement',
+        meeting:'a production planning meeting for an upcoming season',
+        competitor:'other galleries, venues, and cultural organisations competing for audience attention',
+        painPoint:'unpredictable attendance, funding cycles, and converting casual visitors into regulars',
+        goal:'build a loyal subscriber base and increase sponsorship and grant revenue',
+        socialPost:'a sneak peek of an upcoming exhibition or performance with the artist\'s story',
+        newsletter:'a monthly what\'s-on email with upcoming shows, artist features, and behind-the-scenes exclusives'
+      }
+    }
+  ];
+
+  /* ── Expose globally ── */
+  window.COS_INDUSTRIES = INDUSTRIES;
+  window.COS_INDUSTRY_KEY = KEY;
+
+  /* ── Get / set current industry ── */
+  function getCurrent() {
+    var id = localStorage.getItem(KEY) || getCookie(KEY);
+    if (!id) return null;
+    for (var i = 0; i < INDUSTRIES.length; i++) {
+      if (INDUSTRIES[i].id === id) return INDUSTRIES[i];
+    }
+    return null;
+  }
+  function setCurrent(id) {
+    localStorage.setItem(KEY, id);
+    setCookie(KEY, id);
+    window.dispatchEvent(new CustomEvent('industryChanged', { detail: id }));
+  }
+  window.getCosIndustry = getCurrent;
+  window.setCosIndustry = setCurrent;
+
+  /* ── Nav dropdown ── */
+  function buildNavDropdown() {
+    var nav = document.querySelector('.aim-nav');
+    if (!nav) return;
+    var themeBtn = nav.querySelector('.theme-toggle');
+    if (!themeBtn) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'industry-nav-wrap';
+    wrap.style.cssText = 'position:relative;display:flex;align-items:center;flex-shrink:0;';
+
+    var btn = document.createElement('button');
+    btn.className = 'industry-nav-btn';
+    btn.style.cssText = 'height:36px;padding:0 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 200ms ease;font-family:inherit;font-size:12px;font-weight:600;white-space:nowrap;';
+
+    function updateBtn() {
+      var ind = getCurrent();
+      if (ind) {
+        btn.innerHTML = '<span style="font-size:14px;">' + ind.emoji + '</span><span class="ind-label">' + ind.name + '</span><span style="font-size:10px;opacity:0.6;">▼</span>';
+      } else {
+        btn.innerHTML = '<span style="font-size:14px;">🏢</span><span class="ind-label">Select industry</span><span style="font-size:10px;opacity:0.6;">▼</span>';
+      }
+    }
+    updateBtn();
+
+    btn.onmouseover = function(){ btn.style.background='rgba(255,255,255,0.12)'; btn.style.color='#fff'; };
+    btn.onmouseout = function(){ btn.style.background='rgba(255,255,255,0.06)'; btn.style.color='rgba(255,255,255,0.7)'; };
+
+    /* Dropdown panel */
+    var dd = document.createElement('div');
+    dd.className = 'industry-dropdown';
+    dd.style.cssText = 'position:absolute;top:calc(100% + 6px);right:0;background:rgba(26,34,73,0.97);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:6px;min-width:240px;max-height:420px;overflow-y:auto;display:none;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(0,0,0,0.5);z-index:9999;';
+
+    var ddTitle = document.createElement('div');
+    ddTitle.textContent = 'Choose your industry';
+    ddTitle.style.cssText = 'padding:8px 10px 6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);';
+    dd.appendChild(ddTitle);
+
+    INDUSTRIES.forEach(function(ind) {
+      var item = document.createElement('button');
+      item.style.cssText = 'display:flex;align-items:center;gap:10px;width:100%;padding:10px;border:none;background:transparent;color:rgba(255,255,255,0.8);font-size:13px;font-weight:500;cursor:pointer;border-radius:8px;transition:background 0.15s ease;text-align:left;font-family:inherit;';
+      item.innerHTML = '<span style="font-size:18px;width:28px;text-align:center;flex-shrink:0;">' + ind.emoji + '</span><span>' + ind.name + '</span>';
+      item.onmouseover = function(){ item.style.background='rgba(255,255,255,0.08)'; };
+      item.onmouseout = function(){
+        var cur = getCurrent();
+        item.style.background = (cur && cur.id === ind.id) ? 'rgba(255,255,255,0.1)' : 'transparent';
+      };
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        setCurrent(ind.id);
+        updateBtn();
+        dd.style.display = 'none';
+        highlightCurrent();
+        tailorPrompts();
+      });
+      dd.appendChild(item);
+    });
+
+    function highlightCurrent() {
+      var cur = getCurrent();
+      var items = dd.querySelectorAll('button');
+      items.forEach(function(it, idx) {
+        it.style.background = (cur && INDUSTRIES[idx] && INDUSTRIES[idx].id === cur.id) ? 'rgba(255,255,255,0.1)' : 'transparent';
+      });
+    }
+
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = dd.style.display === 'block';
+      dd.style.display = isOpen ? 'none' : 'block';
+      if (!isOpen) highlightCurrent();
+    });
+    document.addEventListener('click', function(){ dd.style.display = 'none'; });
+
+    wrap.appendChild(btn);
+    wrap.appendChild(dd);
+    themeBtn.parentNode.insertBefore(wrap, themeBtn);
+
+    /* Light mode styles */
+    var style = document.createElement('style');
+    style.textContent = 'body.light-mode .industry-nav-btn{border-color:rgba(0,0,0,0.1)!important;background:rgba(0,0,0,0.04)!important;color:#475569!important;}body.light-mode .industry-nav-btn:hover{background:rgba(0,0,0,0.08)!important;color:#1e293b!important;}body.light-mode .industry-dropdown{background:rgba(255,255,255,0.97)!important;border-color:rgba(0,0,0,0.1)!important;box-shadow:0 12px 40px rgba(0,0,0,0.15)!important;}body.light-mode .industry-dropdown button{color:#334155!important;}body.light-mode .industry-dropdown button:hover{background:rgba(0,0,0,0.05)!important;}body.light-mode .industry-dropdown div{color:#94a3b8!important;}body.light-mode .industry-banner{background:rgba(0,0,0,0.03)!important;border-color:rgba(0,0,0,0.08)!important;color:#475569!important;}body.light-mode .industry-banner strong{color:#1e293b!important;}@media(max-width:640px){.ind-label{display:none!important;}.industry-nav-btn{padding:0 8px!important;}}';
+    document.head.appendChild(style);
+
+    window.addEventListener('industryChanged', function(){ updateBtn(); });
+  }
+
+  /* ── Prompt tailoring ── */
+  function tailorPrompts() {
+    var ind = getCurrent();
+    if (!ind) return;
+    var ph = ind.placeholders;
+
+    /* --- Add/update industry banner on pages with prompt-boxes --- */
+    var boxes = document.querySelectorAll('.prompt-box');
+    if (boxes.length === 0) return;
+
+    var banner = document.getElementById('industry-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'industry-banner';
+      banner.className = 'industry-banner';
+      banner.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);margin-bottom:20px;font-size:13px;color:rgba(255,255,255,0.7);';
+      /* Insert before the first prompt-box's parent section */
+      var firstBox = boxes[0];
+      var target = firstBox.closest('section') || firstBox.closest('div') || firstBox.parentNode;
+      if (target && target.parentNode) {
+        target.parentNode.insertBefore(banner, target);
+      }
+    }
+    banner.innerHTML = '<span style="font-size:20px;">' + ind.emoji + '</span><span>Prompts tailored for <strong style="color:#fff;">' + ind.name + '</strong> — examples and context will reflect your industry.</span>';
+
+    /* --- Replace placeholder text in prompt boxes --- */
+    boxes.forEach(function(box) {
+      /* Detach live button bar before modifying HTML */
+      var _liveBar = box.querySelector('.prompt-btn-bar');
+      if (_liveBar) _liveBar.parentNode.removeChild(_liveBar);
+
+      /* Store original HTML on first run (without button bar) */
+      if (!box.dataset.originalHtml) {
+        box.dataset.originalHtml = box.innerHTML;
+      }
+      /* Always restore original before applying new industry */
+      var html = box.dataset.originalHtml;
+
+      /* Replace bracketed placeholders */
+      var replacements = [
+        [/\[YOUR BUSINESS\]/gi, '[e.g. ' + ph.business + ']'],
+        [/\[YOUR BUSINESS TYPE\]/gi, '[e.g. ' + ph.business + ']'],
+        [/\[BUSINESS TYPE\]/gi, '[e.g. ' + ph.business + ']'],
+        [/\[DESCRIBE YOUR BUSINESS\]/gi, '[e.g. ' + ph.context + ']'],
+        [/\[YOUR PRODUCT\]/gi, '[e.g. ' + ph.product + ']'],
+        [/\[YOUR SERVICE\]/gi, '[e.g. ' + ph.service + ']'],
+        [/\[DESCRIBE YOUR CUSTOMERS\]/gi, '[e.g. ' + ph.customers + ']'],
+        [/\[YOUR CUSTOMERS\]/gi, '[e.g. ' + ph.customers + ']'],
+        [/\[YOUR AUDIENCE\]/gi, '[e.g. ' + ph.customers + ']'],
+        [/\[DESCRIBE YOUR AUDIENCE\]/gi, '[e.g. ' + ph.customers + ']'],
+        [/\[YOUR BRAND VOICE\]/gi, '[e.g. ' + ind.tone + ']'],
+        [/\[DESCRIBE HOW YOU CURRENTLY COMMUNICATE\]/gi, '[e.g. ' + ind.tone + ']'],
+        [/\[THEME OR PROMOTION\]/gi, '[e.g. ' + ph.socialPost + ']'],
+        [/\[YOUR IDEA\]/gi, '[e.g. ' + ph.socialPost + ']'],
+        [/\[DESCRIBE YOUR OFFER\]/gi, '[e.g. ' + ph.product + ']'],
+        [/\[YOUR 3 CHOSEN WORDS\]/gi, '[e.g. ' + ind.tone + ']']
+      ];
+
+      replacements.forEach(function(r) {
+        html = html.replace(r[0], r[1]);
+      });
+
+      /* Replace generic "small business" phrasing */
+      html = html.replace(/a small Australian business/gi, 'a small Australian ' + ph.business.split('/')[0].trim());
+      html = html.replace(/a small business/gi, 'a small ' + ph.business.split('/')[0].trim());
+
+      box.innerHTML = html;
+
+      /* Re-append the live button bar (with intact event listeners) */
+      if (_liveBar) box.appendChild(_liveBar);
+    });
+
+    /* --- Patch the copy function to prepend industry context --- */
+    if (!window._industryPatchApplied) {
+      window._industryPatchApplied = true;
+      var origWrite = navigator.clipboard.writeText.bind(navigator.clipboard);
+      navigator.clipboard.writeText = function(text) {
+        var curInd = getCurrent();
+        /* Only prepend to prompt-like text (skip short strings like URLs) */
+        if (curInd && text.length > 50) {
+          var prefix = 'Context: ' + curInd.context + '\n\n';
+          /* Don't double-prepend */
+          if (text.indexOf('Context: I run') !== 0) {
+            text = prefix + text;
+          }
+        }
+        return origWrite(text);
+      };
+    }
+  }
+
+  /* ── Form field tailoring ── */
+  function tailorFormFields() {
+    var ind = getCurrent();
+    if (!ind) return;
+    var ph = ind.placeholders;
+
+    /* Update placeholder text on input/textarea fields */
+    var fieldMap = {
+      'business': ph.business,
+      'biz': ph.business,
+      'company': ph.business,
+      'customer': ph.customers,
+      'audience': ph.customers,
+      'product': ph.product,
+      'service': ph.service,
+      'tone': ind.tone,
+      'voice': ind.tone,
+      'task': ph.task,
+      'goal': ph.goal
+    };
+
+    document.querySelectorAll('input[type="text"], textarea').forEach(function(el) {
+      var label = (el.placeholder || '').toLowerCase();
+      var id = (el.id || '').toLowerCase();
+      var combined = label + ' ' + id;
+
+      Object.keys(fieldMap).forEach(function(key) {
+        if (combined.indexOf(key) !== -1 && !el.value) {
+          el.placeholder = 'e.g. ' + fieldMap[key];
+        }
+      });
+    });
+    /* Industry-specific form examples */
+    if (window.INDUSTRY_CONTENT && window.INDUSTRY_CONTENT.formExamples) {
+      var pageKey = 'safeContextRewriter';
+      var examples = window.INDUSTRY_CONTENT.formExamples[pageKey];
+      if (examples && examples[ind.id]) {
+        var ex = examples[ind.id];
+        if (ex.context) {
+          var ctxEl = document.querySelector('#f-context, textarea[id*="context"], textarea[id*="situation"], textarea[id*="paste"], textarea[id*="describe"]');
+          if (ctxEl && !ctxEl.value) ctxEl.placeholder = 'e.g. ' + ex.context;
+        }
+        if (ex.notes) {
+          var notesEl = document.querySelector('#f-notes, input[id*="notes"], input[id*="include"], input[id*="avoid"]');
+          if (notesEl && !notesEl.value) notesEl.placeholder = 'e.g. ' + ex.notes;
+        }
+      }
+    }
+  }
+
+  /* ── Init ── */
+  function init() {
+    buildNavDropdown();
+    tailorPrompts();
+    tailorFormFields();
+    window.addEventListener('industryChanged', function() {
+      tailorPrompts();
+      tailorFormFields();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+
+<!-- AI Glossary Tooltip System -->
+<script>
+/**
+ * AI Glossary — auto-highlights AI terms and shows plain-English tooltips
+ * Scans text nodes only (won't break links, inputs, or scripts).
+ * First match per term per page to keep it clean.
+ */
+(function(){
+  'use strict';
+
+  var TERMS = {
+    'hallucination': 'When AI confidently generates information that is incorrect or made up. Always fact-check AI outputs.',
+    'hallucinations': 'When AI confidently generates information that is incorrect or made up. Always fact-check AI outputs.',
+    'hallucinate': 'When AI confidently generates information that is incorrect or made up. Always fact-check AI outputs.',
+    'prompt': 'The instruction or question you type into an AI tool. A better prompt = a better answer.',
+    'prompts': 'Instructions or questions you type into an AI tool. Better prompts = better answers.',
+    'prompting': 'The skill of writing clear, effective instructions for AI tools to get the best results.',
+    'token': 'The small chunks (roughly words or word-pieces) that AI reads and generates. More tokens = longer conversations, higher cost.',
+    'tokens': 'The small chunks (roughly words or word-pieces) that AI reads and generates. More tokens = longer conversations, higher cost.',
+    'context window': 'The amount of text an AI can "remember" in one conversation. Think of it as the AI\'s short-term memory.',
+    'large language model': 'The technology behind tools like ChatGPT and Claude. It predicts the next word based on patterns in its training data.',
+    'LLM': 'Large Language Model — the technology behind ChatGPT, Claude, and similar tools. Predicts text based on patterns learned from training data.',
+    'generative AI': 'AI that creates new content (text, images, code) rather than just analysing existing data.',
+    'ChatGPT': 'An AI chatbot made by OpenAI. One of the most popular tools for generating text, answering questions, and brainstorming.',
+    'Claude': 'An AI assistant made by Anthropic. Known for longer, more nuanced responses and strong safety features.',
+    'Gemini': 'Google\'s AI assistant, built into Google Workspace. Good for tasks connected to Google Search and Docs.',
+    'Copilot': 'Microsoft\'s AI assistant, built into Word, Excel, Outlook, and Edge. Useful if you already use Microsoft 365.',
+    'brand voice': 'The consistent personality and tone your business uses across all communications — friendly, professional, playful, etc.',
+    'persona': 'A fictional profile representing your ideal customer — their needs, habits, and what motivates them to buy.',
+    'workflow': 'A repeatable sequence of steps to complete a task. AI can automate or speed up parts of a workflow.',
+    'repurpose': 'Taking one piece of content and adapting it for different platforms — e.g. turning a blog post into social media posts.',
+    'repurposing': 'Taking one piece of content and adapting it for different platforms — e.g. turning a blog post into social media posts.',
+    'training data': 'The massive collection of text and information an AI was trained on. The AI doesn\'t "know" things — it recognises patterns from this data.',
+    'iteration': 'Refining your AI output by sending follow-up prompts. Rarely is the first result perfect — iteration is normal and expected.',
+    'iterating': 'Refining your AI output by sending follow-up prompts. Rarely is the first result perfect — iteration is normal and expected.',
+    'temperature': 'A setting that controls how creative or predictable AI responses are. Low = focused and consistent. High = varied and creative.',
+    'AI model': 'The trained software that powers an AI tool. Different models (GPT-4, Claude, Gemini) have different strengths.',
+    'bias': 'When AI reflects unfair assumptions from its training data — e.g. gender or cultural stereotypes. Important to watch for and correct.',
+    'guardrails': 'Safety limits built into AI tools that prevent harmful, inappropriate, or dangerous outputs.',
+    'zero-shot': 'Asking AI to do something with no examples — just a plain instruction. Works for simple tasks.',
+    'few-shot': 'Giving AI a few examples of what you want before asking it to generate. Improves quality for specific formats or styles.',
+    'chain of thought': 'Asking AI to explain its reasoning step by step. Produces more accurate answers for complex problems.',
+    'API': 'Application Programming Interface — a way for software to talk to AI tools directly, without using the chat interface.',
+    'output': 'The text, table, list, or content that AI generates in response to your prompt.',
+    'context': 'The background information you give AI to help it understand your situation and give a relevant answer.'
+  };
+
+  /* ── CSS for tooltips ── */
+  var style = document.createElement('style');
+  style.textContent = [
+    '.gl-term {',
+    '  border-bottom: 1px dashed rgba(109,216,255,0.4);',
+    '  cursor: help;',
+    '  position: relative;',
+    '  transition: border-color 0.2s ease;',
+    '}',
+    '.gl-term:hover { border-bottom-color: #6dd8ff; }',
+    'body.light-mode .gl-term { border-bottom-color: rgba(46,61,125,0.3); }',
+    'body.light-mode .gl-term:hover { border-bottom-color: #2e3d7d; }',
+    '',
+    '.gl-tip {',
+    '  display: none;',
+    '  position: absolute;',
+    '  bottom: calc(100% + 8px);',
+    '  left: 50%;',
+    '  transform: translateX(-50%);',
+    '  width: max-content;',
+    '  max-width: 280px;',
+    '  padding: 10px 14px;',
+    '  border-radius: 10px;',
+    '  font-family: "Lato", Arial, sans-serif;',
+    '  font-size: 12px;',
+    '  line-height: 1.5;',
+    '  font-weight: 400;',
+    '  white-space: normal;',
+    '  z-index: 1000;',
+    '  pointer-events: none;',
+    '  background: rgba(20,25,50,0.95);',
+    '  border: 1px solid rgba(109,216,255,0.2);',
+    '  color: rgba(255,255,255,0.9);',
+    '  box-shadow: 0 8px 32px rgba(0,0,0,0.3);',
+    '  backdrop-filter: blur(12px);',
+    '  -webkit-backdrop-filter: blur(12px);',
+    '}',
+    'body.light-mode .gl-tip {',
+    '  background: rgba(255,255,255,0.97);',
+    '  border-color: rgba(0,0,0,0.08);',
+    '  color: #334155;',
+    '  box-shadow: 0 8px 32px rgba(0,0,0,0.12);',
+    '}',
+    '.gl-tip::after {',
+    '  content: "";',
+    '  position: absolute;',
+    '  top: 100%;',
+    '  left: 50%;',
+    '  transform: translateX(-50%);',
+    '  border: 6px solid transparent;',
+    '  border-top-color: rgba(20,25,50,0.95);',
+    '}',
+    'body.light-mode .gl-tip::after { border-top-color: rgba(255,255,255,0.97); }',
+    '.gl-tip-label {',
+    '  font-weight: 700;',
+    '  font-size: 11px;',
+    '  text-transform: uppercase;',
+    '  letter-spacing: 0.05em;',
+    '  color: #6dd8ff;',
+    '  margin-bottom: 4px;',
+    '}',
+    'body.light-mode .gl-tip-label { color: #2e3d7d; }',
+    '.gl-term:hover .gl-tip { display: block; animation: glFadeIn 0.15s ease; }',
+    '@keyframes glFadeIn { from { opacity:0; transform:translateX(-50%) translateY(4px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }',
+    '',
+    '/* Flip tooltip below if near top of viewport */',
+    '.gl-term.gl-flip .gl-tip {',
+    '  bottom: auto;',
+    '  top: calc(100% + 8px);',
+    '}',
+    '.gl-term.gl-flip .gl-tip::after {',
+    '  top: auto;',
+    '  bottom: 100%;',
+    '  border-top-color: transparent;',
+    '  border-bottom-color: rgba(20,25,50,0.95);',
+    '}',
+    'body.light-mode .gl-term.gl-flip .gl-tip::after {',
+    '  border-top-color: transparent;',
+    '  border-bottom-color: rgba(255,255,255,0.97);',
+    '}',
+    '@media print { .gl-term { border-bottom: none !important; } .gl-tip { display: none !important; } }'
+  ].join('\n');
+  document.head.appendChild(style);
+
+  /* ── Build case-insensitive lookup ── */
+  var termLower = {};
+  var termDisplay = {};
+  Object.keys(TERMS).forEach(function(t){
+    termLower[t.toLowerCase()] = TERMS[t];
+    termDisplay[t.toLowerCase()] = t;
+  });
+
+  /* Sort terms by length (longest first) so "context window" matches before "context" */
+  var sortedTerms = Object.keys(termLower).sort(function(a,b){ return b.length - a.length; });
+
+  /* Build one big regex */
+  var escaped = sortedTerms.map(function(t){ return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); });
+  var RE = new RegExp('\\b(' + escaped.join('|') + ')\\b', 'gi');
+
+  /* Track which terms we've already highlighted (first match only) */
+  var seen = {};
+
+  /* ── Walk text nodes ── */
+  function walk(root){
+    var skip = { SCRIPT:1, STYLE:1, TEXTAREA:1, INPUT:1, SELECT:1, BUTTON:1, A:1, CODE:1, PRE:1 };
+
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(node){
+        var p = node.parentElement;
+        if(!p) return NodeFilter.FILTER_REJECT;
+        /* Skip if parent is already a glossary term, or is in skip list */
+        if(p.classList && p.classList.contains('gl-term')) return NodeFilter.FILTER_REJECT;
+        if(p.classList && p.classList.contains('gl-tip')) return NodeFilter.FILTER_REJECT;
+        if(p.closest && p.closest('.gl-tip')) return NodeFilter.FILTER_REJECT;
+        if(skip[p.tagName]) return NodeFilter.FILTER_REJECT;
+        /* Skip prompt-box content — don't annotate inside prompts */
+        if(p.closest && p.closest('.prompt-box')) return NodeFilter.FILTER_REJECT;
+        if(p.closest && p.closest('.gradient-text')) return NodeFilter.FILTER_REJECT;
+        /* Skip nav */
+        if(p.closest && p.closest('nav')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
+    var nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach(function(textNode){
+      var text = textNode.nodeValue;
+      if(!RE.test(text)){ return; }
+      RE.lastIndex = 0;
+
+      var frag = document.createDocumentFragment();
+      var lastIdx = 0;
+      var match;
+
+      RE.lastIndex = 0;
+      while((match = RE.exec(text)) !== null){
+        var term = match[1];
+        var key = term.toLowerCase();
+
+        /* Only highlight first occurrence per term */
+        if(seen[key]) continue;
+        seen[key] = true;
+
+        /* Text before match */
+        if(match.index > lastIdx){
+          frag.appendChild(document.createTextNode(text.slice(lastIdx, match.index)));
+        }
+
+        /* Create the glossary span */
+        var span = document.createElement('span');
+        span.className = 'gl-term';
+        span.textContent = term;
+
+        var tip = document.createElement('span');
+        tip.className = 'gl-tip';
+        tip.innerHTML = '<div class="gl-tip-label">' + term + '</div>' + termLower[key];
+        span.appendChild(tip);
+
+        frag.appendChild(span);
+        lastIdx = match.index + term.length;
+      }
+
+      if(lastIdx === 0) return; /* no new highlights in this node */
+
+      /* Remaining text */
+      if(lastIdx < text.length){
+        frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+      }
+
+      textNode.parentNode.replaceChild(frag, textNode);
+    });
+  }
+
+  /* ── Flip detection (tooltip near top of page) ── */
+  function addFlipDetection(){
+    document.querySelectorAll('.gl-term').forEach(function(el){
+      el.addEventListener('mouseenter', function(){
+        var rect = el.getBoundingClientRect();
+        if(rect.top < 120){
+          el.classList.add('gl-flip');
+        } else {
+          el.classList.remove('gl-flip');
+        }
+      });
+    });
+  }
+
+  function init(){
+    walk(document.body);
+    addFlipDetection();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
+
+<!-- Reset Button -->
+<script>
+/**
+ * Reset Button — clears all bootcamp data and returns to lock screen.
+ * Two-step confirmation to prevent accidental resets.
+ */
+(function(){
+  'use strict';
+
+  /* Build reset button */
+  var btn = document.createElement('button');
+  btn.id = 'cos-reset-btn';
+  btn.innerHTML = '↺ Reset';
+  btn.title = 'Reset all progress and return to start';
+  btn.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:9000;padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.25);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.25s ease;letter-spacing:0.02em;';
+  btn.onmouseover = function(){ btn.style.color='rgba(255,255,255,0.55)'; btn.style.borderColor='rgba(255,255,255,0.15)'; btn.style.background='rgba(255,255,255,0.06)'; };
+  btn.onmouseout = function(){ btn.style.color='rgba(255,255,255,0.25)'; btn.style.borderColor='rgba(255,255,255,0.08)'; btn.style.background='rgba(255,255,255,0.03)'; };
+
+  /* Light mode styles */
+  var style = document.createElement('style');
+  style.textContent = 'body.light-mode #cos-reset-btn{border-color:rgba(0,0,0,0.06)!important;background:rgba(0,0,0,0.02)!important;color:rgba(0,0,0,0.2)!important;}body.light-mode #cos-reset-btn:hover{border-color:rgba(0,0,0,0.12)!important;background:rgba(0,0,0,0.04)!important;color:rgba(0,0,0,0.4)!important;}body.light-mode #cos-reset-confirm{background:rgba(255,255,255,0.97)!important;border-color:rgba(0,0,0,0.1)!important;box-shadow:0 8px 32px rgba(0,0,0,0.12)!important;}body.light-mode #cos-reset-confirm p{color:#334155!important;}body.light-mode #cos-reset-confirm .reset-msg{color:#64748b!important;}body.light-mode .reset-cancel{border-color:rgba(0,0,0,0.1)!important;background:rgba(0,0,0,0.04)!important;color:#475569!important;}body.light-mode .reset-cancel:hover{background:rgba(0,0,0,0.08)!important;}@media print{#cos-reset-btn,#cos-reset-confirm{display:none!important;}}';
+  document.head.appendChild(style);
+
+  /* Confirmation dialog */
+  var dialog = document.createElement('div');
+  dialog.id = 'cos-reset-confirm';
+  dialog.style.cssText = 'display:none;position:fixed;bottom:52px;right:16px;z-index:9001;background:rgba(26,34,73,0.97);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:20px;width:280px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,0.4);';
+  dialog.innerHTML =
+    '<p style="color:#fff;font-size:14px;font-weight:700;margin:0 0 6px 0;">Reset everything?</p>' +
+    '<p class="reset-msg" style="color:rgba(255,255,255,0.5);font-size:12px;line-height:1.5;margin:0 0 16px 0;">This will clear all your saved work, quiz answers, progress, and industry selection. You\'ll return to the welcome screen.</p>' +
+    '<div style="display:flex;gap:8px;">' +
+      '<button class="reset-cancel" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s ease;">Cancel</button>' +
+      '<button class="reset-confirm-yes" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.12);color:#f87171;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s ease;">Yes, reset all</button>' +
+    '</div>';
+
+  var cancelBtn = dialog.querySelector('.reset-cancel');
+  var confirmBtn = dialog.querySelector('.reset-confirm-yes');
+
+  cancelBtn.onmouseover = function(){ cancelBtn.style.background='rgba(255,255,255,0.1)'; };
+  cancelBtn.onmouseout = function(){ cancelBtn.style.background='rgba(255,255,255,0.06)'; };
+  confirmBtn.onmouseover = function(){ confirmBtn.style.background='rgba(239,68,68,0.25)'; };
+  confirmBtn.onmouseout = function(){ confirmBtn.style.background='rgba(239,68,68,0.12)'; };
+
+  cancelBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    dialog.style.display = 'none';
+  });
+
+  confirmBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    /* Clear ALL cos_ai_ localStorage keys */
+    var keysToRemove = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('cos_ai_') === 0) {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach(function(k){ localStorage.removeItem(k); });
+
+    /* Clear sessionStorage */
+    sessionStorage.removeItem('cos_ai_unlocked');
+
+    /* Clear industry cookie */
+    try { document.cookie = 'cos_ai_industry=;path=/;max-age=0'; document.cookie = 'cos_ai_reset=1;path=/;max-age=120'; } catch(e){}
+
+    /* Navigate to root */
+    var path = window.location.pathname;
+    var base = path.substring(0, path.indexOf('city-of-sydney-ai-bootcamp'));
+    if (base) {
+      window.location.href = base + 'city-of-sydney-ai-bootcamp/index.html';
+    } else {
+      window.location.href = 'index.html';
+    }
+  });
+
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    dialog.style.display = dialog.style.display === 'none' ? 'block' : 'none';
+  });
+
+  document.addEventListener('click', function(){
+    dialog.style.display = 'none';
+  });
+
+  dialog.addEventListener('click', function(e){ e.stopPropagation(); });
+
+  /* Don't show on welcome overlay */
+  function addToPage(){
+    if (document.getElementById('welcome-overlay') && document.body.classList.contains('locked')) {
+      /* Wait until unlocked */
+      var obs = new MutationObserver(function(){
+        if (!document.body.classList.contains('locked')) {
+          document.body.appendChild(btn);
+          document.body.appendChild(dialog);
+          obs.disconnect();
+        }
+      });
+      obs.observe(document.body, { attributes:true, attributeFilter:['class'] });
+    } else {
+      document.body.appendChild(btn);
+      document.body.appendChild(dialog);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addToPage);
+  } else {
+    addToPage();
+  }
+})();
+
+</script>
+
+
+<style>
+.ws-nav{position:fixed;bottom:0;left:0;right:0;z-index:9000;display:flex;justify-content:space-between;align-items:center;padding:0.6rem 1.5rem;background:rgba(26,34,73,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,0.1);font-family:'Lato',sans-serif}
+html.light-pending .ws-nav,html[data-theme="light"] .ws-nav{background:rgba(255,255,255,0.95);border-top:1px solid rgba(0,0,0,0.1)}
+.ws-nav a{display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;border-radius:8px;font-size:0.85rem;font-weight:600;text-decoration:none;color:rgba(255,255,255,0.8);transition:all 0.2s}
+html.light-pending .ws-nav a,html[data-theme="light"] .ws-nav a{color:rgba(46,61,125,0.8)}
+.ws-nav a:hover{background:rgba(255,255,255,0.1);color:#fff}
+html.light-pending .ws-nav a:hover,html[data-theme="light"] .ws-nav a:hover{background:rgba(46,61,125,0.08);color:#2e3d7d}
+.ws-nav .ws-nav-label{font-size:0.75rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.08em;font-weight:700}
+html.light-pending .ws-nav .ws-nav-label,html[data-theme="light"] .ws-nav .ws-nav-label{color:rgba(46,61,125,0.45)}
+.ws-nav .ws-nav-home{font-size:0.8rem}
+</style>
+
+<nav class="ws-nav">
+  <div><a href="business-task-finder.html">&#9664; Business Task Finder</a></div>
+  <div><a href="index.html" class="ws-nav-home" title="Course Home">&#9632; Home</a></div>
+  <div><a href="act-explain-please-builder.html">Act, Explain, Please &#9654;</a></div>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Business: Save Time and Work Smarter | AIM Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#2e3d7d;--blue-dark:#1a2249;--blue-light:#3a4f99;
+  --accent:#6dd8ff;--coral:#DC5A46;--cream:#F1EEDE;
+  --text:rgba(255,255,255,0.88);--muted:rgba(255,255,255,0.5);
+}
+html,body{height:100%;overflow:hidden;font-family:"Lato",sans-serif;background:var(--blue);color:var(--text)}
+/* ── Slide container ── */
+.deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;opacity:0;visibility:hidden;
+  transition:opacity 0.6s ease,transform 0.6s ease;
+  transform:translateY(30px);will-change:opacity,transform;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateY(0)}
+.slide.exit-up{opacity:0;transform:translateY(-40px)}
+
+/* ── Backgrounds ── */
+.slide{background:var(--blue)}
+.slide.bg-dark{background:var(--blue-dark)}
+.slide.bg-black{background:#0a0e1a}
+.slide.bg-coral{background:var(--coral)}
+.slide.bg-split{background:linear-gradient(90deg,var(--blue) 50%,var(--cream) 50%)}
+
+/* Image overlay slides */
+.slide.has-bg-img{background-size:cover;background-position:center}
+.slide.has-bg-img::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(26,34,73,0.92),rgba(46,61,125,0.82));z-index:0}
+.slide.has-bg-img>*:not(.cs-thumb){position:relative;z-index:1}
+
+/* ── Typography ── */
+h1{font-size:clamp(2.8rem,6vw,5rem);font-weight:900;line-height:1.08;color:#fff;letter-spacing:-0.02em}
+h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;line-height:1.15;color:#fff}
+h3{font-size:clamp(1.4rem,2.5vw,2rem);font-weight:700;color:#fff}
+p,.lead{font-size:clamp(1rem,1.6vw,1.25rem);line-height:1.65;color:var(--text);max-width:52ch}
+.lead{font-size:clamp(1.1rem,1.8vw,1.4rem);color:rgba(255,255,255,0.75)}
+.accent{color:var(--accent)}
+.gradient-text{background:linear-gradient(135deg,#6dd8ff,#e4a4e1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.eyebrow{font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+small{font-size:0.85rem;color:var(--muted)}
+
+/* ── Lists ── */
+ul.checklist{list-style:none;display:flex;flex-direction:column;gap:0.8rem}
+ul.checklist li{display:flex;align-items:flex-start;gap:0.7rem;font-size:clamp(0.95rem,1.4vw,1.15rem);color:var(--text)}
+ul.checklist li::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:0.5em}
+ul.checklist.coral li::before{background:var(--coral)}
+
+/* ── Two-column layout ── */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:4vw;align-items:start}
+.cols.v-center{align-items:center}
+
+/* ── Image panels ── */
+.img-panel{border-radius:16px;overflow:hidden;max-height:55vh;aspect-ratio:4/3}
+.img-panel img{width:100%;height:100%;object-fit:cover}
+
+/* ── Activity badge ── */
+.activity-badge{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:0.5rem 1.2rem;border-radius:999px;
+  background:rgba(255,255,255,0.15);font-size:0.8rem;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;color:#fff;margin-bottom:1.5rem;
+}
+.activity-badge .dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* ── Demo badge ── */
+.demo-badge{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  padding:0.5rem 1.2rem;border-radius:999px;
+  background:rgba(109,216,255,0.15);font-size:0.8rem;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;
+  border:1px solid rgba(109,216,255,0.3);
+}
+
+/* ── Prompt box ── */
+.formula-box{
+  background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);
+  border-radius:12px;padding:1.5rem 2rem;font-size:1.1rem;color:var(--accent);
+  font-weight:700;letter-spacing:0.02em;display:inline-block;margin:1.2rem 0;
+}
+
+/* ── Progress bar ── */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:100;transition:width 0.4s ease;border-radius:0 2px 2px 0}
+
+/* ── Slide counter ── */
+.counter{
+  position:fixed;bottom:2rem;right:2rem;z-index:100;
+  font-size:0.8rem;font-weight:700;color:var(--muted);letter-spacing:0.05em;
+}
+
+/* ── Nav hint ── */
+.nav-hint{
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);z-index:100;
+  font-size:0.75rem;color:var(--muted);opacity:0.6;transition:opacity 0.3s;
+}
+.nav-hint.hidden{opacity:0}
+
+/* ── Logo ── */
+.logo{position:fixed;top:1.5rem;left:2rem;z-index:100;height:2rem;opacity:0.7}
+
+/* ── Staggered children ── */
+.slide.active .stagger>*{animation:fadeUp 0.5s ease both}
+.slide.active .stagger>*:nth-child(1){animation-delay:0.1s}
+.slide.active .stagger>*:nth-child(2){animation-delay:0.2s}
+.slide.active .stagger>*:nth-child(3){animation-delay:0.25s}
+.slide.active .stagger>*:nth-child(4){animation-delay:0.3s}
+.slide.active .stagger>*:nth-child(5){animation-delay:0.35s}
+.slide.active .stagger>*:nth-child(6){animation-delay:0.4s}
+.slide.active .stagger>*:nth-child(7){animation-delay:0.45s}
+.slide.active .stagger>*:nth-child(8){animation-delay:0.5s}
+.slide.active .stagger>*:nth-child(9){animation-delay:0.55s}
+.slide.active .stagger>*:nth-child(10){animation-delay:0.6s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Big number ── */
+.big-num{font-size:clamp(4rem,10vw,8rem);font-weight:900;color:rgba(255,255,255,0.06);position:absolute;bottom:2rem;right:3rem;line-height:1}
+
+/* ── Split-slide text on cream ── */
+.cream-text{color:#423A3A}
+.cream-text h3,.cream-text strong,.cream-text b{color:#2e3d7d}
+.cream-text p,.cream-text li,.cream-text ul.checklist li{color:#423A3A}
+.cream-text ul.checklist li::before{background:#2e3d7d}
+
+/* ── Cheat sheet thumbnail ── */
+.cs-thumb{
+  position:absolute;bottom:1.8rem;left:2rem;z-index:2;
+  width:104px;border-radius:6px;overflow:hidden;
+  box-shadow:0 4px 16px rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.15);
+  opacity:0.85;transition:opacity 0.3s,transform 0.3s;
+}
+.cs-thumb:hover{opacity:1;transform:scale(1.08)}
+.cs-thumb img{width:100%;display:block}
+
+/* ── Tool logos row ── */
+.tool-logos{display:flex;gap:2.5rem;align-items:center;margin-top:2rem;flex-wrap:wrap}
+.tool-logo{display:flex;flex-direction:column;align-items:center;gap:0.6rem}
+.tool-logo img{width:56px;height:56px;border-radius:14px;object-fit:contain;background:rgba(255,255,255,0.08);padding:6px}
+.tool-logo span{font-size:0.75rem;font-weight:700;color:var(--muted);letter-spacing:0.05em}
+
+/* ── Screenshot panel ── */
+.screenshot-panel{
+  border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  border:1px solid rgba(255,255,255,0.1);max-height:50vh;
+}
+.screenshot-panel img{width:100%;display:block;object-fit:cover}
+
+/* ── Model card slides ── */
+.model-card{display:flex;flex-direction:column;justify-content:space-between;height:100%;gap:0}
+.model-top{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.model-top .model-icon{width:72px;height:72px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.model-top .model-icon img{width:50px;height:50px;object-fit:contain}
+.model-top .model-name{font-size:clamp(2rem,4vw,3.2rem);font-weight:700;color:#fff;line-height:1.1}
+.model-top .tagline{font-size:clamp(1rem,1.6vw,1.3rem);color:var(--muted);font-style:italic;margin-left:0.5rem}
+.model-url{position:absolute;top:4vh;right:6vw;font-size:clamp(1.8rem,3vw,2.5rem);font-weight:900;color:var(--accent);letter-spacing:0.02em;opacity:0.85}
+.model-pills{display:flex;flex-direction:column;gap:0.6rem}
+.best-for-strip{display:flex;gap:0.5rem;flex-wrap:wrap}
+.best-for-strip .bf-tag{padding:0.35rem 0.9rem;border-radius:999px;font-size:0.8rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;background:rgba(109,216,255,0.12);color:var(--accent);border:1px solid rgba(109,216,255,0.2)}
+.personality-strip{display:flex;gap:0.5rem;flex-wrap:wrap}
+.personality-strip span{padding:0.35rem 0.9rem;border-radius:999px;font-size:0.8rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;background:rgba(255,255,255,0.06);color:var(--text);border:1px solid rgba(255,255,255,0.1)}
+.model-body{display:grid;grid-template-columns:1fr 1fr;gap:3vw;align-items:start}
+.model-section-label{font-size:0.85rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.model-section-label.warn{color:var(--coral)}
+.model-body ul{list-style:none;display:flex;flex-direction:column;gap:1rem}
+.model-body ul li{display:flex;align-items:flex-start;gap:0.7rem;font-size:clamp(1.05rem,1.5vw,1.25rem);color:var(--text);line-height:1.55}
+.model-body ul li::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:0.55em}
+.model-body ul.warn-list li::before{background:var(--coral)}
+.model-takeaway .formula-box{font-size:clamp(1.05rem,1.5vw,1.2rem);padding:1.2rem 1.8rem;width:100%}
+@media(max-width:768px){
+  .model-top .model-icon{width:56px;height:56px}
+  .model-top .model-icon img{width:38px;height:38px}
+  .model-body{grid-template-columns:1fr}
+}
+
+/* ── Cheat sheet gallery ── */
+.cs-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:0.8rem;width:100%}
+.cs-gallery .cs-card{border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);transition:transform 0.3s}
+.cs-gallery .cs-card:hover{transform:scale(1.05)}
+.cs-gallery .cs-card img{width:100%;display:block}
+
+/* ── Section divider ── */
+.section-num{
+  font-size:clamp(6rem,12vw,10rem);font-weight:900;
+  background:linear-gradient(135deg,rgba(109,216,255,0.15),rgba(228,164,225,0.1));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;margin-bottom:0.5rem;
+}
+
+@media(max-width:768px){
+  .slide{padding:4vh 6vw}
+  .cols{grid-template-columns:1fr;gap:2rem}
+  .img-panel{max-height:35vh}
+  h1{font-size:2.2rem}
+  .big-num{font-size:4rem}
+  .cs-thumb{width:73px;bottom:1.2rem;left:1.2rem}
+  .tool-logos{gap:1.5rem}
+  .tool-logo img{width:44px;height:44px}
+  .screenshot-panel{max-height:35vh}
+}
+</style>
+</head>
+<body>
+<img src="../../assets/aimlogo_white.png" alt="AIM" class="logo">
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter"></div>
+<div class="nav-hint" id="navHint">Press <kbd>&rarr;</kbd> or click to advance</div>
+
+<div class="deck" id="deck">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 1: WELCOME & SETUP                     -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S01: TITLE -->
+<div class="slide bg-black has-bg-img active" style="background-image:url('../../assets/img/futuristic-office-1.jpg')">
+  <div class="stagger">
+    <p class="eyebrow">City of Sydney &middot; Australian Institute of Management</p>
+    <h1>AI for Business<br><span class="gradient-text">Save Time and Work Smarter</span></h1>
+    <p class="lead" style="margin-top:1.5rem">A hands-on workshop for small business owners, managers and operators</p>
+    <div class="tool-logos" style="margin-top:2rem">
+      <div class="tool-logo"><img src="../../assets/ai-tool-logos/ChatGPT.png" alt="ChatGPT"><span>ChatGPT</span></div>
+      <div class="tool-logo"><img src="../../assets/ai-tool-logos/Gemini.png" alt="Gemini"><span>Gemini</span></div>
+      <div class="tool-logo"><img src="../../assets/ai-tool-logos/Claude.png" alt="Claude"><span>Claude</span></div>
+      <div class="tool-logo"><img src="../../assets/ai-tool-logos/Grok.png" alt="Grok"><span>Grok</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- S02: QR CODE — MINI-SITE -->
+<div class="slide bg-dark" style="display:flex;align-items:center;justify-content:center;text-align:center">
+  <div class="stagger" style="max-width:52ch">
+    <h2 style="margin-bottom:2rem">Scan to Follow Along</h2>
+    <div style="display:inline-block;background:#fff;border-radius:20px;padding:1.5rem;box-shadow:0 8px 40px rgba(0,0,0,0.3)">
+      <img src="../../assets/AIMgithubqr.jpg" alt="QR code to mini-site" style="width:280px;height:280px;display:block;border-radius:8px">
+    </div>
+    <p style="margin-top:2rem;font-size:clamp(1.1rem,1.8vw,1.4rem);color:#fff;font-weight:700">Connect here to follow along with our<br>online workshops and cheat sheets</p>
+  </div>
+</div>
+
+<!-- S03: WELCOME -->
+<div class="slide">
+  <div class="stagger">
+    <p class="eyebrow">Welcome</p>
+    <h2>This is not a<br>technical AI lecture</h2>
+    <p style="margin-top:1.5rem">It is a hands-on workshop to help SMEs use AI safely for admin, operations, documents, emails and workflows.</p>
+    <p style="margin-top:0.8rem">You will leave today with prompts, templates and a plan you can use immediately.</p>
+    <p style="margin-top:1.5rem;font-size:0.9rem;color:var(--muted)">I'll mostly be using free tools. If there's a better paid option, I'll let you know.</p>
+  </div>
+</div>
+
+<!-- S03: OUTCOMES -->
+<div class="slide bg-split">
+  <div class="cols v-center">
+    <div class="stagger">
+      <p class="eyebrow">What you will achieve</p>
+      <h2>Today's<br>Outcomes</h2>
+    </div>
+    <div class="stagger cream-text" style="padding:2rem">
+      <ul class="checklist">
+        <li>Identify AI opportunities in your business</li>
+        <li>Write better prompts using a proven formula</li>
+        <li>Protect sensitive information when using AI</li>
+        <li>Explore the major AI tools and when to use each</li>
+        <li>Summarise and extract value from documents</li>
+        <li>Understand what AI agents can do today</li>
+        <li>Create a 7-day action plan to start using AI</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- S04: INTRODUCTIONS -->
+<div class="slide has-bg-img" style="background-image:url('../../assets/img/diverse-team-1.jpg')">
+  <div class="stagger">
+    <p class="eyebrow">Introductions</p>
+    <h2>Who's in the Room?</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:40ch">
+      <li>Your name and business</li>
+      <li>What you currently know about AI</li>
+      <li>One thing you hope to learn today</li>
+    </ul>
+  </div>
+</div>
+
+<!-- S05: HOW IT WORKS -->
+<div class="slide bg-dark">
+  <div class="stagger">
+    <p class="eyebrow">Session rhythm</p>
+    <h2>How the Session Works</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:40ch">
+      <li>Short concept (5 min)</li>
+      <li>Live demo with a real business example</li>
+      <li>You try it on your own business</li>
+      <li>Save your best prompt for reuse</li>
+      <li>Access the mini-site and cheat sheets throughout</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 2: PROMPTING SKILLS                    -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S06: ACT EXPLAIN PLEASE -->
+<div class="slide bg-dark">
+  <div class="stagger">
+    <p class="eyebrow">Section 2 &middot; Cheat Sheet 4</p>
+    <h2>Act &mdash; Explain &mdash; Please</h2>
+    <div style="margin-top:2rem;display:flex;flex-direction:column;gap:1rem;max-width:44ch">
+      <div class="formula-box" style="background:rgba(109,216,255,0.08)"><span class="accent">Act</span> as the useful expert</div>
+      <div class="formula-box" style="background:rgba(109,216,255,0.08)"><span class="accent">Explain</span> the context and background</div>
+      <div class="formula-box" style="background:rgba(109,216,255,0.08)"><span class="accent">Please</span> ask for the specific task + format</div>
+    </div>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/ActExplainPlease.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S07: AI IN PLAIN ENGLISH -->
+<div class="slide bg-split">
+  <div class="cols v-center">
+    <div class="stagger">
+      <p class="eyebrow">Cheat Sheet 2</p>
+      <h2>AI in<br>Plain English</h2>
+      <p style="margin-top:1rem" class="lead">Keep it simple.<br>Build confidence.</p>
+    </div>
+    <div class="stagger cream-text" style="padding:2rem">
+      <ul class="checklist">
+        <li><strong>AI</strong> &mdash; software that learns patterns from data</li>
+        <li><strong>Generative AI</strong> &mdash; creates new text, images, code</li>
+        <li><strong>Prompt</strong> &mdash; the instruction you give the AI</li>
+        <li><strong>Context</strong> &mdash; background that improves the result</li>
+        <li><strong>Hallucination</strong> &mdash; AI confidently makes things up</li>
+        <li><strong>Workflow</strong> &mdash; repeatable AI-assisted steps</li>
+        <li><strong>Human review</strong> &mdash; you always check the output</li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/AIinPlainEnglish.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S08: BAD → BETTER -->
+<div class="slide">
+  <div class="stagger">
+    <p class="eyebrow">Cheat Sheet 5</p>
+    <h2>Bad Prompt &rarr; Better Prompt</h2>
+    <div class="cols" style="margin-top:2rem">
+      <div>
+        <h3 style="font-size:1rem;color:var(--coral);margin-bottom:1rem">BAD PROMPTS</h3>
+        <ul class="checklist coral">
+          <li>"Write an email"</li>
+          <li>"Summarise this"</li>
+          <li>"Help with my business"</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:1rem" class="accent">BETTER PROMPTS</h3>
+        <ul class="checklist">
+          <li>Include role, context, goal, tone and format</li>
+          <li>Specify what to focus on and for whom</li>
+          <li>Name the specific problem and constraints</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/BadPromptBetterPrompt.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S08: ACTIVITY — Upgrade a Prompt -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 4 minutes</div>
+    <h2>Upgrade a Weak Prompt</h2>
+    <p style="margin-top:1.5rem">Your improved prompt must include:</p>
+    <ul class="checklist" style="margin-top:1rem">
+      <li><strong>Role</strong> &mdash; who should the AI act as?</li>
+      <li><strong>Context</strong> &mdash; what is the situation?</li>
+      <li><strong>Task</strong> &mdash; what exactly do you need?</li>
+      <li><strong>Tone</strong> &mdash; how should it sound?</li>
+      <li><strong>Format</strong> &mdash; what shape should the output take?</li>
+    </ul>
+  </div>
+</div>
+
+<!-- S09: BUSINESS PROMPT FORMULA -->
+<div class="slide has-bg-img" style="background-image:url('../../assets/img/stacked-prompt-cards-2.jpg')">
+  <div class="stagger">
+    <p class="eyebrow">Cheat Sheet 12</p>
+    <h2>The Business<br>Prompt Formula</h2>
+    <div class="formula-box" style="margin-top:1.5rem">Role + Context + Task + Constraints + Output</div>
+    <p style="margin-top:1.2rem"><em>"Act as an operations manager for a small Australian business..."</em></p>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/TheBusinessPromptFormula.jpg" alt="Cheat Sheet"></div>
+  <div class="cs-thumb" style="left:auto;right:2rem"><img src="../../assets/cheatsheets/cheatsheet_thumbs/StakeholderEmailTemplates.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 3: AI AS A THINKING PARTNER            -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S10: THINKING PARTNER -->
+<div class="slide bg-dark">
+  <div class="stagger">
+    <p class="eyebrow">Section 3 &middot; Cheat Sheet 17</p>
+    <h2>Use AI as a<br>Thinking Partner</h2>
+    <p style="margin-top:1.5rem">AI can help with <span class="accent">options, trade-offs, blind spots, assumptions, risks</span> and <span class="accent">next steps</span>.</p>
+    <p style="margin-top:1rem;font-weight:700;color:#fff">AI helps thinking &mdash; it does not replace judgement.</p>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/UseAIasaThinkingPartner.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S11: ACTIVITY — Decision -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 5 minutes</div>
+    <h2>Think Through a<br>Business Decision</h2>
+    <p style="margin-top:1.5rem">Ask AI to analyse a simple decision:</p>
+    <ul class="checklist" style="margin-top:1rem">
+      <li>New supplier or vendor choice</li>
+      <li>New product or service offer</li>
+      <li>Staffing or process change</li>
+      <li>Customer complaint handling</li>
+    </ul>
+    <p style="margin-top:1rem"><strong>Output:</strong> pros, cons, risks, unknowns, next questions.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 4: THE DIFFERENT AI MODELS             -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S12: FOUR MODELS -->
+<div class="slide">
+  <div class="stagger">
+    <p class="eyebrow">Section 4</p>
+    <h2>The Different<br>AI Models</h2>
+    <p style="margin-top:1rem">Four major AI tools you should know &mdash; each with different strengths.</p>
+    <div class="cols" style="margin-top:2rem">
+      <div style="display:flex;flex-direction:column;gap:2rem">
+        <div style="display:flex;align-items:center;gap:1.5rem">
+          <div style="width:140px;height:140px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="../../assets/ai-tool-logos/ChatGPT.png" alt="ChatGPT" style="width:100px;height:100px;object-fit:contain"></div>
+          <div><strong style="color:#fff;font-size:1.2rem">ChatGPT</strong><br><small>by OpenAI &middot; Most popular, versatile all-rounder</small></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1.5rem">
+          <div style="width:140px;height:140px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="../../assets/ai-tool-logos/Gemini.png" alt="Gemini" style="width:100px;height:100px;object-fit:contain"></div>
+          <div><strong style="color:#fff;font-size:1.2rem">Gemini</strong><br><small>by Google &middot; Best for search and Google integration</small></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2rem">
+        <div style="display:flex;align-items:center;gap:1.5rem">
+          <div style="width:140px;height:140px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="../../assets/ai-tool-logos/Claude.png" alt="Claude" style="width:100px;height:100px;object-fit:contain"></div>
+          <div><strong style="color:#fff;font-size:1.2rem">Claude</strong><br><small>by Anthropic &middot; Best for long documents and careful writing</small></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1.5rem">
+          <div style="width:140px;height:140px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="../../assets/ai-tool-logos/Grok.png" alt="Grok" style="width:100px;height:100px;object-fit:contain"></div>
+          <div><strong style="color:#fff;font-size:1.2rem">Grok</strong><br><small>by xAI &middot; Real-time info, integrated with X</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S13: ChatGPT MODEL CARD -->
+<div class="slide bg-dark" style="padding:4vh 6vw">
+  <span class="model-url">chatgpt.com</span>
+  <div class="model-card stagger">
+    <div class="model-top">
+      <div class="model-icon"><img src="../../assets/ai-tool-logos/ChatGPT.png" alt="ChatGPT"></div>
+      <span class="model-name">ChatGPT</span>
+      <span class="tagline">The versatile all-rounder</span>
+    </div>
+    <div class="model-pills">
+      <div class="best-for-strip">
+        <span class="bf-tag">Writing</span><span class="bf-tag">Coding</span><span class="bf-tag">Data</span><span class="bf-tag">Documents</span><span class="bf-tag">Images</span><span class="bf-tag">Deep Research</span><span class="bf-tag">Agents</span>
+      </div>
+      <div class="personality-strip">
+        <span>Practical</span><span>Flexible</span><span>Mainstream</span><span>Fast</span><span>Versatile</span>
+      </div>
+    </div>
+    <div class="model-body">
+      <div>
+        <p class="model-section-label">Strengths</p>
+        <ul>
+          <li>Best overall &ldquo;Swiss Army knife&rdquo; &mdash; turns messy requests into useful outputs</li>
+          <li>Strong at documents, coding, images, structured tables and business workflows</li>
+          <li>Agent mode completes multi-step tasks and can be guided or interrupted mid-task</li>
+        </ul>
+      </div>
+      <div>
+        <p class="model-section-label warn">Watch-outs</p>
+        <ul class="warn-list">
+          <li>Versatility can lead to over-trust &mdash; outputs still need checking</li>
+          <li>Advanced features vary by subscription tier</li>
+          <li>Model names and available modes change frequently</li>
+        </ul>
+      </div>
+    </div>
+    <div class="model-takeaway">
+      <div class="formula-box">Reach for ChatGPT when you need the <span class="accent">best general-purpose AI assistant</span> for business work.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S14: Gemini MODEL CARD -->
+<div class="slide bg-dark" style="padding:4vh 6vw">
+  <span class="model-url">gemini.google</span>
+  <div class="model-card stagger">
+    <div class="model-top">
+      <div class="model-icon"><img src="../../assets/ai-tool-logos/Gemini.png" alt="Gemini"></div>
+      <span class="model-name">Gemini</span>
+      <span class="tagline">The Google-connected research &amp; productivity assistant</span>
+    </div>
+    <div class="model-pills">
+      <div class="best-for-strip">
+        <span class="bf-tag">Research</span><span class="bf-tag">Gmail</span><span class="bf-tag">Drive</span><span class="bf-tag">Planning</span><span class="bf-tag">Presentations</span><span class="bf-tag">Brainstorming</span>
+      </div>
+      <div class="personality-strip">
+        <span>Organised</span><span>Search-aware</span><span>Integrated</span><span>Practical</span>
+      </div>
+    </div>
+    <div class="model-body">
+      <div>
+        <p class="model-section-label">Strengths</p>
+        <ul>
+          <li>Strong fit for organisations already using Google Workspace</li>
+          <li>Deep Research draws from Gmail, Drive, Chat and the web</li>
+          <li>Canvas turns research into apps, quizzes, web pages and infographics</li>
+        </ul>
+      </div>
+      <div>
+        <p class="model-section-label warn">Watch-outs</p>
+        <ul class="warn-list">
+          <li>Best value depends on how much your business lives inside Google</li>
+          <li>Can feel more &ldquo;productivity tool&rdquo; than conversationally warm</li>
+          <li>Outputs still need human checking, especially for customer-facing content</li>
+        </ul>
+      </div>
+    </div>
+    <div class="model-takeaway">
+      <div class="formula-box">Reach for Gemini when your work lives in <span class="accent">Google</span> and you want AI connected to research, documents and productivity.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S15: Claude MODEL CARD -->
+<div class="slide bg-dark" style="padding:4vh 6vw">
+  <span class="model-url">claude.ai</span>
+  <div class="model-card stagger">
+    <div class="model-top">
+      <div class="model-icon"><img src="../../assets/ai-tool-logos/Claude.png" alt="Claude"></div>
+      <span class="model-name">Claude</span>
+      <span class="tagline">The careful writer and long-document thinker</span>
+    </div>
+    <div class="model-pills">
+      <div class="best-for-strip">
+        <span class="bf-tag">Long docs</span><span class="bf-tag">Writing</span><span class="bf-tag">Analysis</span><span class="bf-tag">Policy</span><span class="bf-tag">Coding</span><span class="bf-tag">Strategy</span>
+      </div>
+      <div class="personality-strip">
+        <span>Thoughtful</span><span>Careful</span><span>Polished</span><span>Measured</span>
+      </div>
+    </div>
+    <div class="model-body">
+      <div>
+        <p class="model-section-label">Strengths</p>
+        <ul>
+          <li>Excellent for long, careful writing with strong tone and nuance</li>
+          <li>Summarises and reasons across lengthy materials with up to 1M tokens of context</li>
+          <li>Claude Cowork integrates into desktop workflows on macOS and Windows</li>
+        </ul>
+      </div>
+      <div>
+        <p class="model-section-label warn">Watch-outs</p>
+        <ul class="warn-list">
+          <li>Can be more cautious than some users expect</li>
+          <li>Less ideal for very short, punchy, high-volume outputs</li>
+          <li>Feature availability depends on plan and product surface</li>
+        </ul>
+      </div>
+    </div>
+    <div class="model-takeaway">
+      <div class="formula-box">Reach for Claude when the work is <span class="accent">long, sensitive, complex</span> or needs <span class="accent">careful writing</span>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S16: Grok MODEL CARD -->
+<div class="slide bg-dark" style="padding:4vh 6vw">
+  <span class="model-url">grok.com</span>
+  <div class="model-card stagger">
+    <div class="model-top">
+      <div class="model-icon"><img src="../../assets/ai-tool-logos/Grok.png" alt="Grok"></div>
+      <span class="model-name">Grok</span>
+      <span class="tagline">The real-time, internet-aware assistant</span>
+    </div>
+    <div class="model-pills">
+      <div class="best-for-strip">
+        <span class="bf-tag">Real-time</span><span class="bf-tag">Trends</span><span class="bf-tag">X / Social</span><span class="bf-tag">Coding</span><span class="bf-tag">Documents</span><span class="bf-tag">Live Search</span>
+      </div>
+      <div class="personality-strip">
+        <span>Fast</span><span>Direct</span><span>Opinionated</span><span>Internet-native</span>
+      </div>
+    </div>
+    <div class="model-body">
+      <div>
+        <p class="model-section-label">Strengths</p>
+        <ul>
+          <li>Strong for up-to-date web and X-aware insights with live search</li>
+          <li>Useful for social listening, trend spotting and current-context work</li>
+          <li>1M token context window with strong agentic tool calling</li>
+        </ul>
+      </div>
+      <div>
+        <p class="model-section-label warn">Watch-outs</p>
+        <ul class="warn-list">
+          <li>Less neutral &ldquo;enterprise&rdquo; personality &mdash; can feel more provocative or informal</li>
+          <li>X-based context can be noisy, biased or volatile</li>
+          <li>Needs careful verification for sensitive business, legal or brand work</li>
+        </ul>
+      </div>
+    </div>
+    <div class="model-takeaway">
+      <div class="formula-box">Reach for Grok when <span class="accent">freshness, social trends</span> and <span class="accent">real-time internet context</span> matter most.</div>
+    </div>
+  </div>
+</div>
+
+<!-- S17: ACTIVITY — Which Model -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 5 minutes</div>
+    <h2>Which Model for<br>Which Task?</h2>
+    <p style="margin-top:1.5rem">Consider these tasks. Which AI model would be best to use?</p>
+    <ul class="checklist" style="margin-top:1rem">
+      <li>Summarise a 40-page council report</li>
+      <li>Draft a customer email with a warm tone</li>
+      <li>Research what competitors are doing right now</li>
+      <li>Rewrite a policy document for plain English</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 5: NOTEBOOKLM                          -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S14: NOTEBOOKLM INTRO -->
+<div class="slide bg-split">
+  <div class="cols v-center">
+    <div class="stagger">
+      <p class="eyebrow">Section 5</p>
+      <h2>NotebookLM</h2>
+      <p style="margin-top:1rem" class="lead">Google's free AI<br>research assistant</p>
+    </div>
+    <div style="padding:2rem">
+      <div class="screenshot-panel">
+        <img src="../../assets/ai-tool-screenshots/NotebookLM.jpg" alt="NotebookLM interface">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S15: WHAT IS NOTEBOOKLM -->
+<div class="slide bg-dark">
+  <div class="stagger">
+    <p class="eyebrow">notebooklm.google.com</p>
+    <h2>What is NotebookLM?</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:48ch">
+      <li>Upload documents, PDFs, websites or audio &mdash; it only answers from <strong>your</strong> sources</li>
+      <li>Unlike ChatGPT/Claude, no hallucinated facts &mdash; everything is grounded</li>
+      <li>Great for summarising long reports and comparing multiple documents</li>
+      <li>Can generate podcast-style audio overviews of your uploaded material</li>
+    </ul>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/FromPDFtoAction.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S16: DEMO — NotebookLM -->
+<div class="slide has-bg-img" style="background-image:url('../../assets/img/coloured-tabs.jpg')">
+  <div class="stagger">
+    <div class="demo-badge">&#9654; Live Demo</div>
+    <h2>NotebookLM<br>in Action</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:40ch">
+      <li>Upload a public document or report</li>
+      <li>Ask questions and see how it cites specific sources</li>
+      <li>Generate an audio overview of the content</li>
+    </ul>
+  </div>
+</div>
+
+<!-- S17: ACTIVITY — NotebookLM -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 5 minutes</div>
+    <h2>Try NotebookLM<br>Yourself</h2>
+    <p style="margin-top:1.5rem">Upload a safe business document (policy, public report, supplier info):</p>
+    <ul class="checklist" style="margin-top:1rem">
+      <li>Ask it to summarise or extract key points</li>
+      <li>Compare different sections of the document</li>
+      <li>Notice how every answer cites your source</li>
+    </ul>
+    <p style="margin-top:1rem"><strong>Output:</strong> a grounded summary you can trust because it only uses your sources.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 6: GAMMA                               -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S18: GAMMA INTRO -->
+<div class="slide bg-split">
+  <div class="cols v-center">
+    <div class="stagger">
+      <p class="eyebrow">Section 6</p>
+      <h2>Gamma</h2>
+      <p style="margin-top:1rem" class="lead">AI presentation &amp;<br>document builder</p>
+    </div>
+    <div style="padding:2rem">
+      <div class="screenshot-panel">
+        <img src="../../assets/ai-tool-screenshots/Gamma.jpg" alt="Gamma interface">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S19: WHAT IS GAMMA -->
+<div class="slide">
+  <div class="stagger">
+    <p class="eyebrow">gamma.app</p>
+    <h2>What is Gamma?</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:48ch">
+      <li>Describe what you want and it generates polished decks, one-pagers and docs</li>
+      <li>Handles layout, images and design automatically &mdash; no fiddling with PowerPoint</li>
+      <li>Good for quick pitch decks, internal reports, training materials and client proposals</li>
+      <li>Free tier available with generous usage</li>
+    </ul>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/AIforInternalComms.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S20: DEMO — Gamma -->
+<div class="slide has-bg-img" style="background-image:url('../../assets/img/stacked-prompt-cards-2.jpg')">
+  <div class="stagger">
+    <div class="demo-badge">&#9654; Live Demo</div>
+    <h2>Building a Deck<br>with Gamma</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:40ch">
+      <li>Give Gamma a topic and watch it generate a full slide deck in under a minute</li>
+      <li>Edit, restyle and refine the output</li>
+      <li>Compare the speed vs. building slides manually</li>
+    </ul>
+  </div>
+</div>
+
+<!-- S21: ACTIVITY — Gamma -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 5 minutes</div>
+    <h2>Create a Presentation<br>with Gamma</h2>
+    <p style="margin-top:1.5rem">Think of something your business needs to present:</p>
+    <ul class="checklist" style="margin-top:1rem">
+      <li>A team update or internal briefing</li>
+      <li>A client proposal or pitch</li>
+      <li>A new product or service overview</li>
+    </ul>
+    <p style="margin-top:1rem">Write a one-sentence brief and let Gamma build it.</p>
+    <p style="margin-top:0.5rem"><strong>Output:</strong> a shareable presentation created in minutes, not hours.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 7: GOOGLE AI STUDIO                    -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S22: AI STUDIO INTRO -->
+<div class="slide bg-split">
+  <div class="cols v-center">
+    <div class="stagger">
+      <p class="eyebrow">Section 7</p>
+      <h2>Google<br>AI Studio</h2>
+      <p style="margin-top:1rem" class="lead">The power user's<br>Gemini playground</p>
+    </div>
+    <div style="padding:2rem">
+      <div class="screenshot-panel">
+        <img src="../../assets/ai-tool-screenshots/GoogleAIStudio.jpg" alt="Google AI Studio interface">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S23: WHAT IS AI STUDIO -->
+<div class="slide bg-dark">
+  <div class="stagger">
+    <p class="eyebrow">aistudio.google.com</p>
+    <h2>What is Google AI Studio?</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:48ch">
+      <li>Google's free playground for testing Gemini models directly &mdash; more powerful than the consumer Gemini app</li>
+      <li>Experiment with longer prompts, upload files, and set system instructions</li>
+      <li>Compare different model sizes and outputs side by side</li>
+      <li>Useful for testing complex prompts before building them into workflows</li>
+    </ul>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/DatatoDashboard.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S24: DEMO — AI Studio -->
+<div class="slide has-bg-img" style="background-image:url('../../assets/img/three-step-workflow.jpg')">
+  <div class="stagger">
+    <div class="demo-badge">&#9654; Live Demo</div>
+    <h2>Exploring<br>Google AI Studio</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:40ch">
+      <li>Show the interface and how it differs from regular Gemini</li>
+      <li>Set a system instruction (e.g. "You are a business advisor for Australian SMEs")</li>
+      <li>Upload a document and run a detailed analysis</li>
+    </ul>
+  </div>
+</div>
+
+<!-- S25: ACTIVITY — AI Studio -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 5 minutes</div>
+    <h2>Test a Prompt in<br>Google AI Studio</h2>
+    <p style="margin-top:1.5rem">Take your best prompt from earlier in the session:</p>
+    <ul class="checklist" style="margin-top:1rem">
+      <li>Run it in AI Studio with a system instruction added</li>
+      <li>Compare the output to what you got in ChatGPT or Claude</li>
+      <li>Notice the difference system instructions make</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 8: SAFE AI USE                         -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S26: BEFORE YOU PASTE -->
+<div class="slide has-bg-img" style="background-image:url('../../assets/img/black-marker-redacting.jpg')">
+  <div class="stagger">
+    <p class="eyebrow">Section 8 &middot; Cheat Sheet 3</p>
+    <h2>Before You Paste:<br>The Safe AI Checklist</h2>
+    <p style="margin-top:1.5rem;max-width:42ch">Never paste confidential, personal, financial or sensitive information into AI tools unless your organisation has approved systems and policies.</p>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/BeforeYouPaste.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S27: TURN OFF TRAINING -->
+<div class="slide bg-dark">
+  <div class="stagger">
+    <p class="eyebrow">Protect your data</p>
+    <h2>How to Turn Off<br>Training</h2>
+    <p style="margin-top:1.5rem">Most AI tools train on your conversations by default. Go into the settings of your chosen AI model and turn off training.</p>
+    <div class="cols" style="margin-top:2rem">
+      <div style="display:flex;flex-direction:column;gap:1.5rem">
+        <div style="display:flex;align-items:center;gap:1.2rem">
+          <div style="width:56px;height:56px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="../../assets/ai-tool-logos/ChatGPT.png" alt="" style="width:40px;height:40px;object-fit:contain"></div>
+          <small style="color:var(--text)">Settings &rarr; Data Controls &rarr; Improve the model</small>
+        </div>
+        <div style="display:flex;align-items:center;gap:1.2rem">
+          <div style="width:56px;height:56px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="../../assets/ai-tool-logos/Gemini.png" alt="" style="width:40px;height:40px;object-fit:contain"></div>
+          <small style="color:var(--text)">Settings &rarr; Gemini Apps Activity &rarr; Turn off</small>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1.5rem">
+        <div style="display:flex;align-items:center;gap:1.2rem">
+          <div style="width:56px;height:56px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="../../assets/ai-tool-logos/Claude.png" alt="" style="width:40px;height:40px;object-fit:contain"></div>
+          <small style="color:var(--text)">Does not train on conversations by default</small>
+        </div>
+        <div style="display:flex;align-items:center;gap:1.2rem">
+          <div style="width:56px;height:56px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0"><img src="../../assets/ai-tool-logos/Grok.png" alt="" style="width:40px;height:40px;object-fit:contain"></div>
+          <small style="color:var(--text)">Settings &rarr; Data Sharing &rarr; Turn off</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S28: ACTIVITY — Safe or Unsafe -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 4 minutes</div>
+    <h2>Safe or Unsafe?</h2>
+    <p style="margin-top:1.5rem">Review each example prompt and decide:</p>
+    <div class="cols" style="margin-top:1.5rem">
+      <ul class="checklist">
+        <li><span style="color:#2ecc71;font-weight:700">Green</span> &mdash; safe to use as-is</li>
+        <li><span style="color:#FFB76B;font-weight:700">Amber</span> &mdash; needs changes first</li>
+        <li><span style="color:#fff;font-weight:700">Red</span> &mdash; do not paste this</li>
+      </ul>
+      <p>Then rewrite the unsafe examples into safer versions.</p>
+    </div>
+  </div>
+</div>
+
+<!-- S29: SAFE CONTEXT REWRITER -->
+<div class="slide has-bg-img" style="background-image:url('../../assets/img/staff-redacting-document.jpg')">
+  <div class="stagger">
+    <p class="eyebrow">Cheat Sheet 11</p>
+    <h2>Safe Context Rewriter</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:38ch">
+      <li>Remove names &mdash; use generic roles</li>
+      <li>Remove exact figures &mdash; use ranges</li>
+      <li>Remove addresses and emails</li>
+      <li>Remove customer and staff details</li>
+      <li>Keep the useful business problem intact</li>
+    </ul>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/SafeContextRewriter.jpg" alt="Cheat Sheet"></div>
+  <div class="cs-thumb" style="left:auto;right:2rem"><img src="../../assets/cheatsheets/cheatsheet_thumbs/PolicyDraftHelper.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S30: ACTIVITY — Safe Context -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 4 minutes</div>
+    <h2>Rewrite Your Own<br>Safe Context</h2>
+    <p style="margin-top:1.5rem">Take one real business situation. Rewrite it safely:</p>
+    <ul class="checklist" style="margin-top:1rem">
+      <li>Remove all identifying information</li>
+      <li>Keep the business problem clear</li>
+    </ul>
+    <p style="margin-top:1rem"><strong>Output:</strong> a reusable safe business context paragraph.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 9: WHAT AI CAN HELP WITH               -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S31: WHAT CAN AI HELP WITH -->
+<div class="slide bg-dark">
+  <div class="stagger">
+    <p class="eyebrow">Section 9 &middot; Cheat Sheet 1</p>
+    <h2>What Can AI Help<br>With Today?</h2>
+    <p style="margin-top:1.5rem">AI can help small businesses <span class="accent">summarise, draft, rewrite, organise, ideate</span> and <span class="accent">check</span>.</p>
+    <p style="margin-top:1rem">Think of one task you do every week that AI could make easier.</p>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/WhatCanAIHelpWith.jpg" alt="Cheat Sheet"></div>
+  <div class="cs-thumb" style="left:auto;right:2rem"><img src="../../assets/cheatsheets/cheatsheet_thumbs/MeetingMinutesin2Minutes.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S32: ACTIVITY — Opportunity List -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 4 minutes</div>
+    <h2>Your AI<br>Opportunity List</h2>
+    <p style="margin-top:1.5rem">List 3 repetitive or time-consuming tasks from your business:</p>
+    <ul class="checklist coral" style="margin-top:1rem">
+      <li>Email and correspondence</li>
+      <li>Documents and reports</li>
+      <li>Customer service replies</li>
+      <li>Planning and scheduling</li>
+      <li>Staff instructions</li>
+      <li>Research and comparison</li>
+    </ul>
+  </div>
+</div>
+
+<!-- S34: GOOD AT / NOT GOOD AT -->
+<div class="slide">
+  <div class="stagger">
+    <h2>What AI Is Good At /<br>Not Good At</h2>
+    <div class="cols" style="margin-top:2rem">
+      <div>
+        <h3 class="accent" style="font-size:1.1rem;margin-bottom:1rem">GOOD AT</h3>
+        <ul class="checklist">
+          <li>First drafts and rewrites</li>
+          <li>Summaries and structure</li>
+          <li>Generating options and ideas</li>
+          <li>Pattern spotting</li>
+          <li>Reformatting content</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size:1.1rem;margin-bottom:1rem;color:var(--coral)">NOT GOOD AT</h3>
+        <ul class="checklist coral">
+          <li>Guaranteed truth</li>
+          <li>Private judgement calls</li>
+          <li>Legal certainty</li>
+          <li>Emotional nuance</li>
+          <li>Business accountability</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 10: INTRODUCTION TO AI AGENTS          -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S35: CHAT vs WORKFLOW vs AGENT -->
+<div class="slide">
+  <div class="stagger">
+    <p class="eyebrow">Section 10</p>
+    <h2>Introduction to<br><span class="gradient-text">AI Agents</span></h2>
+    <div style="margin-top:2rem;display:flex;flex-direction:column;gap:1rem;max-width:48ch">
+      <div class="formula-box"><span class="accent">Chat</span> &mdash; a one-off conversation for quick answers and drafts</div>
+      <div class="formula-box"><span class="accent">Workflow</span> &mdash; a saved, repeatable sequence of prompts you run regularly</div>
+      <div class="formula-box"><span class="accent">Agent</span> &mdash; an AI that can take actions autonomously: browse the web, use tools, complete multi-step tasks</div>
+    </div>
+    <p style="margin-top:1.5rem;font-size:0.95rem">Most people are still at the chat stage &mdash; understanding the progression helps you plan ahead.</p>
+  </div>
+  <div class="cs-thumb" style="left:auto;right:2rem"><img src="../../assets/cheatsheets/cheatsheet_thumbs/PromptChains.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S36: WHAT CAN AGENTS DO -->
+<div class="slide bg-dark">
+  <div class="stagger">
+    <p class="eyebrow">Agents today</p>
+    <h2>What Can Agents<br>Do Today?</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:48ch">
+      <li>Research a topic across multiple sources and produce a structured report</li>
+      <li>Monitor inboxes, summarise messages, and draft replies</li>
+      <li>Schedule meetings, manage calendars, send follow-ups</li>
+      <li>Automate repetitive data entry, file organisation and reporting</li>
+    </ul>
+    <p style="margin-top:1.5rem;font-weight:700;color:#fff">Agents still need human oversight &mdash; you set the goal, review the output, and own the result.</p>
+  </div>
+</div>
+
+<!-- S37: WHERE AGENTS ARE HEADING -->
+<div class="slide has-bg-img" style="background-image:url('../../assets/img/futuristic-office-1.jpg')">
+  <div class="stagger">
+    <p class="eyebrow">The near future</p>
+    <h2>Where Agents<br>Are Heading</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:44ch">
+      <li>Claude, ChatGPT and Gemini are rapidly adding agent capabilities</li>
+      <li>Small businesses will soon delegate routine admin, customer follow-up and reporting to AI agents</li>
+      <li>The key skill: learning to write clear instructions and set boundaries for what the agent can and cannot do</li>
+    </ul>
+  </div>
+</div>
+
+<!-- S38: DEMO — Agent -->
+<div class="slide bg-dark">
+  <div class="stagger">
+    <div class="demo-badge">&#9654; Live Demo</div>
+    <h2>An Agent<br>in Action</h2>
+    <ul class="checklist" style="margin-top:1.5rem;max-width:44ch">
+      <li>A live example of an AI agent completing a multi-step task</li>
+      <li>Watch how it breaks a goal into steps, uses tools, and produces a final output</li>
+      <li>Discuss what went well and where human review was still needed</li>
+    </ul>
+  </div>
+</div>
+
+<!-- S39: ACTIVITY — Agent Task -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Activity &mdash; 5 minutes</div>
+    <h2>Design Your First<br>Agent Task</h2>
+    <p style="margin-top:1.5rem">Pick one repetitive business task that involves multiple steps:</p>
+    <ul class="checklist" style="margin-top:1rem">
+      <li>Write the <strong>goal</strong> &mdash; what should the agent achieve?</li>
+      <li>List the <strong>steps</strong> involved</li>
+      <li>What <strong>information</strong> would the agent need?</li>
+      <li>Where would you want a <strong>human checkpoint</strong>?</li>
+    </ul>
+    <p style="margin-top:1rem"><strong>Output:</strong> a simple agent brief you could test when agent tools become available.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 11: TRUST, ETHICS & WRAP-UP            -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- S40: TRUST BUT CHECK -->
+<div class="slide has-bg-img" style="background-image:url('../../assets/img/red-pen-circling.jpg')">
+  <div class="stagger">
+    <p class="eyebrow">Section 11 &middot; Cheat Sheet 6</p>
+    <h2>Trust, But Check</h2>
+    <p style="margin-top:1.5rem;max-width:40ch">AI can be confidently wrong. Always check: names, dates, numbers, sources, legal claims, financial claims, customer promises, and anything that sounds too perfect.</p>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/TrustButCheck.jpg" alt="Cheat Sheet"></div>
+  <div class="cs-thumb" style="left:auto;right:2rem"><img src="../../assets/cheatsheets/cheatsheet_thumbs/TheSecondOpinionTechnique.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S41: FAIR TO EVERYONE -->
+<div class="slide">
+  <div class="stagger">
+    <p class="eyebrow">Cheat Sheet 7</p>
+    <h2>Would This Be Fair<br>to Everyone?</h2>
+    <p style="margin-top:1.5rem">Before applying AI to staff, customers, policies or public communications, ask:</p>
+    <ul class="checklist" style="margin-top:1rem;max-width:40ch">
+      <li>Could this exclude someone?</li>
+      <li>Could it stereotype or generalise unfairly?</li>
+      <li>Could it favour one group over another?</li>
+      <li>Could it cause harm if taken at face value?</li>
+    </ul>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/WouldThisBeFair.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S42: 7-DAY HABIT BUILDER -->
+<div class="slide bg-split">
+  <div class="cols v-center">
+    <div class="stagger">
+      <p class="eyebrow">Cheat Sheet 9</p>
+      <h2>The 7-Day<br>AI Habit<br>Builder</h2>
+    </div>
+    <div class="stagger cream-text" style="padding:2rem">
+      <ul class="checklist">
+        <li><strong>Day 1</strong> &mdash; Pick one repetitive task</li>
+        <li><strong>Day 2</strong> &mdash; Write a safe prompt</li>
+        <li><strong>Day 3</strong> &mdash; Test and review the output</li>
+        <li><strong>Day 4</strong> &mdash; Improve the prompt</li>
+        <li><strong>Day 5</strong> &mdash; Save the best version</li>
+        <li><strong>Day 6</strong> &mdash; Use it for real</li>
+        <li><strong>Day 7</strong> &mdash; Keep, change or stop</li>
+      </ul>
+    </div>
+  </div>
+  <div class="cs-thumb"><img src="../../assets/cheatsheets/cheatsheet_thumbs/7-DayAIHabit.jpg" alt="Cheat Sheet"></div>
+</div>
+
+<!-- S43: FINAL ACTIVITY -->
+<div class="slide bg-coral">
+  <div class="stagger">
+    <div class="activity-badge"><span class="dot"></span> Final Activity &mdash; 5 minutes</div>
+    <h2>Your 7-Day<br>Action Plan</h2>
+    <p style="margin-top:1.5rem">Write your personal plan:</p>
+    <ul class="checklist" style="margin-top:1rem">
+      <li>One task to automate</li>
+      <li>One prompt to save</li>
+      <li>One workflow to build</li>
+      <li>One review step to follow</li>
+      <li>One date to test it</li>
+    </ul>
+  </div>
+</div>
+
+<!-- CHEAT SHEET LIBRARY -->
+<div class="slide bg-dark" style="padding:1.5vh 2vw;display:flex;align-items:center;justify-content:center">
+  <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:1vh">
+    <h2 style="font-size:clamp(1.4rem,2.5vw,2.2rem);text-align:center;letter-spacing:-0.01em"><span class="accent">37</span> Cheat Sheets &mdash; Take Them All With You</h2>
+    <p style="font-size:0.8rem;color:var(--muted);text-align:center">Available on the mini-site &mdash; scan the QR code or visit the link</p>
+    <div style="display:grid;grid-template-columns:repeat(13,1fr);gap:0.4vw 0.4vw;width:100%">
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/WhatCanAIHelpWith.jpg" alt="What Can AI Help With"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/AIinPlainEnglish.jpg" alt="AI in Plain English"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/ActExplainPlease.jpg" alt="Act Explain Please"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/BadPromptBetterPrompt.jpg" alt="Bad Prompt Better Prompt"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/TheBusinessPromptFormula.jpg" alt="The Business Prompt Formula"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/UseAIasaThinkingPartner.jpg" alt="Use AI as a Thinking Partner"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/BeforeYouPaste.jpg" alt="Before You Paste"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/SafeContextRewriter.jpg" alt="Safe Context Rewriter"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/TrustButCheck.jpg" alt="Trust But Check"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/WouldThisBeFair.jpg" alt="Would This Be Fair"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/ChatvsWorkflow.jpg" alt="Chat vs Workflow"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/PromptChains.jpg" alt="Prompt Chains"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/TheSecondOpinionTechnique.jpg" alt="The Second Opinion Technique"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/7-DayAIHabit.jpg" alt="7-Day AI Habit"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/WhereIsYourTimeGoing.jpg" alt="Where Is Your Time Going"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/BetterEmailsIn60s.jpg" alt="Better Emails in 60s"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/MessyNotesClearActions.jpg" alt="Messy Notes Clear Actions"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/SummariseExtractCompareCheck.jpg" alt="Summarise Extract Compare Check"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/AIforAdminSafeUses.jpg" alt="AI for Admin Safe Uses"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/BeforeAIHelpHumanReview.jpg" alt="Before AI Help Human Review"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/MyFirstAIWorkflow.jpg" alt="My First AI Workflow"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/MeetingMinutesin2Minutes.jpg" alt="Meeting Minutes in 2 Minutes"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/PolicyDraftHelper.jpg" alt="Policy Draft Helper"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/DatatoDashboard.jpg" alt="Data to Dashboard"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/AIforInternalComms.jpg" alt="AI for Internal Comms"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/FromPDFtoAction.jpg" alt="From PDF to Action"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/StakeholderEmailTemplates.jpg" alt="Stakeholder Email Templates"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/WhatMarketingTask.jpg" alt="What Marketing Task"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/WhoAreWeTalkingTo.jpg" alt="Who Are We Talking To"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/SoundLikeUs.jpg" alt="Sound Like Us"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/TheMarketingPromptFormula.jpg" alt="The Marketing Prompt Formula"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/OneIdeaFivePosts.jpg" alt="One Idea Five Posts"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/BetterCustomerMessages.jpg" alt="Better Customer Messages"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/ReviewReplyCheatSheet.jpg" alt="Review Reply Cheat Sheet"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/30DayCampaignBuilder.jpg" alt="30 Day Campaign Builder"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/ReadyToPublish.jpg" alt="Ready to Publish"></div>
+      <div class="cs-card"><img src="../../assets/cheatsheets/cheatsheet_thumbs/ImagePromptFormula.jpg" alt="Image Prompt Formula"></div>
+    </div>
+  </div>
+</div>
+
+<!-- S44: AIM COURSES UPSELL -->
+<div class="slide bg-dark" style="padding:5vh 8vw;display:flex;flex-direction:column;justify-content:center">
+  <div class="stagger" style="display:flex;flex-direction:column;gap:1.2rem;width:100%">
+    <h2 style="margin-bottom:0.8rem">More AI Courses from <span class="accent">AIM</span></h2>
+    <div style="display:flex;gap:1.2rem;flex-wrap:wrap">
+      <div style="flex:1;min-width:240px;background:rgba(109,216,255,0.08);border:1px solid rgba(109,216,255,0.2);border-radius:16px;padding:1.5rem 2rem">
+        <p style="font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:700;color:var(--accent);margin-bottom:0.4rem">AI for Productivity</p>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);color:var(--text);line-height:1.5">Streamline your daily workflow</p>
+      </div>
+      <div style="flex:1;min-width:240px;background:rgba(109,216,255,0.08);border:1px solid rgba(109,216,255,0.2);border-radius:16px;padding:1.5rem 2rem">
+        <p style="font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:700;color:var(--accent);margin-bottom:0.4rem">AI for Teamwork</p>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);color:var(--text);line-height:1.5">Collaborate smarter with AI tools</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:1.2rem;flex-wrap:wrap">
+      <div style="flex:1;min-width:240px;background:rgba(109,216,255,0.08);border:1px solid rgba(109,216,255,0.2);border-radius:16px;padding:1.5rem 2rem">
+        <p style="font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:700;color:var(--accent);margin-bottom:0.4rem">AI Essentials for Business</p>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);color:var(--text);line-height:1.5">The foundations for every leader</p>
+      </div>
+      <div style="flex:1;min-width:240px;background:rgba(109,216,255,0.08);border:1px solid rgba(109,216,255,0.2);border-radius:16px;padding:1.5rem 2rem">
+        <p style="font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:700;color:var(--accent);margin-bottom:0.4rem">AI for Project Management</p>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);color:var(--text);line-height:1.5">Plan, track and deliver with AI</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:1.2rem;flex-wrap:wrap">
+      <div style="flex:1;min-width:240px;max-width:calc(50% - 0.6rem);background:rgba(109,216,255,0.08);border:1px solid rgba(109,216,255,0.2);border-radius:16px;padding:1.5rem 2rem">
+        <p style="font-size:clamp(1.1rem,1.6vw,1.35rem);font-weight:700;color:var(--accent);margin-bottom:0.4rem">Agentic AI</p>
+        <p style="font-size:clamp(0.9rem,1.2vw,1.05rem);color:var(--text);line-height:1.5">Build and manage autonomous AI agents</p>
+      </div>
+    </div>
+    <p style="font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;color:var(--accent);margin-top:0.5rem">aim.com.au</p>
+  </div>
+</div>
+
+<!-- S45: CLOSING -->
+<div class="slide bg-black" style="display:flex;align-items:center;justify-content:center;text-align:center">
+  <div class="stagger" style="max-width:48ch">
+    <h1 style="font-size:clamp(2.2rem,4.5vw,3.8rem);line-height:1.2">Don't transform everything.<br><span class="gradient-text">Improve one thing.</span></h1>
+    <p style="margin-top:2rem;font-size:1.15rem;color:var(--accent)">AI can draft, organise and support.<br>Humans decide, review and own the result.</p>
+    <div class="tool-logos" style="justify-content:center;margin-top:2.5rem">
+      <div class="tool-logo"><img src="../../assets/ai-tool-logos/ChatGPT.png" alt="ChatGPT"><span>ChatGPT</span></div>
+      <div class="tool-logo"><img src="../../assets/ai-tool-logos/Gemini.png" alt="Gemini"><span>Gemini</span></div>
+      <div class="tool-logo"><img src="../../assets/ai-tool-logos/Claude.png" alt="Claude"><span>Claude</span></div>
+      <div class="tool-logo"><img src="../../assets/ai-tool-logos/Grok.png" alt="Grok"><span>Grok</span></div>
+    </div>
+    <div style="margin-top:2.5rem;display:flex;gap:1.5rem;justify-content:center;align-items:center">
+      <img src="../../assets/aimlogo_white.png" alt="AIM" style="height:2rem;opacity:0.6">
+      <span style="width:1px;height:1.5rem;background:rgba(255,255,255,0.2)"></span>
+      <img src="../../assets/city-of-sydney-logo_white.png" alt="City of Sydney" style="height:1.6rem;opacity:0.6">
+    </div>
+  </div>
+</div>
+
+<!-- THANK YOU -->
+<div class="slide bg-black" style="display:flex;align-items:center;justify-content:center;text-align:center">
+  <div class="stagger" style="display:flex;flex-direction:column;align-items:center;gap:3rem">
+    <h1 style="font-size:clamp(3.5rem,8vw,7rem);font-weight:900;letter-spacing:-0.03em"><span class="gradient-text">Thank You</span></h1>
+    <div style="display:flex;gap:3rem;align-items:center">
+      <img src="../../assets/aimlogo_white.png" alt="AIM" style="height:clamp(3rem,5vw,4.5rem)">
+      <span style="width:2px;height:4rem;background:rgba(255,255,255,0.15);border-radius:1px"></span>
+      <img src="../../assets/city-of-sydney-logo_white.png" alt="City of Sydney" style="height:clamp(2.5rem,4.5vw,4rem)">
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+(function(){
+  var slides = document.querySelectorAll('.slide');
+  var current = 0;
+  var total = slides.length;
+  var progBar = document.getElementById('progress');
+  var counter = document.getElementById('counter');
+  var hint = document.getElementById('navHint');
+  var transitioning = false;
+
+  function update(){
+    progBar.style.width = ((current+1)/total*100)+'%';
+    counter.textContent = (current+1)+' / '+total;
+  }
+
+  function go(n){
+    if(transitioning || n===current || n<0 || n>=total) return;
+    transitioning = true;
+    var prev = slides[current];
+    prev.classList.remove('active');
+    prev.classList.add('exit-up');
+    slides[n].classList.add('active');
+    current = n;
+    update();
+    if(current>0) hint.classList.add('hidden');
+    setTimeout(function(){ prev.classList.remove('exit-up'); transitioning=false; },650);
+  }
+
+  function next(){ go(current+1); }
+  function prev(){ go(current-1); }
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='Enter') next();
+    else if(e.key==='ArrowLeft'||e.key==='Backspace') prev();
+    else if(e.key==='Home') go(0);
+    else if(e.key==='End') go(total-1);
+  });
+
+  document.addEventListener('click',function(e){
+    if(e.clientX > window.innerWidth*0.3) next(); else prev();
+  });
+
+  var touchX=0;
+  document.addEventListener('touchstart',function(e){touchX=e.touches[0].clientX});
+  document.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-touchX;
+    if(dx<-40) next(); else if(dx>40) prev();
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
