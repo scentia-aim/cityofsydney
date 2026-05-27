@@ -1,0 +1,106 @@
+/* ===== AIM AI Bootcamp — Theme & Overrides ===== */
+
+/* Course-specific accent colours */
+.course-business { --course-accent: #6dd8ff; --course-accent-light: rgba(109,216,255,0.1); }
+.course-marketing { --course-accent: var(--aim-digital-marketing); --course-accent-light: rgba(255,77,154,0.1); }
+
+/* Nav */
+.aim-nav {
+  background: rgba(26,34,73,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: box-shadow 300ms ease, padding 300ms ease;
+}
+
+.aim-nav.scrolled {
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+  background: rgba(26,34,73,0.95);
+}
+
+/* Module nav dots */
+.module-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  transition: all 300ms ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.module-dot.completed {
+  width: 22px;
+  height: 22px;
+  background: #22c55e;
+  box-shadow: 0 0 10px rgba(34,197,94,0.45);
+  animation: completePop 400ms ease;
+}
+
+@keyframes completePop {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.module-dot.current {
+  background: #6dd8ff;
+  box-shadow: 0 0 10px rgba(109,216,255,0.5);
+  transform: scale(1.3);
+}
+
+/* AIM Button */
+.aim-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.aim-btn:hover {
+  background: rgba(255,255,255,0.22);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  color: #ffffff;
+}
+
+/* AIM Back Link */
+.aim-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.8);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 200ms ease;
+}
+
+.aim-back:hover {
+  border-color: rgba(255,255,255,0.35);
+  color: #ffffff;
+  background: rgba(255,255,255,0.12);
+}
+
+/* Print styles */
+@media print {
+  body { background: white !important; color: #333 !important; }
+  .glass { box-shadow: none !important; border-color: #e5e7eb !important; background: #f8f8f8 !important; }
+  .noise, .grid-bg, canvas { display: none !important; }
+  .prompt-box { background: #f1f5f9 !important; border-color: #cbd5e1 !important; color: #334155 !important; }
+  nav { display: none !important; }
+  h1, h2, h3, h4 { color: #222 !important; }
+}
