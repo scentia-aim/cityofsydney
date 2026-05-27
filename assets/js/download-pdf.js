@@ -1,6 +1,6 @@
 /**
  * AIM Workshop — Download as PDF
- * Generates a branded PDF with embedded AIM + City of Sydney logos.
+ * Generates a branded PDF with embedded AIM logo.
  * Requires jsPDF loaded via CDN before this script.
  */
 (function () {
@@ -38,8 +38,6 @@
     try { doc.addImage(AIM_LOGO, 'PNG', MARGIN, 7, 32, 13); } catch (e) {
       doc.setTextColor(255,255,255); doc.setFontSize(14); doc.setFont('helvetica','bold'); doc.text('AIM', MARGIN, 17);
     }
-    /* City of Sydney logo right */
-    try { doc.addImage(COS_LOGO, 'PNG', PAGE_W - MARGIN - 44, 6, 44, 11); } catch (e) {}
 
     /* Accent line */
     doc.setDrawColor(ACCENT[0], ACCENT[1], ACCENT[2]);
@@ -176,7 +174,7 @@
       doc.line(MARGIN, PAGE_H - 15, PAGE_W - MARGIN, PAGE_H - 15);
       doc.setTextColor(MUTED[0], MUTED[1], MUTED[2]);
       doc.setFontSize(7); doc.setFont('helvetica', 'normal');
-      doc.text('AIM AI Bootcamp for Small Business  |  City of Sydney', MARGIN, PAGE_H - 10);
+      doc.text('AIM AI Bootcamp for Small Business', MARGIN, PAGE_H - 10);
       doc.text('Page ' + i + ' of ' + n, PAGE_W - MARGIN, PAGE_H - 10, { align:'right' });
     }
   }

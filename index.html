@@ -134,15 +134,16 @@ try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.
   <script>
   (function(){
     /* ── Password check ── */
-    var SECRET = 'lifelonglearner';
     var overlay = document.getElementById('welcome-overlay');
     var pwField = document.getElementById('wc-password');
     var errMsg  = document.getElementById('wc-error');
 
     /* Check if already unlocked this session */
     if(sessionStorage.getItem('cos_ai_unlocked')==='1'){
+      /* Already unlocked — show the front page, tailored to course */
       overlay.remove();
       document.body.classList.remove('locked');
+      tailorFrontPage(sessionStorage.getItem('cos_ai_course'));
     } else {
       document.body.classList.add('locked');
     }
@@ -305,13 +306,13 @@ try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.
       card.style.color='#fff';
       card.style.boxShadow='0 0 24px rgba(109,216,255,0.2)';
 
-      /* Fade out grid */
+      /* Fade out grid then reveal the front page */
       setTimeout(function(){
         gridPanel.style.opacity='0';
         gridPanel.style.transform='translateY(-20px) scale(0.97)';
 
-        /* Now do the split animation to reveal main page */
-        setTimeout(function(){ doRevealAnimation(); }, 400);
+        var _targetCourse = sessionStorage.getItem('cos_ai_course');
+        setTimeout(function(){ tailorFrontPage(_targetCourse); doRevealAnimation(); }, 400);
       }, 400);
     });
 
@@ -379,21 +380,29 @@ try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.
     var errMsg  = document.getElementById('wc-error');
     var val = pwField.value.trim().toLowerCase();
 
-    if(val === 'lifelonglearner'){
+    /* Accept two passwords — each routes to a different course */
+    var courseTarget = null;
+    if(val === 'lifelonglearner') courseTarget = 'business';
+    else if(val === 'aimstudent') courseTarget = 'marketing';
+
+    if(courseTarget){
       sessionStorage.setItem('cos_ai_unlocked','1');
+      sessionStorage.setItem('cos_ai_course', courseTarget);
       pwField.style.borderColor='#6dd8ff';
       errMsg.style.opacity='0';
 
-      /* If industry already chosen, skip grid */
+      var courseUrl = courseTarget === 'business' ? 'ai-for-business/index.html' : 'ai-for-marketing/index.html';
+
+      /* If industry already chosen, skip grid and reveal front page */
       var _hasInd = localStorage.getItem('cos_ai_industry');
       if(!_hasInd){try{var _m=document.cookie.match('(^|;)\\s*cos_ai_industry=([^;]*)');if(_m)_hasInd=decodeURIComponent(_m[2]);}catch(e){}}
       if(_hasInd){
-        /* Fade out content and reveal */
+        /* Fade out password content then reveal the front page */
         var content = document.getElementById('welcome-content');
         content.style.transition='all 0.6s cubic-bezier(0.4,0,0.2,1)';
         content.style.opacity='0';
         content.style.transform='translateY(-30px) scale(0.95)';
-        setTimeout(function(){ doRevealAnimation(); }, 500);
+        setTimeout(function(){ tailorFrontPage(courseTarget); doRevealAnimation(); }, 600);
         return;
       }
 
@@ -452,7 +461,7 @@ try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.
         <span class="gradient-text">Sydney's Small Businesses</span>
       </h1>
 
-      <p class="text-lg sm:text-xl text-[var(--aim-muted)] max-w-2xl mx-auto mb-6 fade-up" style="animation-delay:200ms">
+      <p id="hero-subtitle" class="text-lg sm:text-xl text-[var(--aim-muted)] max-w-2xl mx-auto mb-6 fade-up" style="animation-delay:200ms">
         Two hands-on workshops designed to help local SMEs save time, create better content, and grow with confidence using AI.
       </p>
 
@@ -466,10 +475,10 @@ try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.
     </div>
 
     <!-- Workshop Cards (prominent) -->
-    <div class="relative z-10 grid md:grid-cols-2 gap-6 max-w-5xl mx-auto px-6 mb-8 fade-up" style="animation-delay:350ms">
+    <div id="course-grid" class="relative z-10 grid md:grid-cols-2 gap-6 max-w-5xl mx-auto px-6 mb-8 fade-up" style="animation-delay:350ms">
 
         <!-- AI for Business -->
-        <div class="card glass rounded-2xl p-8 text-left group cursor-pointer block" onclick="window.location='ai-for-business/index.html'">
+        <div id="card-business" class="card glass rounded-2xl p-8 text-left group cursor-pointer block" onclick="window.location='ai-for-business/index.html'">
           <div class="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center mb-5">
             <i data-lucide="briefcase" class="w-7 h-7 text-[#6dd8ff]"></i>
           </div>
@@ -490,7 +499,7 @@ try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.
         </div>
 
         <!-- AI for Marketing -->
-        <div class="card glass rounded-2xl p-8 text-left group cursor-pointer block" onclick="window.location='ai-for-marketing/index.html'">
+        <div id="card-marketing" class="card glass rounded-2xl p-8 text-left group cursor-pointer block" onclick="window.location='ai-for-marketing/index.html'">
           <div class="w-14 h-14 rounded-xl bg-[var(--aim-digital-marketing)]/10 flex items-center justify-center mb-5">
             <i data-lucide="megaphone" class="w-7 h-7 text-[var(--aim-digital-marketing)]"></i>
           </div>
@@ -522,7 +531,7 @@ try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.
           </div>
           <div>
             <h3 class="text-lg font-bold mb-1" style="color: #ffffff">Cheat Sheets</h3>
-            <p class="text-sm text-[var(--aim-muted)] mb-3">37 downloadable reference guides &mdash; prompting formulas, checklists and office posters</p>
+            <p class="text-sm text-[var(--aim-muted)] mb-3">44 downloadable reference guides &mdash; prompting formulas, checklists and office posters</p>
             <div class="flex items-center gap-2 text-[#6dd8ff] text-sm font-bold group-hover:gap-3 transition-all">
               Browse Cheat Sheets <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </div>
@@ -608,11 +617,33 @@ try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.
       nav.classList.toggle('scrolled', window.scrollY > 40);
     });
 
+    /* Tailor front page to show only the relevant course */
+    function tailorFrontPage(course) {
+      if (!course) return;
+      var grid = document.getElementById('course-grid');
+      var bizCard = document.getElementById('card-business');
+      var mktCard = document.getElementById('card-marketing');
+      var subtitle = document.getElementById('hero-subtitle');
+
+      if (course === 'business' && mktCard) {
+        mktCard.style.display = 'none';
+        grid.style.gridTemplateColumns = '1fr';
+        grid.style.maxWidth = '36rem';
+        if (subtitle) subtitle.textContent = 'A hands-on workshop designed to help local SMEs save time and work smarter using AI.';
+      } else if (course === 'marketing' && bizCard) {
+        bizCard.style.display = 'none';
+        grid.style.gridTemplateColumns = '1fr';
+        grid.style.maxWidth = '36rem';
+        if (subtitle) subtitle.textContent = 'A hands-on workshop designed to help local SMEs create better content and grow with confidence using AI.';
+      }
+    }
+
     /* If already unlocked, make sure main content is visible */
     if(sessionStorage.getItem('cos_ai_unlocked')==='1'){
       document.querySelectorAll('body > *:not(#welcome-overlay)').forEach(function(el){
         el.style.opacity='1';
       });
+      tailorFrontPage(sessionStorage.getItem('cos_ai_course'));
     }
   </script>
   <script>

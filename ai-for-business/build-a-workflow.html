@@ -20,7 +20,7 @@ try{if(document.cookie.indexOf('cos_ai_reset=1')!==-1){for(var _ri=localStorage.
 
   <nav class="aim-nav fixed top-0 left-0 right-0 z-50 py-5">
     <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
-      <a href="../index.html"><img src="../assets/aimlogo_white.png" alt="AIM" class="h-8 sm:h-10"></a>
+      <a href="https://www.aim.com.au" target="_blank"><img src="../assets/aimlogo_white.png" alt="AIM" class="h-8 sm:h-10"></a>
       <a href="../index.html" class="aim-back">
         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Back to Bootcamp
       </a>
@@ -205,7 +205,7 @@ function downloadSheet(el,evt){
   <script>
 /**
  * AIM Workshop — Download as PDF
- * Generates a branded PDF with embedded AIM + City of Sydney logos.
+ * Generates a branded PDF with embedded AIM logo.
  * Requires jsPDF loaded via CDN before this script.
  */
 (function () {
@@ -243,8 +243,6 @@ function downloadSheet(el,evt){
     try { doc.addImage(AIM_LOGO, 'PNG', MARGIN, 7, 32, 13); } catch (e) {
       doc.setTextColor(255,255,255); doc.setFontSize(14); doc.setFont('helvetica','bold'); doc.text('AIM', MARGIN, 17);
     }
-    /* City of Sydney logo right */
-    try { doc.addImage(COS_LOGO, 'PNG', PAGE_W - MARGIN - 44, 6, 44, 11); } catch (e) {}
 
     /* Accent line */
     doc.setDrawColor(ACCENT[0], ACCENT[1], ACCENT[2]);
@@ -381,7 +379,7 @@ function downloadSheet(el,evt){
       doc.line(MARGIN, PAGE_H - 15, PAGE_W - MARGIN, PAGE_H - 15);
       doc.setTextColor(MUTED[0], MUTED[1], MUTED[2]);
       doc.setFontSize(7); doc.setFont('helvetica', 'normal');
-      doc.text('AIM AI Bootcamp for Small Business  |  City of Sydney', MARGIN, PAGE_H - 10);
+      doc.text('AIM AI Bootcamp for Small Business', MARGIN, PAGE_H - 10);
       doc.text('Page ' + i + ' of ' + n, PAGE_W - MARGIN, PAGE_H - 10, { align:'right' });
     }
   }
